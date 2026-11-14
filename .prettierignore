@@ -4,3 +4,5 @@ dist
 android
 ios
 package-lock.json
+# gerado por `npm run build:player` a partir de src/lib/youtube/playerHtml.ts
+web/player/index.html

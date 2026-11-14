@@ -34,6 +34,9 @@ yarn-error.*
 .env
 .env*.local
 
+# Vercel CLI (vínculo local do projeto web/player)
+.vercel/
+
 # Supabase CLI
 supabase/.temp/
 supabase/.branches/

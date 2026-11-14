@@ -1,0 +1,142 @@
+/**
+ * Página do player do YouTube — FONTE ÚNICA.
+ *
+ * Usada de duas formas:
+ *  - "hosted": publicada na Vercel como web/player/index.html (gerado por `npm run build:player`);
+ *  - "inline": injetada direto na WebView com `baseUrl` = origem da página hospedada.
+ *
+ * Regras deste arquivo:
+ *  - só pode conter `export const` (o Node lê este arquivo com type stripping no build script);
+ *  - o JS da página não usa crases nem `${` (está dentro de uma template string).
+ *
+ * Protocolo: ver ./bridge.ts.
+ */
+export const PLAYER_HTML = `<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<meta name="referrer" content="strict-origin-when-cross-origin" />
+<title>Watch Together Player</title>
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #000; overflow: hidden; }
+  #player { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+</style>
+</head>
+<body>
+<div id="player"></div>
+<script>
+(function () {
+  'use strict';
+
+  var player = null;
+  var ready = false;
+  var pending = [];
+  var STATUS_INTERVAL_MS = 500;
+
+  function send(msg) {
+    var data = JSON.stringify(msg);
+    if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
+      window.ReactNativeWebView.postMessage(data);
+    } else if (window.console) {
+      console.log('[wt]', data);
+    }
+  }
+
+  function safeNumber(fn) {
+    try {
+      var value = fn();
+      return typeof value === 'number' && isFinite(value) ? value : 0;
+    } catch (e) {
+      return 0;
+    }
+  }
+
+  function currentTime() { return safeNumber(function () { return player.getCurrentTime(); }); }
+
+  function execute(cmd) {
+    switch (cmd.type) {
+      case 'load':
+        var opts = { videoId: cmd.videoId, startSeconds: cmd.startSeconds || 0 };
+        if (cmd.autoplay) { player.loadVideoById(opts); } else { player.cueVideoById(opts); }
+        break;
+      case 'play': player.playVideo(); break;
+      case 'pause': player.pauseVideo(); break;
+      case 'seek': player.seekTo(cmd.seconds, true); break;
+      case 'mute': if (cmd.muted) { player.mute(); } else { player.unMute(); } break;
+      default: send({ type: 'log', message: 'unknown command: ' + cmd.type });
+    }
+  }
+
+  window.__wt = {
+    handle: function (cmd) {
+      if (!cmd || typeof cmd.type !== 'string') return;
+      if (!ready) {
+        // Antes do player existir, só o último "load" e comandos posteriores importam.
+        if (cmd.type === 'load') pending = [];
+        pending.push(cmd);
+        return;
+      }
+      try { execute(cmd); } catch (e) { send({ type: 'log', message: 'command failed: ' + e }); }
+    }
+  };
+
+  window.onerror = function (message) {
+    send({ type: 'log', message: 'page error: ' + message });
+  };
+
+  window.onYouTubeIframeAPIReady = function () {
+    var playerVars = {
+      controls: 0,
+      disablekb: 1,
+      playsinline: 1,
+      rel: 0,
+      fs: 0,
+      iv_load_policy: 3,
+      enablejsapi: 1
+    };
+    if (/^https?:/.test(window.location.origin)) {
+      playerVars.origin = window.location.origin;
+    }
+
+    player = new YT.Player('player', {
+      width: '100%',
+      height: '100%',
+      playerVars: playerVars,
+      events: {
+        onReady: function () {
+          ready = true;
+          send({ type: 'ready' });
+          var queued = pending;
+          pending = [];
+          for (var i = 0; i < queued.length; i++) window.__wt.handle(queued[i]);
+          setInterval(function () {
+            send({
+              type: 'status',
+              state: safeNumber(function () { return player.getPlayerState(); }),
+              currentTime: currentTime(),
+              duration: safeNumber(function () { return player.getDuration(); }),
+              muted: (function () { try { return player.isMuted(); } catch (e) { return false; } })(),
+              at: Date.now()
+            });
+          }, STATUS_INTERVAL_MS);
+        },
+        onStateChange: function (event) {
+          send({ type: 'stateChange', state: event.data, currentTime: currentTime(), at: Date.now() });
+        },
+        onError: function (event) {
+          send({ type: 'error', code: event.data });
+        }
+      }
+    });
+  };
+
+  var tag = document.createElement('script');
+  tag.src = 'https://www.youtube.com/iframe_api';
+  tag.onerror = function () { send({ type: 'apiLoadError' }); };
+  document.head.appendChild(tag);
+})();
+</script>
+</body>
+</html>
+`;

@@ -14,6 +14,7 @@ export default function RootLayout() {
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="room/[id]" />
         <Stack.Screen name="join/[code]" />
+        <Stack.Screen name="poc/player" options={{ headerShown: true, title: 'POC Player' }} />
       </Stack>
     </ThemeProvider>
   );

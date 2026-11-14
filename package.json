@@ -20,6 +20,7 @@
     "react-native-reanimated": "4.7.1",
     "react-native-safe-area-context": "~5.11.1",
     "react-native-screens": "~4.30.1",
+    "react-native-webview": "14.0.1",
     "react-native-worklets": "0.13.0"
   },
   "devDependencies": {
@@ -42,7 +43,10 @@
     "typecheck": "tsc --noEmit",
     "test": "jest",
     "format": "prettier --write .",
-    "check": "npm run typecheck && npm run lint && npm test"
+    "build:player": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/build-player-page.mjs",
+    "check:player": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/build-player-page.mjs --check",
+    "deploy:player": "npm run build:player && npx vercel@latest deploy web/player --prod",
+    "check": "npm run typecheck && npm run lint && npm test && npm run check:player"
   },
   "jest": {
     "preset": "jest-expo"

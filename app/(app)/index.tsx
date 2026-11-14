@@ -22,6 +22,13 @@ export default function HomeScreen() {
         />
         <Button title="Perfil" variant="secondary" onPress={() => router.push('/profile')} />
         <Button title="Tela de login" variant="secondary" onPress={() => router.push('/sign-in')} />
+        {__DEV__ && (
+          <Button
+            title="POC: player do YouTube"
+            variant="secondary"
+            onPress={() => router.push('/poc/player')}
+          />
+        )}
       </View>
     </Screen>
   );
