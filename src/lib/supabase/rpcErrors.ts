@@ -7,6 +7,8 @@ const MESSAGES: Record<string, string> = {
   not_member: 'Você não participa mais desta sala.',
   no_video: 'Coloque um vídeo antes de dar play.',
   invalid_video: 'Link do YouTube inválido.',
+  playlist_full: 'A fila já tem 50 vídeos. Remova algum antes de adicionar.',
+  item_not_found: 'Este vídeo não está mais na fila.',
 };
 
 export const RPC_NETWORK_ERROR = 'Sem conexão com o servidor. Verifique sua internet.';

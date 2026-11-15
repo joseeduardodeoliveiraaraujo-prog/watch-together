@@ -5,7 +5,7 @@ import { supabase } from '@/lib/supabase/client';
 import { bestOffset, type ClockSample } from './sync/clock';
 import { parsePlaybackRow, type PlaybackSnapshot } from './sync/playbackState';
 
-export type PlaybackAction = 'play' | 'pause' | 'seek' | 'load';
+export type PlaybackCommand = 'play' | 'pause' | 'seek' | 'load';
 
 export async function fetchPlayback(roomId: string): Promise<PlaybackSnapshot | null> {
   const { data, error } = await supabase
@@ -20,7 +20,7 @@ export async function fetchPlayback(roomId: string): Promise<PlaybackSnapshot | 
 /** Envia um comando à sala. O `commandId` evita aplicar duas vezes numa retentativa. */
 export async function sendPlaybackCommand(
   roomId: string,
-  action: PlaybackAction,
+  action: PlaybackCommand,
   options: { position?: number; videoId?: string } = {},
 ): Promise<PlaybackSnapshot | null> {
   const { data, error } = await supabase.rpc('playback_command', {
@@ -29,6 +29,24 @@ export async function sendPlaybackCommand(
     p_action: action,
     p_position: options.position,
     p_video_id: options.videoId,
+  });
+  if (error) throw error;
+  return parsePlaybackRow(data);
+}
+
+/**
+ * O vídeo atual terminou (ou não pode tocar): passa para o próximo da fila.
+ * Todos os membros avisam; o banco só avança uma vez por item.
+ */
+export async function advanceToNext(
+  roomId: string,
+  fromItemId: string,
+  reason: 'ended' | 'error',
+): Promise<PlaybackSnapshot | null> {
+  const { data, error } = await supabase.rpc('advance_to_next', {
+    p_room_id: roomId,
+    p_from_item_id: fromItemId,
+    p_reason: reason,
   });
   if (error) throw error;
   return parsePlaybackRow(data);

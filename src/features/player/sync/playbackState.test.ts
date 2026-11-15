@@ -1,5 +1,4 @@
 import {
-  describeChange,
   expectedPosition,
   isNewer,
   parsePlaybackRow,
@@ -15,6 +14,8 @@ const row = {
   position_updated_at: '2026-11-15T12:00:00.000+00:00',
   updated_by: 'u1',
   last_command_id: 'c1',
+  current_item_id: 'i1',
+  last_action: 'play_item',
 };
 
 describe('parsePlaybackRow', () => {
@@ -22,6 +23,8 @@ describe('parsePlaybackRow', () => {
     expect(parsePlaybackRow(row)).toEqual({
       version: 3,
       videoId: 'aqz-KE-bpKQ',
+      currentItemId: 'i1',
+      lastAction: 'play_item',
       isPlaying: true,
       position: 10,
       positionUpdatedAt: Date.parse('2026-11-15T12:00:00Z'),
@@ -35,6 +38,10 @@ describe('parsePlaybackRow', () => {
     expect(parsePlaybackRow({ ...row, version: 'x' })).toBeNull();
     expect(parsePlaybackRow({ ...row, position_updated_at: 'ontem' })).toBeNull();
     expect(parsePlaybackRow({ ...row, is_playing: 'true' })).toBeNull();
+  });
+
+  it('ação desconhecida vira "none"', () => {
+    expect(parsePlaybackRow({ ...row, last_action: 'hackear' })?.lastAction).toBe('none');
   });
 
   it('sem vídeo válido nunca está tocando', () => {
@@ -63,15 +70,5 @@ describe('isNewer', () => {
     expect(isNewer({ ...base, version: 4 }, base)).toBe(true);
     expect(isNewer(base, base)).toBe(false);
     expect(isNewer({ ...base, version: 2 }, base)).toBe(false);
-  });
-});
-
-describe('describeChange', () => {
-  const base = parsePlaybackRow(row) as PlaybackSnapshot;
-  it('identifica a ação', () => {
-    expect(describeChange(base, { ...base, videoId: 'dQw4w9WgXcQ' })).toBe('load');
-    expect(describeChange(base, { ...base, isPlaying: false })).toBe('pause');
-    expect(describeChange({ ...base, isPlaying: false }, base)).toBe('play');
-    expect(describeChange(base, { ...base, position: 99 })).toBe('seek');
   });
 });

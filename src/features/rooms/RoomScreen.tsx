@@ -7,17 +7,17 @@ import { ActivityIndicator, Alert, ScrollView, Share, Text, View } from 'react-n
 
 import { Screen } from '@/components/layout/Screen';
 import { Button } from '@/components/ui/Button';
-import { TextField } from '@/components/ui/TextField';
 import { PLAYER_URL } from '@/constants/config';
 import { Colors } from '@/constants/theme';
 import { useSession } from '@/features/auth/SessionProvider';
 import { PlayerControls } from '@/features/player/PlayerControls';
 import { useFullscreen } from '@/features/player/useFullscreen';
 import { useRoomPlayback, type LastAction } from '@/features/player/useRoomPlayback';
+import { listPlaylist } from '@/features/playlist/api';
+import { PlaylistPanel } from '@/features/playlist/PlaylistPanel';
 import { useAsyncData } from '@/hooks/useAsyncData';
 import { describeRpcError } from '@/lib/supabase/rpcErrors';
 import { describePlayerError } from '@/lib/youtube/errors';
-import { extractYouTubeVideoId } from '@/lib/youtube/videoId';
 import { YouTubePlayer, type YouTubePlayerHandle } from '@/lib/youtube/YouTubePlayer';
 
 import { fetchRoom, leaveRoom, ROOM_CAPACITY, type RoomDetails } from './api';
@@ -29,6 +29,7 @@ export function RoomScreen({ roomId }: { roomId: string }) {
   const { session } = useSession();
   const userId = session?.user.id ?? null;
   const room = useAsyncData(`room:${roomId}`, () => fetchRoom(roomId));
+  const playlist = useAsyncData(`playlist:${roomId}`, () => listPlaylist(roomId));
   const playerRef = useRef<YouTubePlayerHandle>(null);
   const playback = useRoomPlayback(roomId, userId, playerRef);
   const { fullscreen, toggle: toggleFullscreen } = useFullscreen();
@@ -36,8 +37,12 @@ export function RoomScreen({ roomId }: { roomId: string }) {
     // Alguém entrou ou saiu: recarrega a lista de membros (apelidos vêm do banco).
     onPresenceChange: room.reload,
     onPlaybackState: playback.handleRemoteRow,
+    onPlaylistChange: playlist.reload,
     // (Re)conectou: busca o estado atual para não perder mudanças feitas enquanto estava fora.
-    onConnected: () => void playback.refresh(),
+    onConnected: () => {
+      void playback.refresh();
+      playlist.reload();
+    },
   });
   const [leaving, setLeaving] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
@@ -103,6 +108,7 @@ export function RoomScreen({ roomId }: { roomId: string }) {
   };
 
   const hasVideo = !!playback.snapshot?.videoId;
+  const names = new Map(details.members.map((m) => [m.userId, m.displayName]));
   const controls = (
     <PlayerControls
       isPlaying={!!playback.snapshot?.isPlaying}
@@ -160,7 +166,15 @@ export function RoomScreen({ roomId }: { roomId: string }) {
               }
             />
 
-            <VideoLinkForm onSubmit={playback.loadVideo} />
+            <PlaylistPanel
+              roomId={details.id}
+              items={playlist.data}
+              isFirstLoad={playlist.isFirstLoad}
+              loadFailed={!!playlist.error}
+              currentItemId={playback.snapshot?.currentItemId ?? null}
+              names={names}
+              onChanged={playlist.reload}
+            />
 
             <View className="flex-row items-center justify-between rounded-xl border border-border bg-surface p-4">
               <View>
@@ -194,11 +208,17 @@ export function RoomScreen({ roomId }: { roomId: string }) {
   );
 }
 
-const CHANGE_TEXT: Record<LastAction['change'], string> = {
-  play: 'deu play',
-  pause: 'pausou',
-  seek: 'mudou a posição',
-  load: 'colocou um vídeo',
+/** Texto da última ação. `withName`: começa com o nome de quem fez ("Ana pausou"). */
+const ACTION_TEXT: Record<LastAction['action'], { text: string; withName: boolean } | null> = {
+  none: null,
+  play: { text: 'deu play', withName: true },
+  pause: { text: 'pausou', withName: true },
+  seek: { text: 'mudou a posição', withName: true },
+  load: { text: 'colocou um vídeo', withName: true },
+  play_item: { text: 'escolheu um vídeo da fila', withName: true },
+  next: { text: 'Próximo vídeo da fila', withName: false },
+  skip_error: { text: 'Um vídeo indisponível foi pulado', withName: false },
+  stop: { text: 'A fila acabou', withName: false },
 };
 
 type PlaybackStatusProps = {
@@ -211,53 +231,23 @@ type PlaybackStatusProps = {
 
 function PlaybackStatus({ lastAction, members, userId, hasVideo, error }: PlaybackStatusProps) {
   if (error) return <Text className="text-danger">{error}</Text>;
-  if (!hasVideo) {
-    return <Text className="text-muted">Nenhum vídeo ainda. Cole um link abaixo.</Text>;
+  const described = lastAction ? ACTION_TEXT[lastAction.action] : null;
+  if (described && lastAction) {
+    if (!described.withName) return <Text className="text-muted">{described.text}</Text>;
+    const who =
+      lastAction.userId === userId
+        ? 'Você'
+        : (members.find((m) => m.userId === lastAction.userId)?.displayName ?? 'Alguém');
+    return (
+      <Text className="text-muted">
+        {who} {described.text}
+      </Text>
+    );
   }
-  if (!lastAction) return null;
-  const who =
-    lastAction.userId === userId
-      ? 'Você'
-      : (members.find((m) => m.userId === lastAction.userId)?.displayName ?? 'Alguém');
-  return (
-    <Text className="text-muted">
-      {who} {CHANGE_TEXT[lastAction.change]}
-    </Text>
-  );
-}
-
-/** Coloca um vídeo para a sala toda (a playlist completa vem na Etapa 6). */
-function VideoLinkForm({ onSubmit }: { onSubmit: (videoId: string) => void }) {
-  const [link, setLink] = useState('');
-  const [error, setError] = useState<string | null>(null);
-
-  const submit = () => {
-    const videoId = extractYouTubeVideoId(link);
-    if (!videoId) {
-      setError('Link do YouTube inválido.');
-      return;
-    }
-    setError(null);
-    setLink('');
-    onSubmit(videoId);
-  };
-
-  return (
-    <View className="gap-2 rounded-xl border border-border bg-surface p-3">
-      <TextField
-        label="Tocar vídeo para todos"
-        value={link}
-        onChangeText={setLink}
-        error={error}
-        placeholder="Cole um link do YouTube"
-        autoCapitalize="none"
-        autoCorrect={false}
-        returnKeyType="go"
-        onSubmitEditing={submit}
-      />
-      <Button title="Tocar agora" variant="secondary" onPress={submit} />
-    </View>
-  );
+  if (!hasVideo) {
+    return <Text className="text-muted">Nenhum vídeo tocando. Adicione um à fila abaixo.</Text>;
+  }
+  return null;
 }
 
 type ParticipantsProps = {

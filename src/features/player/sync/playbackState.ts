@@ -1,7 +1,26 @@
+/** Última ação registrada no banco (playback_state.last_action). */
+export type PlaybackAction =
+  'none' | 'play' | 'pause' | 'seek' | 'load' | 'play_item' | 'next' | 'skip_error' | 'stop';
+
+const ACTIONS: readonly PlaybackAction[] = [
+  'none',
+  'play',
+  'pause',
+  'seek',
+  'load',
+  'play_item',
+  'next',
+  'skip_error',
+  'stop',
+];
+
 /** Estado de reprodução da sala, como vem do banco (linha de public.playback_state). */
 export type PlaybackSnapshot = {
   version: number;
   videoId: string | null;
+  /** Item da fila que está tocando (null = vídeo avulso ou nada). */
+  currentItemId: string | null;
+  lastAction: PlaybackAction;
   isPlaying: boolean;
   /** Posição (s) no instante `positionUpdatedAt`. */
   position: number;
@@ -31,6 +50,10 @@ export function parsePlaybackRow(row: unknown): PlaybackSnapshot | null {
   return {
     version,
     videoId,
+    currentItemId: typeof r.current_item_id === 'string' ? r.current_item_id : null,
+    lastAction: ACTIONS.includes(r.last_action as PlaybackAction)
+      ? (r.last_action as PlaybackAction)
+      : 'none',
     isPlaying: r.is_playing && videoId !== null,
     position: Math.max(0, position),
     positionUpdatedAt: updatedAt,
@@ -48,13 +71,4 @@ export function expectedPosition(snapshot: PlaybackSnapshot, serverNowMs: number
 /** Só aceita estados mais novos (o broadcast e a resposta da RPC podem chegar fora de ordem). */
 export function isNewer(next: PlaybackSnapshot, current: PlaybackSnapshot | null): boolean {
   return !current || next.version > current.version;
-}
-
-export type PlaybackChange = 'play' | 'pause' | 'seek' | 'load';
-
-/** O que mudou entre dois estados confirmados (para mostrar "Ana pausou"). */
-export function describeChange(prev: PlaybackSnapshot, next: PlaybackSnapshot): PlaybackChange {
-  if (next.videoId !== prev.videoId) return 'load';
-  if (next.isPlaying !== prev.isPlaying) return next.isPlaying ? 'play' : 'pause';
-  return 'seek';
 }

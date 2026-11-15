@@ -5,6 +5,8 @@ const VIDEO = 'aqz-KE-bpKQ';
 const playing: PlaybackSnapshot = {
   version: 1,
   videoId: VIDEO,
+  currentItemId: null,
+  lastAction: 'none',
   isPlaying: true,
   position: 0,
   positionUpdatedAt: 0,

@@ -9,6 +9,8 @@ type RoomChannelHandlers = {
   onPresenceChange?: () => void;
   /** Novo estado de reprodução enviado pelo banco (linha crua de playback_state). */
   onPlaybackState?: (row: unknown) => void;
+  /** A fila mudou (alguém adicionou, removeu, reordenou ou o vídeo avançou). */
+  onPlaylistChange?: () => void;
   /** Canal (re)conectado: bom momento para buscar o estado atual e não perder nada. */
   onConnected?: () => void;
 };
@@ -26,6 +28,7 @@ export function useRoomChannel(
   const [status, setStatus] = useState<ChannelStatus>('connecting');
   const onPresenceChange = useEffectEvent(() => handlers.onPresenceChange?.());
   const onPlaybackState = useEffectEvent((row: unknown) => handlers.onPlaybackState?.(row));
+  const onPlaylistChange = useEffectEvent(() => handlers.onPlaylistChange?.());
   const onConnected = useEffectEvent(() => handlers.onConnected?.());
 
   useEffect(() => {
@@ -45,6 +48,8 @@ export function useRoomChannel(
         const payload = message.payload as { record?: unknown } | undefined;
         onPlaybackState(payload?.record);
       })
+      // Enviado pelo trigger de playlist_items.
+      .on('broadcast', { event: 'playlist' }, () => onPlaylistChange())
       .subscribe((state) => {
         if (state === 'SUBSCRIBED') {
           setStatus('online');

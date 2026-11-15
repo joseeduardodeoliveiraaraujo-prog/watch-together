@@ -37,6 +37,7 @@ export type Database = {
         Row: {
           current_item_id: string | null;
           is_playing: boolean;
+          last_action: string;
           last_command_id: string | null;
           position_seconds: number;
           position_updated_at: string;
@@ -49,6 +50,7 @@ export type Database = {
         Insert: {
           current_item_id?: string | null;
           is_playing?: boolean;
+          last_action?: string;
           last_command_id?: string | null;
           position_seconds?: number;
           position_updated_at?: string;
@@ -61,6 +63,7 @@ export type Database = {
         Update: {
           current_item_id?: string | null;
           is_playing?: boolean;
+          last_action?: string;
           last_command_id?: string | null;
           position_seconds?: number;
           position_updated_at?: string;
@@ -230,6 +233,46 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      add_to_playlist: {
+        Args: { p_room_id: string; p_title?: string; p_video_id: string };
+        Returns: {
+          added_by: string | null;
+          created_at: string;
+          id: string;
+          position: number;
+          room_id: string;
+          title: string | null;
+          video_id: string;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'playlist_items';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      advance_to_next: {
+        Args: { p_from_item_id: string; p_reason?: string; p_room_id: string };
+        Returns: {
+          current_item_id: string | null;
+          is_playing: boolean;
+          last_action: string;
+          last_command_id: string | null;
+          position_seconds: number;
+          position_updated_at: string;
+          room_id: string;
+          updated_at: string;
+          updated_by: string | null;
+          version: number;
+          video_id: string | null;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'playback_state';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
       create_room: {
         Args: never;
         Returns: {
@@ -263,17 +306,16 @@ export type Database = {
         };
       };
       leave_room: { Args: { p_room_id: string }; Returns: undefined };
-      playback_command: {
-        Args: {
-          p_action: string;
-          p_command_id: string;
-          p_position?: number;
-          p_room_id: string;
-          p_video_id?: string;
-        };
+      move_playlist_item: {
+        Args: { p_direction: number; p_item_id: string; p_room_id: string };
+        Returns: undefined;
+      };
+      play_item: {
+        Args: { p_item_id: string; p_room_id: string };
         Returns: {
           current_item_id: string | null;
           is_playing: boolean;
+          last_action: string;
           last_command_id: string | null;
           position_seconds: number;
           position_updated_at: string;
@@ -289,6 +331,38 @@ export type Database = {
           isOneToOne: true;
           isSetofReturn: false;
         };
+      };
+      playback_command: {
+        Args: {
+          p_action: string;
+          p_command_id: string;
+          p_position?: number;
+          p_room_id: string;
+          p_video_id?: string;
+        };
+        Returns: {
+          current_item_id: string | null;
+          is_playing: boolean;
+          last_action: string;
+          last_command_id: string | null;
+          position_seconds: number;
+          position_updated_at: string;
+          room_id: string;
+          updated_at: string;
+          updated_by: string | null;
+          version: number;
+          video_id: string | null;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'playback_state';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      remove_from_playlist: {
+        Args: { p_item_id: string; p_room_id: string };
+        Returns: undefined;
       };
       server_now: { Args: never; Returns: string };
     };

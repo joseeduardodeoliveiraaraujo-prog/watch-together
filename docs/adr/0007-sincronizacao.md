@@ -52,9 +52,10 @@ qualquer uma pode dar play, pausar ou mudar a posição.
 - O player nunca muda de lugar na árvore de componentes, então alternar a tela cheia não recarrega o
   vídeo.
 
-## Riscos a observar no aparelho
+## Validação (2026-11-15)
 
-- **Anúncios:** durante um anúncio o player pode reportar estados e tempos do anúncio. O app pode
-  tentar corrigir a posição. Registrar o comportamento no teste.
-- O `app.json` trava o app em retrato. A documentação não confirma se o giro para paisagem em tempo
-  de execução funciona com essa trava no Android; validar no aparelho.
+- Testado em 2 celulares Android via Expo Go: play, pause, seek, troca de vídeo e presença
+  sincronizados.
+- Tela cheia: o giro para paisagem funciona mesmo com `orientation: portrait` no `app.json`.
+- **Anúncios: ainda não observados.** Durante um anúncio o player pode reportar estados e tempos do
+  anúncio, e o app pode tentar corrigir a posição. Observar nos próximos testes.

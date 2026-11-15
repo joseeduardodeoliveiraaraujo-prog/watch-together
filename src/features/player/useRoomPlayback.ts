@@ -3,20 +3,26 @@ import { AppState } from 'react-native';
 
 import { describeRpcError } from '@/lib/supabase/rpcErrors';
 import type { PlayerEvent, PlayerState } from '@/lib/youtube/bridge';
+import { isUnplayableError } from '@/lib/youtube/errors';
 import type { YouTubePlayerHandle } from '@/lib/youtube/YouTubePlayer';
 
-import { fetchPlayback, measureClockOffset, sendPlaybackCommand, type PlaybackAction } from './api';
+import {
+  advanceToNext,
+  fetchPlayback,
+  measureClockOffset,
+  sendPlaybackCommand,
+  type PlaybackCommand,
+} from './api';
 import { decideSync, type LocalPlayer } from './sync/decideSync';
 import {
-  describeChange,
   expectedPosition,
   isNewer,
   parsePlaybackRow,
-  type PlaybackChange,
+  type PlaybackAction,
   type PlaybackSnapshot,
 } from './sync/playbackState';
 
-export type LastAction = { userId: string | null; change: PlaybackChange };
+export type LastAction = { userId: string | null; action: PlaybackAction };
 
 export type PlayerProgress = { state: PlayerState; currentTime: number; duration: number };
 
@@ -53,6 +59,8 @@ export function useRoomPlayback(
     at: 0,
   });
   const lastCorrectionRef = useRef(0);
+  /** Item para o qual já pedimos "próximo" (evita pedir de novo a cada status). */
+  const advancedItemRef = useRef<string | null>(null);
 
   const [snapshot, setSnapshot] = useState<PlaybackSnapshot | null>(null);
   const [progress, setProgress] = useState<PlayerProgress>({
@@ -105,7 +113,8 @@ export function useRoomPlayback(
     confirmedRef.current = next;
     snapshotRef.current = next;
     setSnapshot(next);
-    if (previous) setLastAction({ userId: next.updatedBy, change: describeChange(previous, next) });
+    // Só mostra ações que aconteceram com a sala aberta (não o estado antigo ao entrar).
+    if (previous) setLastAction({ userId: next.updatedBy, action: next.lastAction });
     lastCorrectionRef.current = 0;
     runSync();
   };
@@ -137,6 +146,23 @@ export function useRoomPlayback(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomId]);
 
+  /**
+   * O vídeo atual da fila acabou ou não pode tocar aqui: pede o próximo.
+   * Só para o vídeo que a sala está tocando e uma vez por item.
+   */
+  const requestAdvance = (reason: 'ended' | 'error') => {
+    const snap = snapshotRef.current;
+    const itemId = snap?.currentItemId;
+    if (!snap || !itemId || advancedItemRef.current === itemId) return;
+    if (localRef.current.loadedVideoId !== snap.videoId) return;
+    if (reason === 'ended' && !snap.isPlaying) return;
+    advancedItemRef.current = itemId;
+    advanceToNext(roomId, itemId, reason).then(applyConfirmed, (e: unknown) => {
+      advancedItemRef.current = null;
+      setError(describeRpcError(e));
+    });
+  };
+
   /** Eventos do player (WebView). */
   const handlePlayerEvent = (event: PlayerEvent) => {
     const local = localRef.current;
@@ -160,14 +186,18 @@ export function useRoomPlayback(
           currentTime: event.currentTime,
           duration: event.duration,
         });
+        if (event.state === 'ended') requestAdvance('ended');
         runSync();
         return;
       case 'stateChange':
         Object.assign(local, { state: event.state, currentTime: event.currentTime, at: event.at });
+        if (event.state === 'ended') requestAdvance('ended');
         runSync();
         return;
       case 'error':
         setPlayerErrorCode(event.code);
+        // Vídeo que nunca vai tocar (removido, privado, incorporação proibida): pula.
+        if (isUnplayableError(event.code)) requestAdvance('error');
         return;
       case 'apiLoadError':
         setPlayerErrorCode(-1);
@@ -177,13 +207,13 @@ export function useRoomPlayback(
 
   /** Comando do usuário: aplica a previsão na hora e confirma no servidor. */
   const command = async (
-    action: PlaybackAction,
+    action: PlaybackCommand,
     predicted: PlaybackSnapshot,
     options: { position?: number; videoId?: string },
   ) => {
     snapshotRef.current = predicted;
     setSnapshot(predicted);
-    setLastAction({ userId, change: action });
+    setLastAction({ userId, action });
     setError(null);
     lastCorrectionRef.current = 0;
     runSync();
@@ -230,23 +260,6 @@ export function useRoomPlayback(
 
   const seekBy = (delta: number) => seekTo(localPosition() + delta);
 
-  const loadVideo = (videoId: string) => {
-    const base: PlaybackSnapshot = snapshotRef.current ?? {
-      version: 0,
-      videoId: null,
-      isPlaying: false,
-      position: 0,
-      positionUpdatedAt: 0,
-      updatedBy: null,
-      lastCommandId: null,
-    };
-    void command(
-      'load',
-      { ...base, videoId, isPlaying: true, position: 0, positionUpdatedAt: serverNow() },
-      { videoId },
-    );
-  };
-
   return {
     snapshot,
     progress,
@@ -261,6 +274,5 @@ export function useRoomPlayback(
     pause,
     seekBy,
     seekTo,
-    loadVideo,
   };
 }
