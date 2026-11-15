@@ -1,9 +1,8 @@
 /**
  * Página do player do YouTube — FONTE ÚNICA.
  *
- * Usada de duas formas:
- *  - "hosted": publicada na Vercel como web/player/index.html (gerado por `npm run build:player`);
- *  - "inline": injetada direto na WebView com `baseUrl` = origem da página hospedada.
+ * Publicada na Vercel como web/player/index.html (gerado por `npm run build:player`) e aberta
+ * pela WebView em EXPO_PUBLIC_PLAYER_URL. O app NÃO embute este HTML (ADR 0004).
  *
  * Regras deste arquivo:
  *  - só pode conter `export const` (o Node lê este arquivo com type stripping no build script);

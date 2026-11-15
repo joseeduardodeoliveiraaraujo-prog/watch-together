@@ -4,13 +4,11 @@ import { WebView, type WebViewMessageEvent } from 'react-native-webview';
 import type { ShouldStartLoadRequest } from 'react-native-webview/lib/WebViewTypes';
 
 import { commandToScript, parsePlayerEvent, type PlayerCommand, type PlayerEvent } from './bridge';
-import { PLAYER_HTML } from './playerHtml';
 
 /**
- * - `hosted`: carrega a página publicada em `playerUrl` (origem real → Referer confiável).
- * - `inline`: injeta o HTML com `baseUrl = playerUrl` (sem request para a página).
+ * Player do YouTube: a WebView abre a página publicada em `playerUrl` (origem real, então o
+ * YouTube recebe um Referer confiável e não dá erro 153). Ver ADR 0004.
  */
-export type PlayerSourceMode = 'hosted' | 'inline';
 
 export type YouTubePlayerHandle = {
   send: (command: PlayerCommand) => void;
@@ -19,7 +17,6 @@ export type YouTubePlayerHandle = {
 
 type YouTubePlayerProps = {
   playerUrl: string;
-  mode: PlayerSourceMode;
   onEvent: (event: PlayerEvent) => void;
   ref?: Ref<YouTubePlayerHandle>;
 };
@@ -29,7 +26,7 @@ function getOrigin(url: string): string {
   return match ? match[1].toLowerCase() : '';
 }
 
-export function YouTubePlayer({ playerUrl, mode, onEvent, ref }: YouTubePlayerProps) {
+export function YouTubePlayer({ playerUrl, onEvent, ref }: YouTubePlayerProps) {
   // `WebView<object>`: os tipos da lib declaram `WebView<P = undefined>` com props
   // `WebViewProps & P`; no TypeScript 6, `X & undefined` vira `never`. Só afeta tipos.
   const webViewRef = useRef<WebView<object>>(null);
@@ -59,9 +56,8 @@ export function YouTubePlayer({ playerUrl, mode, onEvent, ref }: YouTubePlayerPr
   return (
     <View className="aspect-video w-full bg-black">
       <WebView<object>
-        key={mode}
         ref={webViewRef}
-        source={mode === 'hosted' ? { uri: playerUrl } : { html: PLAYER_HTML, baseUrl: playerUrl }}
+        source={{ uri: playerUrl }}
         originWhitelist={['https://*']}
         onMessage={handleMessage}
         onShouldStartLoadWithRequest={handleShouldStartLoad}

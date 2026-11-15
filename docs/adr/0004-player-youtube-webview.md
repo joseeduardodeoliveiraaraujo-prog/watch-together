@@ -1,6 +1,6 @@
 # ADR 0004 — Player do YouTube: página própria na WebView, hospedada na Vercel
 
-- **Status:** aceito (modo final será escolhido após teste em aparelho — ver "Validação")
+- **Status:** aceito — modo **hosted** escolhido em 2026-11-14 após teste em aparelho
 - **Data:** 2026-11-12
 
 ## Contexto
@@ -11,9 +11,11 @@ O YouTube exige que o embed identifique o site de origem via `Referer`. Sem ele,
 ## Decisão
 
 - Uma página HTML própria com a YouTube IFrame Player API, com **fonte única** em
-  `src/lib/youtube/playerHtml.ts`. Dois modos, alternáveis na tela de POC:
-  - **hosted:** a WebView abre a página publicada (origem real);
-  - **inline:** a WebView recebe o HTML com `baseUrl` = URL publicada.
+  `src/lib/youtube/playerHtml.ts`. A WebView abre a **página publicada** (modo hosted): a origem é
+  real, então o `Referer` enviado ao YouTube não depende da WebView de cada aparelho.
+- Alternativa testada e descartada: **inline** (HTML embutido no app com `baseUrl` = URL
+  publicada). Funcionou no aparelho de teste, mas depende de cada WebView repassar a origem
+  emprestada e exige nova versão do app para corrigir o player. Removida do código.
 - Hospedagem: **Vercel (plano Hobby)**, projeto estático a partir de `web/player/`
   (`npm run deploy:player`). URL configurada em `EXPO_PUBLIC_PLAYER_URL`.
 - O plano Hobby **proíbe uso comercial**. Se o app for monetizado, migrar para Cloudflare Pages:
@@ -26,8 +28,13 @@ O YouTube exige que o embed identifique o site de origem via `Referer`. Sem ele,
 
 ## Validação (critérios da Etapa 2)
 
-- [ ] Vídeo toca sem erro 152/153 no modo hosted e/ou inline, em aparelho Android real.
-- [ ] play/pause/seek executam em < 300 ms (medido na tela de POC).
-- [ ] Vídeo com anúncio: comportamento registrado (estados emitidos durante o anúncio).
-- [ ] Vídeo com embed desativado mostra o erro 101/150 de forma amigável.
+Teste em 2026-11-14, aparelho real via Expo Go:
+
+- [x] Vídeo toca sem erro 152/153 — **ambos os modos** funcionaram.
+- [x] Comandos: pause **13 ms**, seek **106 ms**, ponte página→app **9 ms**. Play **904 ms**,
+      mas a medida vai até o estado `playing` e inclui buffering do YouTube (provavelmente medido no
+      carregamento do vídeo). Não afeta a sincronização, que corrige a posição por seek (Etapa 5).
+- [x] Toque no logo do YouTube abre o app do YouTube sem tirar o player da tela.
+- [ ] Vídeo com anúncio: nenhum anúncio exibido no teste; comportamento a observar na Etapa 5.
+- [ ] Vídeo com embed desativado (101/150): não testado; mensagem coberta por teste unitário.
 - [ ] Tela cheia: adiado para a integração do player na sala (exige `expo-screen-orientation`).

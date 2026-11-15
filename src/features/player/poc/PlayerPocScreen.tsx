@@ -8,11 +8,7 @@ import { Colors } from '@/constants/theme';
 import type { PlayerEvent, PlayerState } from '@/lib/youtube/bridge';
 import { describePlayerError } from '@/lib/youtube/errors';
 import { extractYouTubeVideoId } from '@/lib/youtube/videoId';
-import {
-  YouTubePlayer,
-  type PlayerSourceMode,
-  type YouTubePlayerHandle,
-} from '@/lib/youtube/YouTubePlayer';
+import { YouTubePlayer, type YouTubePlayerHandle } from '@/lib/youtube/YouTubePlayer';
 
 /**
  * Tela TEMPORÁRIA da Etapa 2: valida o player do YouTube na WebView em aparelho real.
@@ -59,7 +55,6 @@ export function PlayerPocScreen() {
   const playerRef = useRef<YouTubePlayerHandle>(null);
   const pendingRef = useRef<PendingCommand | null>(null);
 
-  const [mode, setMode] = useState<PlayerSourceMode>('hosted');
   const [input, setInput] = useState(SAMPLE_VIDEOS[0].url);
   const [ready, setReady] = useState(false);
   const [state, setState] = useState<PlayerState>('unstarted');
@@ -132,16 +127,6 @@ export function PlayerPocScreen() {
     playerRef.current?.send({ type: 'seek', seconds: target });
   };
 
-  const switchMode = (next: PlayerSourceMode) => {
-    if (next === mode) return;
-    setMode(next);
-    setReady(false);
-    setState('unstarted');
-    setTime({ current: 0, duration: 0 });
-    setMetrics({});
-    addLog(`modo → ${next}`);
-  };
-
   if (!PLAYER_URL) {
     return (
       <Screen>
@@ -160,23 +145,9 @@ export function PlayerPocScreen() {
 
   return (
     <Screen padded={false}>
-      <YouTubePlayer ref={playerRef} playerUrl={PLAYER_URL} mode={mode} onEvent={handleEvent} />
+      <YouTubePlayer ref={playerRef} playerUrl={PLAYER_URL} onEvent={handleEvent} />
 
       <ScrollView className="flex-1" contentContainerClassName="gap-3 p-4">
-        <View className="flex-row gap-2">
-          {(['hosted', 'inline'] as const).map((option) => (
-            <Pressable
-              key={option}
-              onPress={() => switchMode(option)}
-              className={`flex-1 items-center rounded-lg border py-2 ${mode === option ? 'border-primary bg-primary/20' : 'border-border'}`}
-            >
-              <Text className="font-semibold text-text">
-                {option === 'hosted' ? 'A página hospedada' : 'B HTML inline'}
-              </Text>
-            </Pressable>
-          ))}
-        </View>
-
         <Text className="text-xs text-muted">
           {ready ? '● pronto' : '○ carregando player…'} · {state} · {formatTime(time.current)} /{' '}
           {formatTime(time.duration)}
