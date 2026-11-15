@@ -7,9 +7,11 @@
 
 - **Rotas em `app/` na raiz** (como no plano aprovado). O template do SDK 58 usa `src/app/`; o
   Expo Router suporta ambos. Mantemos `app/` só com composição de telas, e todo o resto em `src/`.
-- Arquitetura por funcionalidade em `src/features/<feature>` (auth, rooms, player, playlist,
-  participants, chat). Features não importam umas das outras; o que for compartilhado sobe para
-  `src/components`, `src/hooks`, `src/lib` ou `src/utils`.
+- Arquitetura por funcionalidade em `src/features/<feature>` (auth, rooms, player, playlist, chat).
+  Features não importam umas das outras; o que for compartilhado sobe para `src/components`,
+  `src/hooks`, `src/lib` ou `src/utils`. Exceções (2026-11-15):
+  - `auth` (sessão, perfil) pode ser usada por qualquer feature;
+  - `rooms/RoomScreen` é a tela que **compõe** a sala e importa player, playlist e chat.
 - Integrações externas em `src/lib` (`supabase/`, `youtube/`).
 - Alias `@/*` → `src/*`.
 

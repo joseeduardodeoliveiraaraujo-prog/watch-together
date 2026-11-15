@@ -12,7 +12,7 @@ import { useAsyncData } from '@/hooks/useAsyncData';
 
 import { createRoom, joinRoom, listMyRooms, ROOM_CAPACITY, type RoomSummary } from './api';
 import { normalizeRoomCode, validateRoomCode } from './roomCode';
-import { describeRoomError } from './roomErrors';
+import { describeRpcError } from '@/lib/supabase/rpcErrors';
 
 export function HomeScreen() {
   const router = useRouter();
@@ -38,7 +38,7 @@ export function HomeScreen() {
       const room = await createRoom();
       openRoom(room.id);
     } catch (error) {
-      setActionError(describeRoomError(error));
+      setActionError(describeRpcError(error));
     } finally {
       setBusy(null);
     }
@@ -56,7 +56,7 @@ export function HomeScreen() {
       setCode('');
       openRoom(room.id);
     } catch (error) {
-      setActionError(describeRoomError(error));
+      setActionError(describeRpcError(error));
     } finally {
       setBusy(null);
     }
@@ -115,13 +115,6 @@ export function HomeScreen() {
 
       <View className="mt-4 gap-2">
         <Button title="Perfil" variant="secondary" onPress={() => router.push('/profile')} />
-        {__DEV__ && (
-          <Button
-            title="POC: player do YouTube"
-            variant="secondary"
-            onPress={() => router.push('/poc/player')}
-          />
-        )}
       </View>
     </FormScreen>
   );

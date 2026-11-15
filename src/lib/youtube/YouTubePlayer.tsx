@@ -17,6 +17,8 @@ export type YouTubePlayerHandle = {
 
 type YouTubePlayerProps = {
   playerUrl: string;
+  /** Ocupa todo o espaço do pai (tela cheia) em vez de 16:9 na largura. */
+  fill?: boolean;
   onEvent: (event: PlayerEvent) => void;
   ref?: Ref<YouTubePlayerHandle>;
 };
@@ -26,7 +28,7 @@ function getOrigin(url: string): string {
   return match ? match[1].toLowerCase() : '';
 }
 
-export function YouTubePlayer({ playerUrl, onEvent, ref }: YouTubePlayerProps) {
+export function YouTubePlayer({ playerUrl, fill = false, onEvent, ref }: YouTubePlayerProps) {
   // `WebView<object>`: os tipos da lib declaram `WebView<P = undefined>` com props
   // `WebViewProps & P`; no TypeScript 6, `X & undefined` vira `never`. Só afeta tipos.
   const webViewRef = useRef<WebView<object>>(null);
@@ -54,7 +56,7 @@ export function YouTubePlayer({ playerUrl, onEvent, ref }: YouTubePlayerProps) {
   };
 
   return (
-    <View className="aspect-video w-full bg-black">
+    <View className={fill ? 'flex-1 bg-black' : 'aspect-video w-full bg-black'}>
       <WebView<object>
         ref={webViewRef}
         source={{ uri: playerUrl }}

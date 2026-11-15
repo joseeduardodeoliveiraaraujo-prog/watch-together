@@ -263,6 +263,34 @@ export type Database = {
         };
       };
       leave_room: { Args: { p_room_id: string }; Returns: undefined };
+      playback_command: {
+        Args: {
+          p_action: string;
+          p_command_id: string;
+          p_position?: number;
+          p_room_id: string;
+          p_video_id?: string;
+        };
+        Returns: {
+          current_item_id: string | null;
+          is_playing: boolean;
+          last_command_id: string | null;
+          position_seconds: number;
+          position_updated_at: string;
+          room_id: string;
+          updated_at: string;
+          updated_by: string | null;
+          version: number;
+          video_id: string | null;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'playback_state';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      server_now: { Args: never; Returns: string };
     };
     Enums: {
       [_ in never]: never;

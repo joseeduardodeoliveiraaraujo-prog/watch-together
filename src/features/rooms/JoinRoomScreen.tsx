@@ -9,7 +9,7 @@ import { useAsyncData } from '@/hooks/useAsyncData';
 
 import { joinRoom } from './api';
 import { normalizeRoomCode, validateRoomCode } from './roomCode';
-import { describeRoomError } from './roomErrors';
+import { describeRpcError } from '@/lib/supabase/rpcErrors';
 
 /** Destino do link de convite: entra na sala e abre a tela dela. */
 export function JoinRoomScreen({ code: rawCode }: { code: string }) {
@@ -23,7 +23,7 @@ export function JoinRoomScreen({ code: rawCode }: { code: string }) {
     if (roomId) router.replace(`/room/${roomId}`);
   }, [roomId, router]);
 
-  const error = invalid ?? (join.error ? describeRoomError(join.error) : null);
+  const error = invalid ?? (join.error ? describeRpcError(join.error) : null);
 
   return (
     <Screen>

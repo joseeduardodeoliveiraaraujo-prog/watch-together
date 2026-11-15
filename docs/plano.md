@@ -1,6 +1,6 @@
 # Plano de desenvolvimento — Etapas 3 a 8
 
-Atualizado em 2026-11-15. Etapas 1 (Fundação), 2 (POC do player), 3 (Supabase) e 4 (Salas) concluídas.
+Atualizado em 2026-11-15. Etapas 1 (Fundação), 2 (POC do player), 3 (Supabase), 4 (Salas) e 5 (Sincronização) concluídas.
 
 Cada etapa termina com: `npm run check` passando, critérios de validação testados no celular,
 README/ADR atualizados e um commit.

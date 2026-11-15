@@ -32,7 +32,6 @@ function RootNavigator() {
         <Stack.Screen name="(app)" />
         <Stack.Screen name="room/[id]" options={{ headerShown: true, title: 'Sala' }} />
         <Stack.Screen name="join/[code]" />
-        <Stack.Screen name="poc/player" options={{ headerShown: true, title: 'POC Player' }} />
       </Stack.Protected>
 
       <Stack.Protected guard={!signedIn} redirectTo="/">
