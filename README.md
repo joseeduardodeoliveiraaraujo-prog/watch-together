@@ -21,13 +21,15 @@ npm run android    # abre no emulador/aparelho conectado
 
 ## Scripts
 
-| Script              | O que faz                       |
-| ------------------- | ------------------------------- |
-| `npm run typecheck` | `tsc --noEmit`                  |
-| `npm run lint`      | ESLint (config Expo + Prettier) |
-| `npm test`          | Jest (`jest-expo`)              |
-| `npm run check`     | Os três acima                   |
-| `npm run format`    | Prettier                        |
+| Script              | O que faz                        |
+| ------------------- | -------------------------------- |
+| `npm run typecheck` | `tsc --noEmit`                   |
+| `npm run lint`      | ESLint (config Expo + Prettier)  |
+| `npm test`          | Jest (`jest-expo`)               |
+| `npm run check`     | Tipos, lint, testes e player     |
+| `npm run db:push`   | Aplica as migrations no Supabase |
+| `npm run db:types`  | Regenera os tipos do banco       |
+| `npm run format`    | Prettier                         |
 
 ## Variáveis de ambiente
 
@@ -50,9 +52,11 @@ docs/adr/            decisões arquiteturais
 
 ## Etapas
 
+Detalhes, decisões e critérios de validação em [docs/plano.md](docs/plano.md).
+
 1. ✅ Fundação
-2. Prova de conceito do player do YouTube (WebView)
-3. Supabase: Auth, banco, RLS
+2. ✅ Prova de conceito do player do YouTube (WebView)
+3. ✅ Supabase: Auth, banco, RLS
 4. Salas e presença
 5. Sincronização de reprodução
 6. Playlist

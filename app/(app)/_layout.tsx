@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 
-// Na Etapa 3 este grupo passa a exigir sessão (redireciona para /sign-in sem login).
+// Grupo protegido por sessão (ver Stack.Protected em app/_layout.tsx).
 export default function AppLayout() {
   return (
     <Stack>
