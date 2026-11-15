@@ -230,7 +230,39 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      create_room: {
+        Args: never;
+        Returns: {
+          code: string;
+          created_at: string;
+          id: string;
+          last_activity_at: string;
+          owner_id: string | null;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'rooms';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      join_room: {
+        Args: { p_code: string };
+        Returns: {
+          code: string;
+          created_at: string;
+          id: string;
+          last_activity_at: string;
+          owner_id: string | null;
+        };
+        SetofOptions: {
+          from: '*';
+          to: 'rooms';
+          isOneToOne: true;
+          isSetofReturn: false;
+        };
+      };
+      leave_room: { Args: { p_room_id: string }; Returns: undefined };
     };
     Enums: {
       [_ in never]: never;

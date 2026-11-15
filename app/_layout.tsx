@@ -30,7 +30,7 @@ function RootNavigator() {
           destino padrão do Expo Router ("/(auth)") cairia em "page could not be found". */}
       <Stack.Protected guard={signedIn} redirectTo="/sign-in">
         <Stack.Screen name="(app)" />
-        <Stack.Screen name="room/[id]" />
+        <Stack.Screen name="room/[id]" options={{ headerShown: true, title: 'Sala' }} />
         <Stack.Screen name="join/[code]" />
         <Stack.Screen name="poc/player" options={{ headerShown: true, title: 'POC Player' }} />
       </Stack.Protected>

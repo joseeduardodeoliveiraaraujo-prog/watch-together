@@ -57,7 +57,7 @@ Detalhes, decisões e critérios de validação em [docs/plano.md](docs/plano.md
 1. ✅ Fundação
 2. ✅ Prova de conceito do player do YouTube (WebView)
 3. ✅ Supabase: Auth, banco, RLS
-4. Salas e presença
+4. ✅ Salas e presença
 5. Sincronização de reprodução
 6. Playlist
 7. Chat

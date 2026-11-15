@@ -4,14 +4,13 @@ import { fireEvent, renderRouter, screen } from 'expo-router/testing-library';
 let mockSession: { user: { id: string; email: string } } | null = null;
 
 jest.mock('@/lib/supabase/client', () => {
-  const profileQuery = {
-    select: () => profileQuery,
-    eq: () => profileQuery,
-    maybeSingle: () =>
-      Promise.resolve({
-        data: { id: 'u1', display_name: 'Ana', created_at: '', updated_at: '' },
-        error: null,
-      }),
+  const profile = { id: 'u1', display_name: 'Ana', created_at: '', updated_at: '' };
+  // Consulta encadeável mínima: perfis (maybeSingle) e lista de salas (order).
+  const query = {
+    select: () => query,
+    eq: () => query,
+    maybeSingle: () => Promise.resolve({ data: profile, error: null }),
+    order: () => Promise.resolve({ data: [], error: null }),
   };
   return {
     supabase: {
@@ -19,7 +18,7 @@ jest.mock('@/lib/supabase/client', () => {
         getSession: () => Promise.resolve({ data: { session: mockSession } }),
         onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => undefined } } }),
       },
-      from: () => profileQuery,
+      from: () => query,
     },
   };
 });
@@ -51,6 +50,7 @@ describe('rotas protegidas', () => {
     await renderRouter('./app', { initialUrl: '/' });
     expect(await screen.findByText('Olá, Ana!')).toBeTruthy();
     expect(screen).toHavePathname('/');
+    expect(await screen.findByText(/ainda não está em nenhuma sala/)).toBeTruthy();
   });
 
   it('com login, a tela de entrar redireciona para a home', async () => {

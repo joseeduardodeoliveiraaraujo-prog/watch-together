@@ -55,7 +55,7 @@ export function ProfileScreen() {
   const unchanged = !!profile && normalizeDisplayName(name) === profile.display_name;
 
   return (
-    <FormScreen>
+    <FormScreen topInset={false}>
       <View className="gap-1">
         <Text className="text-sm text-muted">Conectado como</Text>
         <Text className="text-base text-text">{session?.user.email}</Text>
