@@ -3,13 +3,16 @@ import { NavigationBar } from 'expo-navigation-bar';
 import { Stack, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useRef, useState, type ReactNode } from 'react';
-import { ActivityIndicator, Alert, ScrollView, Share, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Pressable, ScrollView, Share, Text, View } from 'react-native';
 
 import { Screen } from '@/components/layout/Screen';
 import { Button } from '@/components/ui/Button';
 import { PLAYER_URL } from '@/constants/config';
 import { Colors } from '@/constants/theme';
 import { useSession } from '@/features/auth/SessionProvider';
+import { useProfile } from '@/features/auth/useProfile';
+import { ChatOverlay, ChatPanel } from '@/features/chat/ChatPanel';
+import { useRoomChat } from '@/features/chat/useRoomChat';
 import { PlayerControls } from '@/features/player/PlayerControls';
 import { useFullscreen } from '@/features/player/useFullscreen';
 import { useRoomPlayback, type LastAction } from '@/features/player/useRoomPlayback';
@@ -21,9 +24,11 @@ import { describePlayerError } from '@/lib/youtube/errors';
 import { YouTubePlayer, type YouTubePlayerHandle } from '@/lib/youtube/YouTubePlayer';
 
 import { fetchRoom, leaveRoom, ROOM_CAPACITY, type RoomDetails } from './api';
-import { useRoomChannel, type ChannelStatus } from './useRoomChannel';
+import { useRoomChannel, type ChannelStatus, type PresencePerson } from './useRoomChannel';
 
-/** Composição da sala: player sincronizado, controles, convite e participantes. */
+type Tab = 'chat' | 'queue' | 'room';
+
+/** Composição da sala: player sincronizado, controles e abas de chat, fila e sala. */
 export function RoomScreen({ roomId }: { roomId: string }) {
   const router = useRouter();
   const { session } = useSession();
@@ -33,17 +38,43 @@ export function RoomScreen({ roomId }: { roomId: string }) {
   const playerRef = useRef<YouTubePlayerHandle>(null);
   const playback = useRoomPlayback(roomId, userId, playerRef);
   const { fullscreen, toggle: toggleFullscreen } = useFullscreen();
-  const channel = useRoomChannel(roomId, userId, {
-    // Alguém entrou ou saiu: recarrega a lista de membros (apelidos vêm do banco).
-    onPresenceChange: room.reload,
-    onPlaybackState: playback.handleRemoteRow,
-    onPlaylistChange: playlist.reload,
-    // (Re)conectou: busca o estado atual para não perder mudanças feitas enquanto estava fora.
-    onConnected: () => {
-      void playback.refresh();
-      playlist.reload();
+  const { profile } = useProfile();
+  const myName = profile?.display_name ?? null;
+  const chat = useRoomChat(roomId, { userId, displayName: myName ?? 'Você' });
+  const [tab, setTab] = useState<Tab>('chat');
+  /** Mensagem mais nova já vista na aba de chat (para contar as não lidas). */
+  const [seenEntryId, setSeenEntryId] = useState<string | null>(null);
+
+  const memberName = (id: unknown) => room.data?.members.find((m) => m.userId === id)?.displayName;
+  const nameOf = (person: PresencePerson) => memberName(person.id) ?? person.name ?? 'Alguém';
+
+  const channel = useRoomChannel(
+    roomId,
+    { userId, displayName: myName },
+    {
+      // Alguém entrou ou saiu: recarrega a lista de membros (apelidos vêm do banco).
+      onPresenceChange: room.reload,
+      onPresenceDiff: (joined, left) => {
+        for (const person of joined) chat.notice(`${nameOf(person)} entrou`);
+        for (const person of left) chat.notice(`${nameOf(person)} saiu`);
+      },
+      onPlaybackState: playback.handleRemoteRow,
+      onPlaylistChange: (change) => {
+        playlist.reload();
+        const record = change.record as { added_by?: unknown; title?: unknown } | undefined;
+        if (change.operation !== 'INSERT' || !record) return;
+        const who = record.added_by === userId ? 'Você' : (memberName(record.added_by) ?? 'Alguém');
+        const title = typeof record.title === 'string' ? `"${record.title}"` : 'um vídeo';
+        chat.notice(`${who} adicionou ${title} à fila`);
+      },
+      onChat: chat.receive,
+      // (Re)conectou: busca o estado atual para não perder mudanças feitas enquanto estava fora.
+      onConnected: () => {
+        void playback.refresh();
+        playlist.reload();
+      },
     },
-  });
+  );
   const [leaving, setLeaving] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
 
@@ -107,6 +138,13 @@ export function RoomScreen({ roomId }: { roomId: string }) {
     );
   };
 
+  const switchTab = (next: Tab) => {
+    // Entrando ou saindo do chat: marca como lido tudo o que estava na tela.
+    if (tab === 'chat' || next === 'chat') setSeenEntryId(chat.entries[0]?.id ?? null);
+    setTab(next);
+  };
+  const unread = tab === 'chat' ? 0 : countUnread(chat.entries, seenEntryId, userId);
+
   const hasVideo = !!playback.snapshot?.videoId;
   const names = new Map(details.members.map((m) => [m.userId, m.displayName]));
   const controls = (
@@ -146,13 +184,18 @@ export function RoomScreen({ roomId }: { roomId: string }) {
             </Text>
           </View>
         )}
-        {fullscreen ? <View className="absolute bottom-0 left-0 right-0">{controls}</View> : null}
+        {fullscreen ? (
+          <>
+            <ChatOverlay entries={chat.entries} />
+            <View className="absolute bottom-0 left-0 right-0">{controls}</View>
+          </>
+        ) : null}
       </View>
 
       {fullscreen ? null : (
         <Screen padded={false} topInset={false}>
           {controls}
-          <ScrollView contentContainerClassName="gap-4 p-4" keyboardShouldPersistTaps="handled">
+          <View className="px-4 py-2">
             <PlaybackStatus
               lastAction={playback.lastAction}
               members={details.members}
@@ -165,45 +208,122 @@ export function RoomScreen({ roomId }: { roomId: string }) {
                   : null)
               }
             />
+          </View>
 
-            <PlaylistPanel
-              roomId={details.id}
-              items={playlist.data}
-              isFirstLoad={playlist.isFirstLoad}
-              loadFailed={!!playlist.error}
-              currentItemId={playback.snapshot?.currentItemId ?? null}
-              names={names}
-              onChanged={playlist.reload}
-            />
+          <TabBar
+            tab={tab}
+            onChange={switchTab}
+            unread={unread}
+            queueCount={playlist.data?.length ?? 0}
+            online={channel.onlineIds.size}
+          />
 
-            <View className="flex-row items-center justify-between rounded-xl border border-border bg-surface p-4">
-              <View>
-                <Text className="text-xs text-muted">Código da sala</Text>
-                <Text className="font-mono text-2xl font-bold tracking-widest text-text">
-                  {details.code}
-                </Text>
-              </View>
-              <Button title="Convidar" onPress={invite} />
-            </View>
-
-            <Participants
-              details={details}
+          {tab === 'chat' ? (
+            <ChatPanel
+              entries={chat.entries}
               userId={userId}
-              onlineIds={channel.onlineIds}
-              status={channel.status}
+              error={chat.error}
+              onSend={chat.send}
             />
+          ) : tab === 'queue' ? (
+            <ScrollView contentContainerClassName="p-4" keyboardShouldPersistTaps="handled">
+              <PlaylistPanel
+                roomId={details.id}
+                items={playlist.data}
+                isFirstLoad={playlist.isFirstLoad}
+                loadFailed={!!playlist.error}
+                currentItemId={playback.snapshot?.currentItemId ?? null}
+                names={names}
+                onChanged={playlist.reload}
+              />
+            </ScrollView>
+          ) : (
+            <ScrollView contentContainerClassName="gap-4 p-4">
+              <View className="flex-row items-center justify-between rounded-xl border border-border bg-surface p-4">
+                <View>
+                  <Text className="text-xs text-muted">Código da sala</Text>
+                  <Text className="font-mono text-2xl font-bold tracking-widest text-text">
+                    {details.code}
+                  </Text>
+                </View>
+                <Button title="Convidar" onPress={invite} />
+              </View>
 
-            {actionError ? <Text className="text-danger">{actionError}</Text> : null}
+              <Participants
+                details={details}
+                userId={userId}
+                onlineIds={channel.onlineIds}
+                status={channel.status}
+              />
 
-            <Button
-              title="Sair da sala"
-              variant="danger"
-              onPress={confirmLeave}
-              loading={leaving}
-            />
-          </ScrollView>
+              {actionError ? <Text className="text-danger">{actionError}</Text> : null}
+
+              <Button
+                title="Sair da sala"
+                variant="danger"
+                onPress={confirmLeave}
+                loading={leaving}
+              />
+            </ScrollView>
+          )}
         </Screen>
       )}
+    </View>
+  );
+}
+
+/** Mensagens de outras pessoas que chegaram depois da última vista. */
+function countUnread(
+  entries: ReturnType<typeof useRoomChat>['entries'],
+  seenId: string | null,
+  userId: string | null,
+): number {
+  let count = 0;
+  for (const entry of entries) {
+    if (entry.id === seenId) break;
+    if (entry.kind === 'user' && entry.userId !== userId) count++;
+  }
+  return count;
+}
+
+type TabBarProps = {
+  tab: Tab;
+  onChange: (tab: Tab) => void;
+  unread: number;
+  queueCount: number;
+  online: number;
+};
+
+function TabBar({ tab, onChange, unread, queueCount, online }: TabBarProps) {
+  const tabs: { id: Tab; label: string; badge?: number }[] = [
+    { id: 'chat', label: 'Chat', badge: unread },
+    { id: 'queue', label: `Fila (${queueCount})` },
+    { id: 'room', label: `Sala (${online} on)` },
+  ];
+  return (
+    <View className="flex-row border-b border-border" accessibilityRole="tablist">
+      {tabs.map((t) => {
+        const active = t.id === tab;
+        return (
+          <Pressable
+            key={t.id}
+            onPress={() => onChange(t.id)}
+            accessibilityRole="tab"
+            accessibilityState={{ selected: active }}
+            accessibilityLabel={t.badge ? `${t.label}, ${t.badge} novas` : t.label}
+            className={`flex-1 flex-row items-center justify-center gap-1 py-3 ${active ? 'border-b-2 border-primary' : ''}`}
+          >
+            <Text className={active ? 'font-semibold text-text' : 'text-muted'}>{t.label}</Text>
+            {t.badge ? (
+              <View className="min-w-5 items-center rounded-full bg-primary px-1.5">
+                <Text className="text-xs font-bold text-primary-foreground">
+                  {t.badge > 99 ? '99+' : t.badge}
+                </Text>
+              </View>
+            ) : null}
+          </Pressable>
+        );
+      })}
     </View>
   );
 }

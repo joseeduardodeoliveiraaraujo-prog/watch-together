@@ -8,5 +8,6 @@
   "primary": "#7C5CFF",
   "primary-foreground": "#FFFFFF",
   "danger": "#FF5C7A",
-  "success": "#3DD68C"
+  "success": "#3DD68C",
+  "black": "#000000"
 }

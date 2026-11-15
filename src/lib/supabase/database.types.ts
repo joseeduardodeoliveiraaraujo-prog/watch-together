@@ -364,6 +364,10 @@ export type Database = {
         Args: { p_item_id: string; p_room_id: string };
         Returns: undefined;
       };
+      send_chat_message: {
+        Args: { p_client_id: string; p_room_id: string; p_text: string };
+        Returns: undefined;
+      };
       server_now: { Args: never; Returns: string };
     };
     Enums: {

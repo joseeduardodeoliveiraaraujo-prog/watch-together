@@ -9,6 +9,8 @@ const MESSAGES: Record<string, string> = {
   invalid_video: 'Link do YouTube inválido.',
   playlist_full: 'A fila já tem 50 vídeos. Remova algum antes de adicionar.',
   item_not_found: 'Este vídeo não está mais na fila.',
+  invalid_message: 'A mensagem precisa ter entre 1 e 500 caracteres.',
+  rate_limited: 'Calma! Espere alguns segundos antes de mandar mais mensagens.',
 };
 
 export const RPC_NETWORK_ERROR = 'Sem conexão com o servidor. Verifique sua internet.';
