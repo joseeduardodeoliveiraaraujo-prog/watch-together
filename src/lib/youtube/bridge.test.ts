@@ -55,6 +55,45 @@ describe('parsePlayerEvent', () => {
     expect(parsePlayerEvent('{"type":"error","code":150}')).toEqual({ type: 'error', code: 150 });
   });
 
+  it('aceita captions com tradução e descarta itens inválidos', () => {
+    const raw = JSON.stringify({
+      type: 'captions',
+      tracks: [
+        { id: 'a.en', label: 'English (auto-generated)', auto: true },
+        { id: 'pt', label: '' },
+        { label: 'sem id' },
+        null,
+      ],
+      translations: [{ code: 'pt', label: 'Português' }, { label: 'sem código' }],
+      active: { id: 'a.en', translateTo: 'pt' },
+    });
+    expect(parsePlayerEvent(raw)).toEqual({
+      type: 'captions',
+      tracks: [
+        { id: 'a.en', label: 'English (auto-generated)', auto: true },
+        { id: 'pt', label: 'pt', auto: false },
+      ],
+      translations: [{ code: 'pt', label: 'Português' }],
+      active: { id: 'a.en', translateTo: 'pt' },
+    });
+  });
+
+  it('captions: faixa ativa fora da lista vira desligada; tradução desconhecida é ignorada', () => {
+    const off = JSON.stringify({ type: 'captions', tracks: [], active: { id: 'en' } });
+    expect(parsePlayerEvent(off)).toEqual({
+      type: 'captions',
+      tracks: [],
+      translations: [],
+      active: null,
+    });
+    const unknown = JSON.stringify({
+      type: 'captions',
+      tracks: [{ id: 'en', label: 'English' }],
+      active: { id: 'en', translateTo: 'xx' },
+    });
+    expect(parsePlayerEvent(unknown)).toMatchObject({ active: { id: 'en', translateTo: null } });
+  });
+
   it('trunca logs longos', () => {
     const event = parsePlayerEvent(JSON.stringify({ type: 'log', message: 'x'.repeat(2000) }));
     expect(event?.type === 'log' && event.message.length).toBe(500);

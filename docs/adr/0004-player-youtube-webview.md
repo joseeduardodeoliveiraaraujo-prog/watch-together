@@ -23,8 +23,18 @@ O YouTube exige que o embed identifique o site de origem via `Referer`. Sem ele,
 - Protocolo tipado app ↔ página em `src/lib/youtube/bridge.ts`. Toda mensagem da página é
   validada (`parsePlayerEvent`) e só é aceita se vier da origem do player.
 - `controls=0`, `disablekb=1`, `fs=0`: busca/seek só pelos controles do app, para distinguir ações
-  do usuário de comandos de sincronização. Toques no vídeo continuam liberados (botão "Pular
-  anúncio"). Navegação para fora da página abre no navegador/app do YouTube.
+  do usuário de comandos de sincronização. Navegação para fora da página abre no navegador/app do
+  YouTube.
+- **Atualização 2026-11-20 — toques no vídeo bloqueados.** Mesmo com `controls=0` o YouTube mostra
+  o botão grande de play com o vídeo parado; tocar nele dava play só naquele aparelho e a
+  sincronização pausava de novo. Agora uma camada do app cobre o vídeo e recebe todos os toques
+  (na tela cheia ela mostra/esconde os controles). Custo aceito: o botão "Pular anúncio" e o logo
+  do YouTube deixam de responder. Usar os controles nativos do YouTube foi descartado: o app teria
+  de adivinhar se cada mudança de estado veio da pessoa, da rede ou de um anúncio.
+- **Legendas** (escolha local, não vai para a sala) usam `getOption`/`setOption('captions', ...)`,
+  não documentados pelo YouTube. **Qualidade** não é controlável pela IFrame API
+  (`setPlaybackQuality` não faz nada desde 2019): fica no automático do YouTube, independente em
+  cada aparelho. Tocar o vídeo fora do player oficial para escolher a qualidade viola os termos.
 
 ## Validação (critérios da Etapa 2)
 

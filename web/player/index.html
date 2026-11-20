@@ -41,6 +41,90 @@
 
   function currentTime() { return safeNumber(function () { return player.getCurrentTime(); }); }
 
+  // Legendas: getOption/setOption('captions', ...) não são documentados pelo YouTube, mas são o
+  // único jeito de listar e trocar a legenda pela IFrame API. Tudo protegido por try/catch.
+  var captionTracks = [];
+  var captionLanguages = [];
+
+  function trackId(track) {
+    return String(track.vss_id || ((track.kind === 'asr' ? 'a.' : '') + (track.languageCode || '')));
+  }
+
+  function readOption(name) {
+    try { return player.getOption('captions', name); } catch (e) { return null; }
+  }
+
+  function captionsInfo() {
+    var list = readOption('tracklist');
+    captionTracks = list && list.length ? list : [];
+    var langs = readOption('translationLanguages');
+    captionLanguages = langs && langs.length ? langs : [];
+    var current = readOption('track');
+
+    var tracks = [];
+    var active = null;
+    for (var i = 0; i < captionTracks.length; i++) {
+      var t = captionTracks[i];
+      var id = trackId(t);
+      if (!id) continue;
+      tracks.push({
+        id: id,
+        label: String(t.displayName || t.languageName || t.languageCode || id),
+        auto: t.kind === 'asr'
+      });
+      if (current && current.languageCode && active === null) {
+        var sameVss = t.vss_id && current.vss_id && t.vss_id === current.vss_id;
+        var sameLang = t.languageCode === current.languageCode && (t.kind || '') === (current.kind || '');
+        if (sameVss || sameLang) {
+          var tl = current.translationLanguage;
+          active = { id: id, translateTo: tl && tl.languageCode ? String(tl.languageCode) : null };
+        }
+      }
+    }
+
+    var translations = [];
+    for (var j = 0; j < captionLanguages.length; j++) {
+      var l = captionLanguages[j];
+      if (!l || !l.languageCode) continue;
+      translations.push({ code: String(l.languageCode), label: String(l.languageName || l.languageCode) });
+    }
+    return { type: 'captions', tracks: tracks, translations: translations, active: active };
+  }
+
+  function sendCaptions() { send(captionsInfo()); }
+
+  function setCaption(selection) {
+    if (!selection || typeof selection.id !== 'string') {
+      player.setOption('captions', 'track', {});
+    } else {
+      var track = null;
+      for (var i = 0; i < captionTracks.length; i++) {
+        if (trackId(captionTracks[i]) === selection.id) track = captionTracks[i];
+      }
+      if (!track) { sendCaptions(); return; }
+      // Cópia da faixa; a tradução automática é a mesma faixa com translationLanguage.
+      var chosen = {};
+      for (var key in track) {
+        if (Object.prototype.hasOwnProperty.call(track, key) && key !== 'translationLanguage') {
+          chosen[key] = track[key];
+        }
+      }
+      if (typeof selection.translateTo === 'string') {
+        for (var j = 0; j < captionLanguages.length; j++) {
+          if (captionLanguages[j].languageCode === selection.translateTo) {
+            chosen.translationLanguage = captionLanguages[j];
+          }
+        }
+      }
+      var modules = [];
+      try { modules = player.getOptions() || []; } catch (e) { modules = []; }
+      if (modules.indexOf('captions') < 0) player.loadModule('captions');
+      player.setOption('captions', 'track', chosen);
+    }
+    // O YouTube aplica a troca de forma assíncrona: confirma o estado logo depois.
+    setTimeout(sendCaptions, 500);
+  }
+
   function execute(cmd) {
     switch (cmd.type) {
       case 'load':
@@ -51,6 +135,8 @@
       case 'pause': player.pauseVideo(); break;
       case 'seek': player.seekTo(cmd.seconds, true); break;
       case 'mute': if (cmd.muted) { player.mute(); } else { player.unMute(); } break;
+      case 'getCaptions': sendCaptions(); break;
+      case 'setCaption': setCaption(cmd.selection); break;
       default: send({ type: 'log', message: 'unknown command: ' + cmd.type });
     }
   }
@@ -111,6 +197,8 @@
         onStateChange: function (event) {
           send({ type: 'stateChange', state: event.data, currentTime: currentTime(), at: Date.now() });
         },
+        // Módulos (como o de legendas) carregados para o vídeo atual: a lista pode ter mudado.
+        onApiChange: function () { sendCaptions(); },
         onError: function (event) {
           send({ type: 'error', code: event.data });
         }

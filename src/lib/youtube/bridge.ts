@@ -14,7 +14,23 @@ export type PlayerCommand =
   | { type: 'play' }
   | { type: 'pause' }
   | { type: 'seek'; seconds: number }
-  | { type: 'mute'; muted: boolean };
+  | { type: 'mute'; muted: boolean }
+  /** Pede a lista de legendas do vídeo atual (resposta: evento `captions`). */
+  | { type: 'getCaptions' }
+  /** Liga a legenda escolhida; `null` desliga. Vale só para este aparelho. */
+  | { type: 'setCaption'; selection: CaptionSelection | null };
+
+/**
+ * Legenda disponível no vídeo (lista do próprio YouTube). `id` distingue a manual da gerada
+ * automaticamente (`auto`) do mesmo idioma.
+ */
+export type CaptionTrack = { id: string; label: string; auto: boolean };
+
+/** Idioma para o qual o YouTube sabe traduzir a legenda automaticamente. */
+export type CaptionLanguage = { code: string; label: string };
+
+/** Legenda ativa: a faixa `id`, opcionalmente traduzida pelo YouTube para `translateTo`. */
+export type CaptionSelection = { id: string; translateTo: string | null };
 
 export type PlayerEvent =
   /** Player criado e pronto para receber comandos. */
@@ -33,6 +49,13 @@ export type PlayerEvent =
   | { type: 'error'; code: number }
   /** O script da IFrame API não carregou (sem rede, bloqueio etc.). */
   | { type: 'apiLoadError' }
+  /** Legendas do vídeo atual e a ativa (`null` = desligada). */
+  | {
+      type: 'captions';
+      tracks: CaptionTrack[];
+      translations: CaptionLanguage[];
+      active: CaptionSelection | null;
+    }
   | { type: 'log'; message: string };
 
 const STATE_BY_CODE: Record<number, PlayerState> = {
@@ -97,6 +120,8 @@ export function parsePlayerEvent(raw: string): PlayerEvent | null {
     }
     case 'error':
       return isFiniteNumber(msg.code) ? { type: 'error', code: msg.code } : null;
+    case 'captions':
+      return parseCaptions(msg);
     case 'log':
       return typeof msg.message === 'string'
         ? { type: 'log', message: msg.message.slice(0, 500) }
@@ -104,6 +129,54 @@ export function parsePlayerEvent(raw: string): PlayerEvent | null {
     default:
       return null;
   }
+}
+
+const MAX_ITEMS = 300;
+
+function shortString(value: unknown, max: number): string | null {
+  return typeof value === 'string' && value.length > 0 && value.length <= max ? value : null;
+}
+
+function parseCaptions(msg: Record<string, unknown>): PlayerEvent | null {
+  if (!Array.isArray(msg.tracks)) return null;
+  const tracks: CaptionTrack[] = [];
+  for (const item of msg.tracks.slice(0, MAX_ITEMS)) {
+    if (typeof item !== 'object' || item === null) continue;
+    const raw = item as Record<string, unknown>;
+    const id = shortString(raw.id, 100);
+    if (!id) continue;
+    tracks.push({
+      id,
+      label: (shortString(raw.label, 200) ?? id).slice(0, 100),
+      auto: raw.auto === true,
+    });
+  }
+
+  const translations: CaptionLanguage[] = [];
+  if (Array.isArray(msg.translations)) {
+    for (const item of msg.translations.slice(0, MAX_ITEMS)) {
+      if (typeof item !== 'object' || item === null) continue;
+      const raw = item as Record<string, unknown>;
+      const code = shortString(raw.code, 20);
+      if (!code) continue;
+      translations.push({ code, label: (shortString(raw.label, 200) ?? code).slice(0, 100) });
+    }
+  }
+
+  let active: CaptionSelection | null = null;
+  if (typeof msg.active === 'object' && msg.active !== null) {
+    const raw = msg.active as Record<string, unknown>;
+    const id = shortString(raw.id, 100);
+    if (id && tracks.some((t) => t.id === id)) {
+      const translateTo = shortString(raw.translateTo, 20);
+      active = {
+        id,
+        translateTo:
+          translateTo && translations.some((l) => l.code === translateTo) ? translateTo : null,
+      };
+    }
+  }
+  return { type: 'captions', tracks, translations, active };
 }
 
 /** Gera o JS injetado na WebView para executar um comando. */

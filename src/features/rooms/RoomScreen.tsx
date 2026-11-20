@@ -19,7 +19,9 @@ import { useSession } from '@/features/auth/SessionProvider';
 import { useProfile } from '@/features/auth/useProfile';
 import { ChatOverlay, ChatPanel } from '@/features/chat/ChatPanel';
 import { useRoomChat } from '@/features/chat/useRoomChat';
+import { FullscreenControls } from '@/features/player/FullscreenControls';
 import { PlayerControls } from '@/features/player/PlayerControls';
+import { useCaptions } from '@/features/player/useCaptions';
 import { useFullscreen } from '@/features/player/useFullscreen';
 import { useRoomPlayback, type LastAction } from '@/features/player/useRoomPlayback';
 import { listPlaylist } from '@/features/playlist/api';
@@ -46,6 +48,7 @@ export function RoomScreen({ roomId }: { roomId: string }) {
   const playerRef = useRef<YouTubePlayerHandle>(null);
   const playback = useRoomPlayback(roomId, userId, playerRef);
   const { fullscreen, toggle: toggleFullscreen } = useFullscreen();
+  const captions = useCaptions(playerRef, playback.snapshot?.videoId ?? null);
   const { profile } = useProfile();
   const myName = profile?.display_name ?? null;
   const chat = useRoomChat(roomId, { userId, displayName: myName ?? 'Você' });
@@ -165,21 +168,10 @@ export function RoomScreen({ roomId }: { roomId: string }) {
     Alert.alert('Código copiado', `Mande ${details.code} para quem vai assistir com você.`);
   };
 
-  const controls = (
-    <PlayerControls
-      isPlaying={!!playback.snapshot?.isPlaying}
-      currentTime={playback.progress.currentTime}
-      duration={playback.progress.duration}
-      disabled={!hasVideo}
-      fullscreen={fullscreen}
-      title={currentTitle}
-      onPlay={playback.play}
-      onPause={playback.pause}
-      onSeekBy={playback.seekBy}
-      onSeekTo={playback.seekTo}
-      onToggleFullscreen={toggleFullscreen}
-    />
-  );
+  const handlePlayerEvent: typeof playback.handlePlayerEvent = (event) => {
+    captions.handleEvent(event);
+    playback.handlePlayerEvent(event);
+  };
 
   return (
     <View className="flex-1 bg-background" style={{ paddingTop: fullscreen ? 0 : insets.top }}>
@@ -232,7 +224,7 @@ export function RoomScreen({ roomId }: { roomId: string }) {
             ref={playerRef}
             playerUrl={PLAYER_URL}
             fill={fullscreen}
-            onEvent={playback.handlePlayerEvent}
+            onEvent={handlePlayerEvent}
           />
         ) : (
           <View className="aspect-video w-full items-center justify-center bg-surface p-4">
@@ -242,32 +234,54 @@ export function RoomScreen({ roomId }: { roomId: string }) {
           </View>
         )}
         {fullscreen ? (
+          <FullscreenControls
+            isPlaying={!!playback.snapshot?.isPlaying}
+            currentTime={playback.progress.currentTime}
+            duration={playback.progress.duration}
+            disabled={!hasVideo}
+            title={currentTitle}
+            captions={captions.captions}
+            onPlay={playback.play}
+            onPause={playback.pause}
+            onSeekBy={playback.seekBy}
+            onSeekTo={playback.seekTo}
+            onExit={toggleFullscreen}
+            onRequestCaptions={captions.refresh}
+            onSelectCaption={captions.select}
+            overlay={<ChatOverlay entries={chat.entries} userId={userId} colorOf={colorOf} />}
+          />
+        ) : (
           <>
-            {/* Escurece o topo (chat) e a base (controles) para o texto aparecer sobre o vídeo. */}
-            <GradientView
-              gradient="linear-gradient(to bottom, #00000066 0%, #00000000 35%, #00000000 60%, #000000CC 100%)"
-              className="absolute inset-0"
-              style={{ pointerEvents: 'none' }}
-            />
-            <ChatOverlay entries={chat.entries} userId={userId} colorOf={colorOf} />
-            <View className="absolute bottom-0 left-0 right-0">{controls}</View>
+            {/* Bloqueia toques no vídeo: o play do YouTube tocaria só aqui e a sincronia pausaria. */}
+            <View className="absolute inset-0" onStartShouldSetResponder={() => true} />
+            {currentTitle ? (
+              <GradientView
+                gradient="linear-gradient(to bottom, #00000000, #000000AA)"
+                className="absolute bottom-0 left-0 right-0 justify-end px-4 pb-3 pt-8"
+                style={{ pointerEvents: 'none' }}
+              >
+                <Text className="font-semibold text-[13px] text-white" numberOfLines={1}>
+                  {currentTitle}
+                </Text>
+              </GradientView>
+            ) : null}
           </>
-        ) : currentTitle ? (
-          <GradientView
-            gradient="linear-gradient(to bottom, #00000000, #000000AA)"
-            className="absolute bottom-0 left-0 right-0 justify-end px-4 pb-3 pt-8"
-            style={{ pointerEvents: 'none' }}
-          >
-            <Text className="font-semibold text-[13px] text-white" numberOfLines={1}>
-              {currentTitle}
-            </Text>
-          </GradientView>
-        ) : null}
+        )}
       </View>
 
       {fullscreen ? null : (
         <Screen padded={false} topInset={false}>
-          {controls}
+          <PlayerControls
+            isPlaying={!!playback.snapshot?.isPlaying}
+            currentTime={playback.progress.currentTime}
+            duration={playback.progress.duration}
+            disabled={!hasVideo}
+            onPlay={playback.play}
+            onPause={playback.pause}
+            onSeekBy={playback.seekBy}
+            onSeekTo={playback.seekTo}
+            onToggleFullscreen={toggleFullscreen}
+          />
           <PlaybackStatus
             lastAction={playback.lastAction}
             members={details.members}
