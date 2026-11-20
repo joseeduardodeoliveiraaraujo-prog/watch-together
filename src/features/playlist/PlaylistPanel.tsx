@@ -1,8 +1,9 @@
 import { Image } from 'expo-image';
 import { useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Pressable, Text, TextInput, View } from 'react-native';
 
 import { Button } from '@/components/ui/Button';
+import { useDialog } from '@/components/ui/Dialog';
 import { Icon, type IconName } from '@/components/ui/Icon';
 import { Colors } from '@/constants/theme';
 import { describeRpcError } from '@/lib/supabase/rpcErrors';
@@ -40,6 +41,7 @@ export function PlaylistPanel({
   names,
   onChanged,
 }: PlaylistPanelProps) {
+  const dialog = useDialog();
   const [error, setError] = useState<string | null>(null);
   const [busyItem, setBusyItem] = useState<string | null>(null);
 
@@ -64,21 +66,33 @@ export function PlaylistPanel({
     void run(item.id, () => removeFromPlaylist(roomId, item.id));
 
   const openMenu = (item: PlaylistItem) => {
-    Alert.alert(itemTitle(item), undefined, [
-      {
-        text: 'Tocar agora',
-        onPress: () => void run(item.id, () => playPlaylistItem(roomId, item.id)),
-      },
-      { text: 'Remover da fila', style: 'destructive', onPress: () => remove(item) },
-      { text: 'Cancelar', style: 'cancel' },
-    ]);
+    dialog.sheet({
+      title: itemTitle(item),
+      subtitle: item.addedBy ? `Adicionado por ${names.get(item.addedBy) ?? 'alguém'}` : undefined,
+      actions: [
+        {
+          label: 'Tocar agora',
+          icon: 'play',
+          onPress: () => void run(item.id, () => playPlaylistItem(roomId, item.id)),
+        },
+        {
+          label: 'Remover da fila',
+          icon: 'trash-2',
+          destructive: true,
+          onPress: () => remove(item),
+        },
+      ],
+    });
   };
 
   const confirmRemoveCurrent = (item: PlaylistItem) => {
-    Alert.alert('Remover o vídeo que está tocando?', itemTitle(item), [
-      { text: 'Cancelar', style: 'cancel' },
-      { text: 'Remover', style: 'destructive', onPress: () => remove(item) },
-    ]);
+    dialog.confirm({
+      title: 'Remover o vídeo que está tocando?',
+      message: itemTitle(item),
+      confirmLabel: 'Remover',
+      destructive: true,
+      onConfirm: () => remove(item),
+    });
   };
 
   return (

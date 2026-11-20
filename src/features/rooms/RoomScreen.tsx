@@ -4,7 +4,7 @@ import { NavigationBar } from 'expo-navigation-bar';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useRef, useState, type ReactNode } from 'react';
-import { ActivityIndicator, Alert, Pressable, ScrollView, Share, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, Share, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppHeader } from '@/components/layout/AppHeader';
@@ -12,6 +12,7 @@ import { Screen } from '@/components/layout/Screen';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
 import { GradientView } from '@/components/ui/Decor';
+import { useDialog } from '@/components/ui/Dialog';
 import { Icon, type IconName } from '@/components/ui/Icon';
 import { PLAYER_URL } from '@/constants/config';
 import { Colors } from '@/constants/theme';
@@ -40,6 +41,7 @@ type Tab = 'chat' | 'queue' | 'room';
 /** Composição da sala: player sincronizado, controles e abas de chat, fila e sala. */
 export function RoomScreen({ roomId }: { roomId: string }) {
   const router = useRouter();
+  const dialog = useDialog();
   const insets = useSafeAreaInsets();
   const { session } = useSession();
   const userId = session?.user.id ?? null;
@@ -137,16 +139,15 @@ export function RoomScreen({ roomId }: { roomId: string }) {
 
   const confirmLeave = () => {
     const alone = details.members.length <= 1;
-    Alert.alert(
-      'Sair da sala?',
-      alone
+    dialog.confirm({
+      title: 'Sair da sala?',
+      message: alone
         ? 'Você é a última pessoa aqui. A sala será apagada.'
         : 'Você deixa de ser membro. Para voltar, vai precisar do código.',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        { text: 'Sair', style: 'destructive', onPress: leave },
-      ],
-    );
+      confirmLabel: 'Sair',
+      destructive: true,
+      onConfirm: () => void leave(),
+    });
   };
 
   const switchTab = (next: Tab) => {
@@ -165,7 +166,7 @@ export function RoomScreen({ roomId }: { roomId: string }) {
 
   const copyCode = async () => {
     await Clipboard.setStringAsync(details.code);
-    Alert.alert('Código copiado', `Mande ${details.code} para quem vai assistir com você.`);
+    dialog.toast({ message: `Código ${details.code} copiado`, icon: 'copy' });
   };
 
   const handlePlayerEvent: typeof playback.handlePlayerEvent = (event) => {

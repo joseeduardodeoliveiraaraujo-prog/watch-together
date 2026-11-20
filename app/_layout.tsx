@@ -5,6 +5,7 @@ import { SplashScreen, Stack, ThemeProvider } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 
+import { DialogProvider } from '@/components/ui/Dialog';
 import { FONT_FILES } from '@/constants/fonts';
 import { NavigationTheme } from '@/constants/theme';
 import { SessionProvider, useSession } from '@/features/auth/SessionProvider';
@@ -53,7 +54,7 @@ export default function RootLayout() {
       <StatusBar style="light" />
       <SessionProvider>
         <SplashScreenController ready={ready} />
-        {ready ? <RootNavigator /> : null}
+        <DialogProvider>{ready ? <RootNavigator /> : null}</DialogProvider>
       </SessionProvider>
     </ThemeProvider>
   );
