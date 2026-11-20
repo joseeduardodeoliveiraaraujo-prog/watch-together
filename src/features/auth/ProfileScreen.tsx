@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 
+import { AppHeader } from '@/components/layout/AppHeader';
 import { FormScreen } from '@/components/layout/FormScreen';
 import { Button } from '@/components/ui/Button';
+import { BRAND_GRADIENT } from '@/components/ui/Decor';
+import { Icon } from '@/components/ui/Icon';
 import { TextField } from '@/components/ui/TextField';
 import { Colors } from '@/constants/theme';
 import { supabase } from '@/lib/supabase/client';
@@ -33,7 +36,7 @@ export function ProfileScreen() {
     const saveError = await updateDisplayName(name);
     setSaving(false);
     if (!saveError) setDraft(null);
-    setMessage(saveError ? { text: saveError, ok: false } : { text: 'Apelido salvo.', ok: true });
+    setMessage(saveError ? { text: saveError, ok: false } : { text: 'Apelido salvo', ok: true });
   };
 
   const signOut = async () => {
@@ -53,23 +56,37 @@ export function ProfileScreen() {
   }
 
   const unchanged = !!profile && normalizeDisplayName(name) === profile.display_name;
+  const savedName = profile?.display_name ?? '';
 
   return (
-    <FormScreen topInset={false}>
-      <View className="gap-1">
-        <Text className="text-sm text-muted">Conectado como</Text>
-        <Text className="text-base text-text">{session?.user.email}</Text>
+    <FormScreen header={<AppHeader title="Perfil" />} contentClassName="gap-7 px-5 pb-8 pt-4">
+      <View className="items-center gap-3.5 py-2">
+        <View
+          className="h-[88px] w-[88px] items-center justify-center rounded-full"
+          style={{ backgroundImage: BRAND_GRADIENT }}
+        >
+          <Text className="font-extrabold text-4xl text-primary-foreground">
+            {savedName.charAt(0).toUpperCase() || '?'}
+          </Text>
+        </View>
+        <View className="items-center gap-1">
+          <Text className="font-extrabold text-[22px] text-text">{savedName}</Text>
+          <Text className="font-sans text-[13px] text-muted">
+            Conectado como {session?.user.email}
+          </Text>
+        </View>
       </View>
 
       {error ? (
         <View className="gap-2">
-          <Text className="text-danger">{error}</Text>
+          <Text className="font-sans text-danger">{error}</Text>
           <Button title="Tentar de novo" variant="secondary" onPress={reload} />
         </View>
       ) : (
-        <>
+        <View className="gap-3.5">
           <TextField
             label="Apelido"
+            icon="user"
             value={name}
             onChangeText={setDraft}
             error={fieldError}
@@ -77,17 +94,33 @@ export function ProfileScreen() {
             returnKeyType="done"
             onSubmitEditing={save}
           />
+          {message ? (
+            <View className="flex-row items-center gap-1.5">
+              <Icon
+                name={message.ok ? 'check-circle' : 'alert-circle'}
+                size={14}
+                color={message.ok ? Colors.success : Colors.danger}
+              />
+              <Text
+                className={`font-sans text-[13px] ${message.ok ? 'text-success' : 'text-danger'}`}
+              >
+                {message.text}
+              </Text>
+            </View>
+          ) : null}
           <Button title="Salvar apelido" onPress={save} loading={saving} disabled={unchanged} />
-        </>
+        </View>
       )}
 
-      {message ? (
-        <Text className={message.ok ? 'text-success' : 'text-danger'}>{message.text}</Text>
-      ) : null}
+      <View className="flex-1" />
 
-      <View className="mt-6">
-        <Button title="Sair da conta" variant="danger" onPress={signOut} loading={signingOut} />
-      </View>
+      <Button
+        title="Sair da conta"
+        icon="log-out"
+        variant="danger"
+        onPress={signOut}
+        loading={signingOut}
+      />
     </FormScreen>
   );
 }

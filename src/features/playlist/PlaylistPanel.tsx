@@ -1,9 +1,9 @@
 import { Image } from 'expo-image';
-import { useState, type ReactNode } from 'react';
-import { ActivityIndicator, Pressable, Text, View } from 'react-native';
+import { useState } from 'react';
+import { ActivityIndicator, Alert, Pressable, Text, TextInput, View } from 'react-native';
 
 import { Button } from '@/components/ui/Button';
-import { TextField } from '@/components/ui/TextField';
+import { Icon, type IconName } from '@/components/ui/Icon';
 import { Colors } from '@/constants/theme';
 import { describeRpcError } from '@/lib/supabase/rpcErrors';
 import { extractYouTubeVideoId } from '@/lib/youtube/videoId';
@@ -45,6 +45,7 @@ export function PlaylistPanel({
 
   const current = items?.find((item) => item.id === currentItemId) ?? null;
   const upcoming = items?.filter((item) => item.id !== currentItemId) ?? [];
+  const busy = busyItem !== null;
 
   const run = async (itemId: string, action: () => Promise<void>) => {
     setBusyItem(itemId);
@@ -59,79 +60,147 @@ export function PlaylistPanel({
     }
   };
 
+  const remove = (item: PlaylistItem) =>
+    void run(item.id, () => removeFromPlaylist(roomId, item.id));
+
+  const openMenu = (item: PlaylistItem) => {
+    Alert.alert(itemTitle(item), undefined, [
+      {
+        text: 'Tocar agora',
+        onPress: () => void run(item.id, () => playPlaylistItem(roomId, item.id)),
+      },
+      { text: 'Remover da fila', style: 'destructive', onPress: () => remove(item) },
+      { text: 'Cancelar', style: 'cancel' },
+    ]);
+  };
+
+  const confirmRemoveCurrent = (item: PlaylistItem) => {
+    Alert.alert('Remover o vídeo que está tocando?', itemTitle(item), [
+      { text: 'Cancelar', style: 'cancel' },
+      { text: 'Remover', style: 'destructive', onPress: () => remove(item) },
+    ]);
+  };
+
   return (
-    <View className="gap-3">
+    <View className="gap-4">
       <AddVideoForm
         roomId={roomId}
         full={(items?.length ?? 0) >= PLAYLIST_CAPACITY}
         onAdded={onChanged}
       />
 
-      {error ? <Text className="text-danger">{error}</Text> : null}
+      {error ? <Text className="font-sans text-danger">{error}</Text> : null}
 
       {isFirstLoad ? (
         <ActivityIndicator color={Colors.primary} />
       ) : loadFailed && !items ? (
         <View className="gap-2">
-          <Text className="text-danger">Não foi possível carregar a fila.</Text>
+          <Text className="font-sans text-danger">Não foi possível carregar a fila.</Text>
           <Button title="Tentar de novo" variant="secondary" onPress={onChanged} />
         </View>
       ) : (
         <>
           {current ? (
-            <View className="gap-2">
-              <Text className="text-sm font-semibold text-muted">Tocando agora</Text>
-              <ItemRow item={current} names={names} highlight>
-                <IconButton
-                  label="Remover"
-                  icon="✕"
-                  onPress={() => void run(current.id, () => removeFromPlaylist(roomId, current.id))}
-                  disabled={busyItem !== null}
-                />
-              </ItemRow>
+            <View className="flex-row items-center gap-3 rounded-2xl border border-primary/30 bg-primary/15 p-2.5">
+              <Thumb videoId={current.videoId} />
+              <View className="flex-1 gap-1">
+                <View className="flex-row items-center gap-[5px]">
+                  <Icon name="bar-chart-2" size={12} color={Colors.accent} />
+                  <Text className="font-bold text-[11px] text-accent">Tocando agora</Text>
+                </View>
+                <ItemText item={current} names={names} />
+              </View>
+              <SmallButton
+                label="Remover o vídeo atual"
+                icon="x"
+                onPress={() => confirmRemoveCurrent(current)}
+                disabled={busy}
+              />
             </View>
           ) : null}
 
-          <View className="gap-2">
-            <Text className="text-sm font-semibold text-muted">A seguir ({upcoming.length})</Text>
-            {upcoming.length === 0 ? (
-              <Text className="text-muted">
-                {current ? 'Nada na fila depois deste vídeo.' : 'A fila está vazia.'}
+          <View className="gap-3">
+            <View className="flex-row justify-between">
+              <Text className="font-bold text-[13px] text-muted">A seguir</Text>
+              <Text className="font-sans text-[13px] text-subtle">
+                {upcoming.length === 1 ? '1 vídeo' : `${upcoming.length} vídeos`}
               </Text>
+            </View>
+            {upcoming.length === 0 ? (
+              <View className="items-center gap-2 rounded-2xl border border-dashed border-border px-6 py-6">
+                <Icon name="youtube" size={22} color={Colors.muted} />
+                <Text className="text-center font-sans text-sm text-muted">
+                  {current
+                    ? 'Nada na fila depois deste vídeo.'
+                    : 'A fila está vazia. Cole um link do YouTube acima.'}
+                </Text>
+              </View>
             ) : (
               upcoming.map((item, index) => (
-                <ItemRow key={item.id} item={item} names={names}>
-                  <IconButton
-                    label="Tocar agora"
-                    icon="▶"
-                    onPress={() => void run(item.id, () => playPlaylistItem(roomId, item.id))}
-                    disabled={busyItem !== null}
+                <View
+                  key={item.id}
+                  className={`flex-row items-center gap-3 py-0.5 ${busyItem === item.id ? 'opacity-50' : ''}`}
+                >
+                  <Thumb videoId={item.videoId} />
+                  <View className="flex-1 gap-1">
+                    <ItemText item={item} names={names} />
+                  </View>
+                  <View className="items-center gap-0.5">
+                    <SmallButton
+                      label="Subir na fila"
+                      icon="chevron-up"
+                      compact
+                      onPress={() => void run(item.id, () => moveInPlaylist(roomId, item.id, -1))}
+                      disabled={busy || index === 0}
+                    />
+                    <SmallButton
+                      label="Descer na fila"
+                      icon="chevron-down"
+                      compact
+                      onPress={() => void run(item.id, () => moveInPlaylist(roomId, item.id, 1))}
+                      disabled={busy || index === upcoming.length - 1}
+                    />
+                  </View>
+                  <SmallButton
+                    label={`Opções de ${itemTitle(item)}`}
+                    icon="more-vertical"
+                    onPress={() => openMenu(item)}
+                    disabled={busy}
                   />
-                  <IconButton
-                    label="Subir"
-                    icon="↑"
-                    onPress={() => void run(item.id, () => moveInPlaylist(roomId, item.id, -1))}
-                    disabled={busyItem !== null || index === 0}
-                  />
-                  <IconButton
-                    label="Descer"
-                    icon="↓"
-                    onPress={() => void run(item.id, () => moveInPlaylist(roomId, item.id, 1))}
-                    disabled={busyItem !== null || index === upcoming.length - 1}
-                  />
-                  <IconButton
-                    label="Remover"
-                    icon="✕"
-                    onPress={() => void run(item.id, () => removeFromPlaylist(roomId, item.id))}
-                    disabled={busyItem !== null}
-                  />
-                </ItemRow>
+                </View>
               ))
             )}
           </View>
         </>
       )}
     </View>
+  );
+}
+
+function itemTitle(item: PlaylistItem): string {
+  return item.title ?? `Vídeo ${item.videoId}`;
+}
+
+function Thumb({ videoId }: { videoId: string }) {
+  return (
+    <Image
+      source={{ uri: thumbnailUrl(videoId) }}
+      style={{ width: 96, height: 54, borderRadius: 10, backgroundColor: Colors['surface-raised'] }}
+      contentFit="cover"
+      accessibilityIgnoresInvertColors
+    />
+  );
+}
+
+function ItemText({ item, names }: { item: PlaylistItem; names: ReadonlyMap<string, string> }) {
+  const addedBy = item.addedBy ? names.get(item.addedBy) : undefined;
+  return (
+    <>
+      <Text className="font-semibold text-sm leading-[18px] text-text" numberOfLines={2}>
+        {itemTitle(item)}
+      </Text>
+      {addedBy ? <Text className="font-sans text-xs text-muted">por {addedBy}</Text> : null}
+    </>
   );
 }
 
@@ -147,8 +216,10 @@ function AddVideoForm({
   const [link, setLink] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
+  const [focused, setFocused] = useState(false);
 
   const submit = async () => {
+    if (full || adding) return;
     const videoId = extractYouTubeVideoId(link);
     if (!videoId) {
       setError('Link do YouTube inválido.');
@@ -176,73 +247,66 @@ function AddVideoForm({
     }
   };
 
-  return (
-    <View className="gap-2 rounded-xl border border-border bg-surface p-3">
-      <TextField
-        label="Adicionar à fila"
-        value={link}
-        onChangeText={setLink}
-        error={error}
-        placeholder="Cole um link do YouTube"
-        autoCapitalize="none"
-        autoCorrect={false}
-        returnKeyType="go"
-        onSubmitEditing={submit}
-        editable={!adding}
-      />
-      <Button
-        title={full ? `Fila cheia (${PLAYLIST_CAPACITY})` : 'Adicionar'}
-        variant="secondary"
-        onPress={submit}
-        loading={adding}
-        disabled={full}
-      />
-    </View>
-  );
-}
+  const border = error ? 'border-danger' : focused ? 'border-primary' : 'border-border';
 
-type ItemRowProps = {
-  item: PlaylistItem;
-  names: ReadonlyMap<string, string>;
-  highlight?: boolean;
-  children: ReactNode;
-};
-
-function ItemRow({ item, names, highlight = false, children }: ItemRowProps) {
-  const addedBy = item.addedBy ? names.get(item.addedBy) : undefined;
   return (
-    <View
-      className={`gap-2 rounded-xl border p-2 ${highlight ? 'border-primary bg-primary/10' : 'border-border bg-surface'}`}
-    >
-      <View className="flex-row gap-3">
-        <Image
-          source={{ uri: thumbnailUrl(item.videoId) }}
-          style={{ width: 96, height: 54, borderRadius: 6 }}
-          contentFit="cover"
-          accessibilityIgnoresInvertColors
-        />
-        <View className="flex-1 justify-center">
-          <Text className="text-text" numberOfLines={2}>
-            {item.title ?? `Vídeo ${item.videoId}`}
-          </Text>
-          {addedBy ? <Text className="text-xs text-muted">por {addedBy}</Text> : null}
+    <View className="gap-2">
+      <View className="flex-row gap-2">
+        <View
+          className={`h-[46px] flex-1 flex-row items-center gap-2.5 rounded-[14px] border bg-surface px-3.5 ${border}`}
+        >
+          <Icon name="link" size={16} color={Colors.muted} />
+          <TextInput
+            value={link}
+            onChangeText={setLink}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            placeholder={
+              full ? `Fila cheia (${PLAYLIST_CAPACITY} vídeos)` : 'Cole um link do YouTube'
+            }
+            placeholderTextColor={Colors.subtle}
+            selectionColor={Colors.primary}
+            accessibilityLabel="Adicionar à fila"
+            autoCapitalize="none"
+            autoCorrect={false}
+            returnKeyType="go"
+            onSubmitEditing={submit}
+            editable={!adding && !full}
+            className="h-full flex-1 font-sans text-sm text-text"
+          />
         </View>
+        <Pressable
+          onPress={submit}
+          disabled={full || adding || !link.trim()}
+          accessibilityRole="button"
+          accessibilityLabel="Adicionar"
+          accessibilityState={{ disabled: full || adding || !link.trim(), busy: adding }}
+          className={`h-[46px] w-[46px] items-center justify-center rounded-[14px] bg-primary active:opacity-80 ${full || !link.trim() ? 'opacity-40' : ''}`}
+        >
+          {adding ? (
+            <ActivityIndicator color={Colors['primary-foreground']} />
+          ) : (
+            <Icon name="plus" size={20} color={Colors['primary-foreground']} />
+          )}
+        </Pressable>
       </View>
-      <View className="flex-row justify-end gap-2">{children}</View>
+      {error ? <Text className="font-sans text-sm text-danger">{error}</Text> : null}
     </View>
   );
 }
 
-function IconButton({
+function SmallButton({
   label,
   icon,
   onPress,
   disabled,
+  compact = false,
 }: {
   label: string;
-  icon: string;
+  icon: IconName;
   onPress: () => void;
   disabled: boolean;
+  compact?: boolean;
 }) {
   return (
     <Pressable
@@ -251,10 +315,10 @@ function IconButton({
       accessibilityRole="button"
       accessibilityLabel={label}
       accessibilityState={{ disabled }}
-      hitSlop={4}
-      className={`h-9 w-11 items-center justify-center rounded-lg border border-border bg-surface-raised active:opacity-70 ${disabled ? 'opacity-30' : ''}`}
+      hitSlop={compact ? 2 : 6}
+      className={`items-center justify-center rounded-full active:bg-surface-raised ${compact ? 'h-6 w-7' : 'h-8 w-8'} ${disabled ? 'opacity-30' : ''}`}
     >
-      <Text className="text-base text-text">{icon}</Text>
+      <Icon name={icon} size={compact ? 16 : 18} color={Colors.muted} />
     </Pressable>
   );
 }

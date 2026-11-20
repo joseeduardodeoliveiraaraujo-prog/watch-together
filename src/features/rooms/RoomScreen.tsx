@@ -1,12 +1,18 @@
+import * as Clipboard from 'expo-clipboard';
 import * as Linking from 'expo-linking';
 import { NavigationBar } from 'expo-navigation-bar';
-import { Stack, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useRef, useState, type ReactNode } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, Share, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { AppHeader } from '@/components/layout/AppHeader';
 import { Screen } from '@/components/layout/Screen';
+import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
+import { GradientView } from '@/components/ui/Decor';
+import { Icon, type IconName } from '@/components/ui/Icon';
 import { PLAYER_URL } from '@/constants/config';
 import { Colors } from '@/constants/theme';
 import { useSession } from '@/features/auth/SessionProvider';
@@ -24,13 +30,15 @@ import { describePlayerError } from '@/lib/youtube/errors';
 import { YouTubePlayer, type YouTubePlayerHandle } from '@/lib/youtube/YouTubePlayer';
 
 import { fetchRoom, leaveRoom, ROOM_CAPACITY, type RoomDetails } from './api';
-import { useRoomChannel, type ChannelStatus, type PresencePerson } from './useRoomChannel';
+import { memberColor, memberColorMap } from './memberColors';
+import { useRoomChannel, type PresencePerson } from './useRoomChannel';
 
 type Tab = 'chat' | 'queue' | 'room';
 
 /** Composição da sala: player sincronizado, controles e abas de chat, fila e sala. */
 export function RoomScreen({ roomId }: { roomId: string }) {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const { session } = useSession();
   const userId = session?.user.id ?? null;
   const room = useAsyncData(`room:${roomId}`, () => fetchRoom(roomId));
@@ -147,6 +155,16 @@ export function RoomScreen({ roomId }: { roomId: string }) {
 
   const hasVideo = !!playback.snapshot?.videoId;
   const names = new Map(details.members.map((m) => [m.userId, m.displayName]));
+  const colorOf = memberColorMap(details.members.map((m) => m.userId));
+  const currentTitle =
+    playlist.data?.find((item) => item.id === playback.snapshot?.currentItemId)?.title ?? null;
+  const online = channel.onlineIds.size;
+
+  const copyCode = async () => {
+    await Clipboard.setStringAsync(details.code);
+    Alert.alert('Código copiado', `Mande ${details.code} para quem vai assistir com você.`);
+  };
+
   const controls = (
     <PlayerControls
       isPlaying={!!playback.snapshot?.isPlaying}
@@ -154,6 +172,7 @@ export function RoomScreen({ roomId }: { roomId: string }) {
       duration={playback.progress.duration}
       disabled={!hasVideo}
       fullscreen={fullscreen}
+      title={currentTitle}
       onPlay={playback.play}
       onPause={playback.pause}
       onSeekBy={playback.seekBy}
@@ -163,10 +182,48 @@ export function RoomScreen({ roomId }: { roomId: string }) {
   );
 
   return (
-    <View className="flex-1 bg-background">
-      <Stack.Screen options={{ headerShown: !fullscreen }} />
+    <View className="flex-1 bg-background" style={{ paddingTop: fullscreen ? 0 : insets.top }}>
       <StatusBar hidden={fullscreen} style="light" />
       <NavigationBar hidden={fullscreen} />
+
+      {fullscreen ? null : (
+        <AppHeader
+          title={
+            <View className="gap-0.5">
+              <Text
+                accessibilityRole="header"
+                accessibilityLabel={`Sala ${details.code}`}
+                className="font-mono-bold text-[17px] tracking-[2.5px] text-text"
+              >
+                {details.code}
+              </Text>
+              <View className="flex-row items-center gap-1.5">
+                <View
+                  className={`h-1.5 w-1.5 rounded-full ${channel.status === 'online' ? 'bg-success' : 'bg-faint'}`}
+                />
+                <Text className="font-sans text-xs text-muted">
+                  {channel.status === 'online'
+                    ? `${online} assistindo agora`
+                    : channel.status === 'connecting'
+                      ? 'Conectando…'
+                      : 'Reconectando…'}
+                </Text>
+              </View>
+            </View>
+          }
+          right={
+            <Pressable
+              onPress={invite}
+              accessibilityRole="button"
+              accessibilityLabel="Convidar"
+              className="h-9 flex-row items-center gap-1.5 rounded-full bg-primary/15 px-3.5 active:opacity-80"
+            >
+              <Icon name="user-plus" size={16} color={Colors.accent} />
+              <Text className="font-bold text-[13px] text-accent">Convidar</Text>
+            </Pressable>
+          }
+        />
+      )}
 
       {/* O player fica sempre no mesmo lugar da árvore: alternar a tela cheia não recarrega o vídeo. */}
       <View className={fullscreen ? 'flex-1 bg-black' : ''}>
@@ -179,43 +236,57 @@ export function RoomScreen({ roomId }: { roomId: string }) {
           />
         ) : (
           <View className="aspect-video w-full items-center justify-center bg-surface p-4">
-            <Text className="text-center text-muted">
+            <Text className="text-center font-sans text-muted">
               Player não configurado: defina EXPO_PUBLIC_PLAYER_URL no .env.local.
             </Text>
           </View>
         )}
         {fullscreen ? (
           <>
-            <ChatOverlay entries={chat.entries} />
+            {/* Escurece o topo (chat) e a base (controles) para o texto aparecer sobre o vídeo. */}
+            <GradientView
+              gradient="linear-gradient(to bottom, #00000066 0%, #00000000 35%, #00000000 60%, #000000CC 100%)"
+              className="absolute inset-0"
+              style={{ pointerEvents: 'none' }}
+            />
+            <ChatOverlay entries={chat.entries} userId={userId} colorOf={colorOf} />
             <View className="absolute bottom-0 left-0 right-0">{controls}</View>
           </>
+        ) : currentTitle ? (
+          <GradientView
+            gradient="linear-gradient(to bottom, #00000000, #000000AA)"
+            className="absolute bottom-0 left-0 right-0 justify-end px-4 pb-3 pt-8"
+            style={{ pointerEvents: 'none' }}
+          >
+            <Text className="font-semibold text-[13px] text-white" numberOfLines={1}>
+              {currentTitle}
+            </Text>
+          </GradientView>
         ) : null}
       </View>
 
       {fullscreen ? null : (
         <Screen padded={false} topInset={false}>
           {controls}
-          <View className="px-4 py-2">
-            <PlaybackStatus
-              lastAction={playback.lastAction}
-              members={details.members}
-              userId={userId}
-              hasVideo={hasVideo}
-              error={
-                playback.error ??
-                (playback.playerErrorCode !== null
-                  ? describePlayerError(playback.playerErrorCode)
-                  : null)
-              }
-            />
-          </View>
+          <PlaybackStatus
+            lastAction={playback.lastAction}
+            members={details.members}
+            userId={userId}
+            hasVideo={hasVideo}
+            error={
+              playback.error ??
+              (playback.playerErrorCode !== null
+                ? describePlayerError(playback.playerErrorCode)
+                : null)
+            }
+          />
 
           <TabBar
             tab={tab}
             onChange={switchTab}
             unread={unread}
             queueCount={playlist.data?.length ?? 0}
-            online={channel.onlineIds.size}
+            online={online}
           />
 
           {tab === 'chat' ? (
@@ -224,9 +295,13 @@ export function RoomScreen({ roomId }: { roomId: string }) {
               userId={userId}
               error={chat.error}
               onSend={chat.send}
+              colorOf={colorOf}
             />
           ) : tab === 'queue' ? (
-            <ScrollView contentContainerClassName="p-4" keyboardShouldPersistTaps="handled">
+            <ScrollView
+              contentContainerClassName="px-4 pb-6 pt-4"
+              keyboardShouldPersistTaps="handled"
+            >
               <PlaylistPanel
                 roomId={details.id}
                 items={playlist.data}
@@ -238,28 +313,42 @@ export function RoomScreen({ roomId }: { roomId: string }) {
               />
             </ScrollView>
           ) : (
-            <ScrollView contentContainerClassName="gap-4 p-4">
-              <View className="flex-row items-center justify-between rounded-xl border border-border bg-surface p-4">
-                <View>
-                  <Text className="text-xs text-muted">Código da sala</Text>
-                  <Text className="font-mono text-2xl font-bold tracking-widest text-text">
+            <ScrollView contentContainerClassName="gap-[22px] px-4 pb-7 pt-4">
+              <View className="flex-row items-center justify-between rounded-[18px] border border-border bg-surface p-4">
+                <View className="gap-1">
+                  <Text className="font-sans text-xs text-muted">Código da sala</Text>
+                  <Text className="font-mono-bold text-2xl tracking-[4px] text-text">
                     {details.code}
                   </Text>
                 </View>
-                <Button title="Convidar" onPress={invite} />
+                <View className="flex-row gap-2">
+                  <Pressable
+                    onPress={copyCode}
+                    accessibilityRole="button"
+                    accessibilityLabel="Copiar código"
+                    className="h-[42px] w-[42px] items-center justify-center rounded-xl bg-surface-raised active:opacity-80"
+                  >
+                    <Icon name="copy" size={18} />
+                  </Pressable>
+                  <Pressable
+                    onPress={invite}
+                    accessibilityRole="button"
+                    accessibilityLabel="Convidar"
+                    className="h-[42px] flex-row items-center gap-1.5 rounded-xl bg-primary px-3.5 active:opacity-80"
+                  >
+                    <Icon name="share-2" size={16} color={Colors['primary-foreground']} />
+                    <Text className="font-bold text-sm text-primary-foreground">Convidar</Text>
+                  </Pressable>
+                </View>
               </View>
 
-              <Participants
-                details={details}
-                userId={userId}
-                onlineIds={channel.onlineIds}
-                status={channel.status}
-              />
+              <Participants details={details} userId={userId} onlineIds={channel.onlineIds} />
 
-              {actionError ? <Text className="text-danger">{actionError}</Text> : null}
+              {actionError ? <Text className="font-sans text-danger">{actionError}</Text> : null}
 
               <Button
                 title="Sair da sala"
+                icon="log-out"
                 variant="danger"
                 onPress={confirmLeave}
                 loading={leaving}
@@ -295,13 +384,13 @@ type TabBarProps = {
 };
 
 function TabBar({ tab, onChange, unread, queueCount, online }: TabBarProps) {
-  const tabs: { id: Tab; label: string; badge?: number }[] = [
-    { id: 'chat', label: 'Chat', badge: unread },
-    { id: 'queue', label: `Fila (${queueCount})` },
-    { id: 'room', label: `Sala (${online} on)` },
+  const tabs: { id: Tab; label: string; a11y: string; badge?: number }[] = [
+    { id: 'chat', label: 'Chat', a11y: 'Chat', badge: unread },
+    { id: 'queue', label: `Fila · ${queueCount}`, a11y: `Fila, ${queueCount} vídeos` },
+    { id: 'room', label: `Sala · ${online} on`, a11y: `Sala, ${online} online` },
   ];
   return (
-    <View className="flex-row border-b border-border" accessibilityRole="tablist">
+    <View className="h-12 flex-row border-b border-border bg-surface" accessibilityRole="tablist">
       {tabs.map((t) => {
         const active = t.id === tab;
         return (
@@ -310,13 +399,17 @@ function TabBar({ tab, onChange, unread, queueCount, online }: TabBarProps) {
             onPress={() => onChange(t.id)}
             accessibilityRole="tab"
             accessibilityState={{ selected: active }}
-            accessibilityLabel={t.badge ? `${t.label}, ${t.badge} novas` : t.label}
-            className={`flex-1 flex-row items-center justify-center gap-1 py-3 ${active ? 'border-b-2 border-primary' : ''}`}
+            accessibilityLabel={t.badge ? `${t.a11y}, ${t.badge} novas` : t.a11y}
+            className={`flex-1 flex-row items-center justify-center gap-1.5 ${active ? 'border-b-2 border-primary' : ''}`}
           >
-            <Text className={active ? 'font-semibold text-text' : 'text-muted'}>{t.label}</Text>
+            <Text
+              className={`text-sm ${active ? 'font-bold text-text' : 'font-medium text-muted'}`}
+            >
+              {t.label}
+            </Text>
             {t.badge ? (
-              <View className="min-w-5 items-center rounded-full bg-primary px-1.5">
-                <Text className="text-xs font-bold text-primary-foreground">
+              <View className="h-[18px] min-w-[18px] items-center justify-center rounded-full bg-primary px-1.5">
+                <Text className="font-extrabold text-[11px] text-primary-foreground">
                   {t.badge > 99 ? '99+' : t.badge}
                 </Text>
               </View>
@@ -329,16 +422,19 @@ function TabBar({ tab, onChange, unread, queueCount, online }: TabBarProps) {
 }
 
 /** Texto da última ação. `withName`: começa com o nome de quem fez ("Ana pausou"). */
-const ACTION_TEXT: Record<LastAction['action'], { text: string; withName: boolean } | null> = {
+const ACTION_TEXT: Record<
+  LastAction['action'],
+  { text: string; withName: boolean; icon: IconName } | null
+> = {
   none: null,
-  play: { text: 'deu play', withName: true },
-  pause: { text: 'pausou', withName: true },
-  seek: { text: 'mudou a posição', withName: true },
-  load: { text: 'colocou um vídeo', withName: true },
-  play_item: { text: 'escolheu um vídeo da fila', withName: true },
-  next: { text: 'Próximo vídeo da fila', withName: false },
-  skip_error: { text: 'Um vídeo indisponível foi pulado', withName: false },
-  stop: { text: 'A fila acabou', withName: false },
+  play: { text: 'deu play', withName: true, icon: 'play' },
+  pause: { text: 'pausou', withName: true, icon: 'pause' },
+  seek: { text: 'mudou a posição', withName: true, icon: 'fast-forward' },
+  load: { text: 'colocou um vídeo', withName: true, icon: 'film' },
+  play_item: { text: 'escolheu um vídeo da fila', withName: true, icon: 'list' },
+  next: { text: 'Próximo vídeo da fila', withName: false, icon: 'skip-forward' },
+  skip_error: { text: 'Um vídeo indisponível foi pulado', withName: false, icon: 'skip-forward' },
+  stop: { text: 'A fila acabou', withName: false, icon: 'square' },
 };
 
 type PlaybackStatusProps = {
@@ -349,76 +445,130 @@ type PlaybackStatusProps = {
   error: string | null;
 };
 
+/** Linha abaixo dos controles: última ação de alguém (ou erro do player). */
 function PlaybackStatus({ lastAction, members, userId, hasVideo, error }: PlaybackStatusProps) {
-  if (error) return <Text className="text-danger">{error}</Text>;
+  let icon: IconName = 'refresh-cw';
+  let color: string = Colors.success;
+  let text: string | null = null;
+
   const described = lastAction ? ACTION_TEXT[lastAction.action] : null;
-  if (described && lastAction) {
-    if (!described.withName) return <Text className="text-muted">{described.text}</Text>;
-    const who =
-      lastAction.userId === userId
-        ? 'Você'
-        : (members.find((m) => m.userId === lastAction.userId)?.displayName ?? 'Alguém');
-    return (
-      <Text className="text-muted">
-        {who} {described.text}
-      </Text>
-    );
+  if (error) {
+    icon = 'alert-circle';
+    color = Colors.danger;
+    text = error;
+  } else if (described && lastAction) {
+    icon = described.icon;
+    if (described.withName) {
+      const who =
+        lastAction.userId === userId
+          ? 'Você'
+          : (members.find((m) => m.userId === lastAction.userId)?.displayName ?? 'Alguém');
+      text = `${who} ${described.text}`;
+    } else {
+      text = described.text;
+    }
+  } else if (!hasVideo) {
+    icon = 'info';
+    color = Colors.muted;
+    text = 'Nenhum vídeo tocando. Adicione um na aba Fila.';
   }
-  if (!hasVideo) {
-    return <Text className="text-muted">Nenhum vídeo tocando. Adicione um à fila abaixo.</Text>;
-  }
-  return null;
+
+  return (
+    <View
+      className="min-h-[31px] flex-row items-center gap-2 bg-surface px-5 pb-3 pt-1"
+      accessibilityLiveRegion="polite"
+    >
+      {text ? (
+        <>
+          <Icon name={icon} size={13} color={color} />
+          <Text
+            className={`flex-1 font-sans text-xs ${error ? 'text-danger' : 'text-muted'}`}
+            numberOfLines={2}
+          >
+            {text}
+          </Text>
+        </>
+      ) : null}
+    </View>
+  );
 }
 
 type ParticipantsProps = {
   details: RoomDetails;
   userId: string | null;
   onlineIds: ReadonlySet<string>;
-  status: ChannelStatus;
 };
 
-function Participants({ details, userId, onlineIds, status }: ParticipantsProps) {
+function Participants({ details, userId, onlineIds }: ParticipantsProps) {
+  const free = Math.max(0, ROOM_CAPACITY - details.members.length);
   return (
-    <View className="gap-2">
-      <View className="flex-row items-center justify-between">
-        <Text className="text-lg font-semibold text-text">
-          Participantes ({details.members.length}/{ROOM_CAPACITY})
+    <View className="gap-1">
+      <View className="flex-row justify-between pb-1.5">
+        <Text className="font-bold text-[13px] text-muted">Participantes</Text>
+        <Text className="font-semibold text-[13px] text-muted">
+          {details.members.length}/{ROOM_CAPACITY}
         </Text>
-        {status !== 'online' ? (
-          <Text className="text-xs text-muted">
-            {status === 'connecting' ? 'Conectando…' : 'Reconectando…'}
-          </Text>
-        ) : null}
       </View>
 
-      {details.members.map((member) => {
+      {details.members.map((member, index) => {
         const online = onlineIds.has(member.userId);
+        const isMe = member.userId === userId;
+        const isOwner = member.userId === details.owner_id;
+        const sub = isMe
+          ? isOwner
+            ? 'Você · Dono'
+            : 'Você'
+          : [online ? 'Assistindo' : 'Offline', isOwner ? 'Dono' : null]
+              .filter(Boolean)
+              .join(' · ');
         return (
           <View
             key={member.userId}
-            className="flex-row items-center gap-3 rounded-xl bg-surface px-4 py-3"
-            accessibilityLabel={`${member.displayName}, ${online ? 'online' : 'offline'}`}
+            className="flex-row items-center gap-3 py-2"
+            accessible
+            accessibilityLabel={`${member.displayName}, ${sub}, ${online ? 'online' : 'offline'}`}
           >
-            <View className={`h-3 w-3 rounded-full ${online ? 'bg-success' : 'bg-border'}`} />
-            <Text className="flex-1 text-text">
-              {member.displayName}
-              {member.userId === userId ? ' (você)' : ''}
-            </Text>
-            {member.userId === details.owner_id ? (
-              <Text className="text-xs text-primary">dono</Text>
-            ) : null}
+            <View className="h-10 w-10">
+              <Avatar
+                name={member.displayName}
+                color={memberColor(index)}
+                size={40}
+                dimmed={!online}
+              />
+              <View
+                className={`absolute left-7 top-7 h-3 w-3 rounded-full border-2 border-background ${online ? 'bg-success' : 'bg-faint'}`}
+              />
+            </View>
+            <View className="flex-1 gap-0.5">
+              <Text className={`font-semibold text-[15px] ${online ? 'text-text' : 'text-muted'}`}>
+                {member.displayName}
+              </Text>
+              <Text className="font-sans text-xs text-muted">{sub}</Text>
+            </View>
           </View>
         );
       })}
+
+      {free > 0 ? (
+        <View className="flex-row items-center gap-3 py-2">
+          <View className="h-10 w-10 items-center justify-center rounded-full border-[1.5px] border-dashed border-border">
+            <Icon name="plus" size={16} color={Colors.muted} />
+          </View>
+          <Text className="font-sans text-sm text-muted">
+            {free === 1 ? '1 vaga livre' : `${free} vagas livres`} — mande o código
+          </Text>
+        </View>
+      ) : null}
     </View>
   );
 }
 
 function Message({ text, action }: { text: string; action: ReactNode }) {
   return (
-    <Screen topInset={false}>
-      <View className="flex-1 justify-center gap-4">
-        <Text className="text-center text-text">{text}</Text>
+    <Screen padded={false}>
+      <AppHeader title="Sala" />
+      <View className="flex-1 justify-center gap-4 px-5">
+        <Text className="text-center font-sans text-text">{text}</Text>
         {action}
       </View>
     </Screen>

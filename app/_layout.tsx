@@ -1,21 +1,23 @@
 import '@/global.css';
 
+import { useFonts } from 'expo-font';
 import { SplashScreen, Stack, ThemeProvider } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 
+import { FONT_FILES } from '@/constants/fonts';
 import { NavigationTheme } from '@/constants/theme';
 import { SessionProvider, useSession } from '@/features/auth/SessionProvider';
 
-// A splash fica na tela até a sessão salva no aparelho ser lida.
+// A splash fica na tela até a sessão salva no aparelho ser lida e as fontes carregarem.
 void SplashScreen.preventAutoHideAsync();
 
-function SplashScreenController() {
+function SplashScreenController({ ready }: { ready: boolean }) {
   const { isLoading } = useSession();
 
   useEffect(() => {
-    if (!isLoading) SplashScreen.hide();
-  }, [isLoading]);
+    if (ready && !isLoading) SplashScreen.hide();
+  }, [ready, isLoading]);
 
   return null;
 }
@@ -30,7 +32,7 @@ function RootNavigator() {
           destino padrão do Expo Router ("/(auth)") cairia em "page could not be found". */}
       <Stack.Protected guard={signedIn} redirectTo="/sign-in">
         <Stack.Screen name="(app)" />
-        <Stack.Screen name="room/[id]" options={{ headerShown: true, title: 'Sala' }} />
+        <Stack.Screen name="room/[id]" />
         <Stack.Screen name="join/[code]" />
       </Stack.Protected>
 
@@ -42,12 +44,16 @@ function RootNavigator() {
 }
 
 export default function RootLayout() {
+  // Falha ao carregar fonte não trava o app: segue com a fonte do sistema.
+  const [fontsLoaded, fontError] = useFonts(FONT_FILES);
+  const ready = fontsLoaded || !!fontError;
+
   return (
     <ThemeProvider value={NavigationTheme}>
       <StatusBar style="light" />
       <SessionProvider>
-        <SplashScreenController />
-        <RootNavigator />
+        <SplashScreenController ready={ready} />
+        {ready ? <RootNavigator /> : null}
       </SessionProvider>
     </ThemeProvider>
   );

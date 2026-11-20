@@ -2,11 +2,11 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Text } from 'react-native';
 
-import { FormScreen } from '@/components/layout/FormScreen';
 import { Button } from '@/components/ui/Button';
 import { TextField } from '@/components/ui/TextField';
 import { supabase } from '@/lib/supabase/client';
 
+import { AuthScaffold } from './AuthScaffold';
 import { describeAuthError } from './authErrors';
 import {
   DISPLAY_NAME_MAX,
@@ -60,10 +60,16 @@ export function SignUpScreen() {
   };
 
   return (
-    <FormScreen>
-      <Text className="text-2xl font-bold text-text">Criar conta</Text>
+    <AuthScaffold
+      title="Crie sua conta"
+      subtitle="Leva menos de um minuto. Seu apelido é como os amigos vão te ver na sala."
+      footerQuestion="Já tem conta?"
+      footerAction="Entrar"
+      onFooterPress={() => router.replace('/sign-in')}
+    >
       <TextField
         label="Apelido"
+        icon="user"
         value={name}
         onChangeText={setName}
         error={errors.name}
@@ -73,9 +79,11 @@ export function SignUpScreen() {
       />
       <TextField
         label="E-mail"
+        icon="mail"
         value={email}
         onChangeText={setEmail}
         error={errors.email}
+        placeholder="voce@email.com"
         autoCapitalize="none"
         autoComplete="email"
         keyboardType="email-address"
@@ -83,6 +91,7 @@ export function SignUpScreen() {
       />
       <TextField
         label="Senha"
+        icon="lock"
         value={password}
         onChangeText={setPassword}
         error={errors.password}
@@ -93,11 +102,9 @@ export function SignUpScreen() {
         returnKeyType="go"
         onSubmitEditing={submit}
       />
-      {formError ? <Text className="text-danger">{formError}</Text> : null}
-      {notice ? <Text className="text-success">{notice}</Text> : null}
+      {formError ? <Text className="font-sans text-danger">{formError}</Text> : null}
+      {notice ? <Text className="font-sans text-success">{notice}</Text> : null}
       <Button title="Criar conta" onPress={submit} loading={loading} />
-      <Text className="mt-4 text-center text-muted">Já tem conta?</Text>
-      <Button title="Entrar" variant="secondary" onPress={() => router.replace('/sign-in')} />
-    </FormScreen>
+    </AuthScaffold>
   );
 }

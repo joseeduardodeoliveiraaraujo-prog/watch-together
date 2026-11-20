@@ -2,11 +2,11 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Text } from 'react-native';
 
-import { FormScreen } from '@/components/layout/FormScreen';
 import { Button } from '@/components/ui/Button';
 import { TextField } from '@/components/ui/TextField';
 import { supabase } from '@/lib/supabase/client';
 
+import { AuthScaffold } from './AuthScaffold';
 import { describeAuthError } from './authErrors';
 import { normalizeEmail, validateEmail } from './validation';
 
@@ -38,13 +38,20 @@ export function SignInScreen() {
   };
 
   return (
-    <FormScreen>
-      <Text className="text-2xl font-bold text-text">Entrar</Text>
+    <AuthScaffold
+      title={'Assista junto,\nmesmo de longe.'}
+      subtitle="Entre na sua conta para criar salas e ver vídeos do YouTube com até 4 amigos."
+      footerQuestion="Ainda não tem conta?"
+      footerAction="Criar conta"
+      onFooterPress={() => router.replace('/sign-up')}
+    >
       <TextField
         label="E-mail"
+        icon="mail"
         value={email}
         onChangeText={setEmail}
         error={errors.email}
+        placeholder="voce@email.com"
         autoCapitalize="none"
         autoComplete="email"
         keyboardType="email-address"
@@ -52,19 +59,19 @@ export function SignInScreen() {
       />
       <TextField
         label="Senha"
+        icon="lock"
         value={password}
         onChangeText={setPassword}
         error={errors.password}
+        placeholder="Sua senha"
         secureTextEntry
         autoComplete="current-password"
         textContentType="password"
         returnKeyType="go"
         onSubmitEditing={submit}
       />
-      {formError ? <Text className="text-danger">{formError}</Text> : null}
+      {formError ? <Text className="font-sans text-danger">{formError}</Text> : null}
       <Button title="Entrar" onPress={submit} loading={loading} />
-      <Text className="mt-4 text-center text-muted">Ainda não tem conta?</Text>
-      <Button title="Criar conta" variant="secondary" onPress={() => router.replace('/sign-up')} />
-    </FormScreen>
+    </AuthScaffold>
   );
 }
