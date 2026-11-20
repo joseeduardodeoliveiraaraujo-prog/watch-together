@@ -1,4 +1,5 @@
 import { Image } from 'expo-image';
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { ActivityIndicator, Pressable, Text, TextInput, View } from 'react-native';
 
@@ -42,6 +43,7 @@ export function PlaylistPanel({
   onChanged,
 }: PlaylistPanelProps) {
   const dialog = useDialog();
+  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [busyItem, setBusyItem] = useState<string | null>(null);
 
@@ -101,6 +103,13 @@ export function PlaylistPanel({
         roomId={roomId}
         full={(items?.length ?? 0) >= PLAYLIST_CAPACITY}
         onAdded={onChanged}
+      />
+      <Button
+        title="Buscar no YouTube"
+        icon="youtube"
+        variant="secondary"
+        disabled={(items?.length ?? 0) >= PLAYLIST_CAPACITY}
+        onPress={() => router.push({ pathname: '/room/[id]/youtube', params: { id: roomId } })}
       />
 
       {error ? <Text className="font-sans text-danger">{error}</Text> : null}

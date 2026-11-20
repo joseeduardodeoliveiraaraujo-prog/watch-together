@@ -31,7 +31,12 @@ type ConfirmOptions = {
   onConfirm: () => void;
 };
 
-type ToastOptions = { message: string; icon?: IconName };
+type ToastOptions = {
+  message: string;
+  icon?: IconName;
+  /** `error`: ícone vermelho (ex.: falha ao adicionar). */
+  tone?: 'success' | 'error';
+};
 
 type DialogApi = {
   sheet: (options: SheetOptions) => void;
@@ -79,7 +84,9 @@ export function DialogProvider({ children }: { children: ReactNode }) {
     <DialogContext value={api}>
       <View className="flex-1">
         {children}
-        {toast ? <Toast key={toast.key} message={toast.message} icon={toast.icon} /> : null}
+        {toast ? (
+          <Toast key={toast.key} message={toast.message} icon={toast.icon} tone={toast.tone} />
+        ) : null}
       </View>
 
       <Modal
@@ -229,7 +236,7 @@ function Confirm({ options, onClose, closeThen }: PartProps<ConfirmOptions>) {
   );
 }
 
-function Toast({ message, icon = 'check-circle' }: ToastOptions) {
+function Toast({ message, icon, tone = 'success' }: ToastOptions) {
   const insets = useSafeAreaInsets();
   return (
     <View
@@ -242,8 +249,12 @@ function Toast({ message, icon = 'check-circle' }: ToastOptions) {
         className="flex-row items-center gap-2.5 rounded-full border border-border bg-surface-raised px-4 py-3"
         style={{ boxShadow: '0px 8px 24px #00000080' }}
       >
-        <Icon name={icon} size={17} color={Colors.success} />
-        <Text className="font-semibold text-sm text-text">{message}</Text>
+        <Icon
+          name={icon ?? (tone === 'error' ? 'alert-circle' : 'check-circle')}
+          size={17}
+          color={tone === 'error' ? Colors.danger : Colors.success}
+        />
+        <Text className="shrink font-semibold text-sm text-text">{message}</Text>
       </View>
     </View>
   );

@@ -31,13 +31,19 @@ export async function listPlaylist(roomId: string): Promise<PlaylistItem[]> {
 
 // Escritas pelas funções do banco: travam a sala e avisam todos pelo canal.
 
-export async function addToPlaylist(roomId: string, videoId: string, title: string | null) {
-  const { error } = await supabase.rpc('add_to_playlist', {
+/** Adiciona ao fim da fila e devolve o id do item criado. */
+export async function addToPlaylist(
+  roomId: string,
+  videoId: string,
+  title: string | null,
+): Promise<string> {
+  const { data, error } = await supabase.rpc('add_to_playlist', {
     p_room_id: roomId,
     p_video_id: videoId,
     p_title: title ?? undefined,
   });
   if (error) throw error;
+  return data.id;
 }
 
 export async function removeFromPlaylist(roomId: string, itemId: string) {
