@@ -20,6 +20,11 @@ type YouTubePlayerProps = {
   /** Ocupa todo o espaço do pai (tela cheia) em vez de 16:9 na largura. */
   fill?: boolean;
   onEvent: (event: PlayerEvent) => void;
+  /**
+   * A página do player não carregou: sem resposta (sem internet, DNS) ou, com `httpStatus`,
+   * o servidor respondeu com erro.
+   */
+  onLoadError?: (httpStatus?: number) => void;
   ref?: Ref<YouTubePlayerHandle>;
 };
 
@@ -28,7 +33,13 @@ function getOrigin(url: string): string {
   return match ? match[1].toLowerCase() : '';
 }
 
-export function YouTubePlayer({ playerUrl, fill = false, onEvent, ref }: YouTubePlayerProps) {
+export function YouTubePlayer({
+  playerUrl,
+  fill = false,
+  onEvent,
+  onLoadError,
+  ref,
+}: YouTubePlayerProps) {
   // `WebView<object>`: os tipos da lib declaram `WebView<P = undefined>` com props
   // `WebViewProps & P`; no TypeScript 6, `X & undefined` vira `never`. Só afeta tipos.
   const webViewRef = useRef<WebView<object>>(null);
@@ -71,6 +82,14 @@ export function YouTubePlayer({ playerUrl, fill = false, onEvent, ref }: YouTube
         setSupportMultipleWindows={false}
         scrollEnabled={false}
         overScrollMode="never"
+        // Só a nossa página conta (falhas de recursos do YouTube não derrubam o player).
+        onError={(e) => {
+          if (getOrigin(e.nativeEvent.url) === playerOrigin) onLoadError?.();
+        }}
+        onHttpError={(e) => {
+          if (getOrigin(e.nativeEvent.url) === playerOrigin)
+            onLoadError?.(e.nativeEvent.statusCode);
+        }}
         // Android pode matar o processo de renderização sob pressão de memória: recarrega.
         onRenderProcessGone={() => webViewRef.current?.reload()}
         style={{ backgroundColor: '#000' }}

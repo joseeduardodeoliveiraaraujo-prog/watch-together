@@ -1,4 +1,5 @@
 import { NavigationBar } from 'expo-navigation-bar';
+import * as Linking from 'expo-linking';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useRef, useState, type ReactNode } from 'react';
@@ -25,6 +26,7 @@ import { ChatOverlay, ChatPanel } from '@/features/chat/ChatPanel';
 import { useRoomChat } from '@/features/chat/useRoomChat';
 import { FullscreenControls } from '@/features/player/FullscreenControls';
 import { PlayerControls } from '@/features/player/PlayerControls';
+import { PlayerStatusOverlay } from '@/features/player/PlayerStatusOverlay';
 import { VOLUME_POPOVER_WIDTH, VolumePopover } from '@/features/player/VolumeControl';
 import { useCaptions } from '@/features/player/useCaptions';
 import { useVolume } from '@/features/player/useVolume';
@@ -34,7 +36,12 @@ import { listPlaylist } from '@/features/playlist/api';
 import { PlaylistPanel } from '@/features/playlist/PlaylistPanel';
 import { useAsyncData } from '@/hooks/useAsyncData';
 import { describeRpcError } from '@/lib/supabase/rpcErrors';
-import { describePlayerError } from '@/lib/youtube/errors';
+import {
+  pageLoadIssue,
+  playerErrorIssue,
+  type PlayerAction,
+  type PlayerIssue,
+} from '@/lib/youtube/errors';
 import { YouTubePlayer, type YouTubePlayerHandle } from '@/lib/youtube/YouTubePlayer';
 
 import { fetchRoom } from './api';
@@ -57,6 +64,8 @@ export function RoomScreen({ roomId }: { roomId: string }) {
   const playback = useRoomPlayback(roomId, userId, playerRef);
   const { fullscreen, toggle: toggleFullscreen } = useFullscreen();
   const volume = useVolume(playerRef);
+  /** A página do player (Vercel) não carregou. */
+  const [pageIssue, setPageIssue] = useState<PlayerIssue | null>(null);
   /** Barra de volume (em pé) aberta sobre o vídeo; `volumeTouch` reinicia o tempo para fechar. */
   const [volumeOpen, setVolumeOpen] = useState(false);
   const [volumeTouch, setVolumeTouch] = useState(0);
@@ -165,7 +174,27 @@ export function RoomScreen({ roomId }: { roomId: string }) {
     toggleFullscreen();
   };
 
+  const videoId = playback.snapshot?.videoId ?? null;
+  const playerIssue: PlayerIssue | null =
+    pageIssue ??
+    (playback.playerErrorCode !== null && hasVideo
+      ? playerErrorIssue(playback.playerErrorCode)
+      : null);
+
+  const handlePlayerAction = (action: PlayerAction) => {
+    if (action === 'retry') {
+      setPageIssue(null);
+      playback.resetPlayer();
+      playerRef.current?.reload();
+    } else if (action === 'skip') {
+      playback.skipBroken();
+    } else if (videoId) {
+      void Linking.openURL(`https://www.youtube.com/watch?v=${videoId}`);
+    }
+  };
+
   const handlePlayerEvent: typeof playback.handlePlayerEvent = (event) => {
+    if (event.type === 'ready') setPageIssue(null);
     captions.handleEvent(event);
     volume.handleEvent(event);
     playback.handlePlayerEvent(event);
@@ -223,6 +252,7 @@ export function RoomScreen({ roomId }: { roomId: string }) {
             playerUrl={PLAYER_URL}
             fill={fullscreen}
             onEvent={handlePlayerEvent}
+            onLoadError={(httpStatus) => setPageIssue(pageLoadIssue(httpStatus))}
           />
         ) : (
           <View className="aspect-video w-full items-center justify-center bg-surface p-4">
@@ -256,7 +286,7 @@ export function RoomScreen({ roomId }: { roomId: string }) {
               onStartShouldSetResponder={() => true}
               onResponderRelease={() => setVolumeOpen(false)}
             />
-            {currentTitle ? (
+            {currentTitle && !playerIssue ? (
               <GradientView
                 gradient="linear-gradient(to bottom, #00000000, #000000AA)"
                 className="absolute bottom-0 left-0 right-0 justify-end px-4 pb-3 pt-8"
@@ -280,6 +310,18 @@ export function RoomScreen({ roomId }: { roomId: string }) {
             ) : null}
           </>
         )}
+        {PLAYER_URL ? (
+          <PlayerStatusOverlay
+            progress={playback.progress}
+            issue={playerIssue}
+            ready={playback.playerReady}
+            hasVideo={hasVideo}
+            expectPlaying={!!playback.snapshot?.isPlaying}
+            size={fullscreen ? 'fullscreen' : 'portrait'}
+            onAction={handlePlayerAction}
+            onExitFullscreen={fullscreen ? switchFullscreen : undefined}
+          />
+        ) : null}
       </View>
 
       {fullscreen ? null : (
@@ -302,12 +344,8 @@ export function RoomScreen({ roomId }: { roomId: string }) {
             members={details.members}
             userId={userId}
             hasVideo={hasVideo}
-            error={
-              playback.error ??
-              (playback.playerErrorCode !== null
-                ? describePlayerError(playback.playerErrorCode)
-                : null)
-            }
+            // Problemas do vídeo aparecem sobre ele (PlayerStatusOverlay); aqui, só os da sala.
+            error={playback.error}
           />
 
           <RoomTabBar

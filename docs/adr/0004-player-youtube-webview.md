@@ -38,6 +38,12 @@ O YouTube exige que o embed identifique o site de origem via `Referer`. Sem ele,
 - **Volume** (2026-11-22): `setVolume` (0–100) e `mute` da IFrame API, escolha local salva no
   celular (`localStorage`, chave `wt.player.volume`) e reaplicada quando o player fica pronto. O
   volume do app multiplica o volume de mídia do celular, que continua nos botões físicos.
+- **Erros e carregamento** (2026-11-22): estados sobre o próprio vídeo (`PlayerStatusOverlay`),
+  em pé e na tela cheia — carregando, "conexão lenta" após 8 s, e aviso de erro com título,
+  mensagem, ações (tentar de novo / pular / abrir no YouTube) e o código pequeno
+  (`src/lib/youtube/errors.ts`). Falha ao carregar a página do player vem de `onError`/`onHttpError`
+  da WebView (`player_load_failed`, `player_http_<status>`). Erros inesperados do app caem na tela
+  "Algo deu errado" (`ErrorBoundary` em `app/_layout.tsx`).
 
 ## Validação (critérios da Etapa 2)
 

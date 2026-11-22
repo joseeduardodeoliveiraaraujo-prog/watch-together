@@ -3,7 +3,7 @@ import { AppState } from 'react-native';
 
 import { describeRpcError } from '@/lib/supabase/rpcErrors';
 import type { PlayerEvent } from '@/lib/youtube/bridge';
-import { isUnplayableError } from '@/lib/youtube/errors';
+import { API_LOAD_ERROR_CODE, isUnplayableError } from '@/lib/youtube/errors';
 import type { YouTubePlayerHandle } from '@/lib/youtube/YouTubePlayer';
 
 import {
@@ -67,6 +67,8 @@ export function useRoomPlayback(
   const [lastAction, setLastAction] = useState<LastAction | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [playerErrorCode, setPlayerErrorCode] = useState<number | null>(null);
+  /** A página do player avisou que está pronta (antes disso, mostra "carregando"). */
+  const [playerReady, setPlayerReady] = useState(false);
 
   const serverNow = () => Date.now() + offsetRef.current;
 
@@ -166,6 +168,7 @@ export function useRoomPlayback(
       case 'ready':
         // Página (re)carregada: nenhum vídeo no player.
         readyRef.current = true;
+        setPlayerReady(true);
         local.loadedVideoId = null;
         lastCorrectionRef.current = 0;
         runSync();
@@ -196,7 +199,7 @@ export function useRoomPlayback(
         if (isUnplayableError(event.code)) requestAdvance('error');
         return;
       case 'apiLoadError':
-        setPlayerErrorCode(-1);
+        setPlayerErrorCode(API_LOAD_ERROR_CODE);
         return;
     }
   };
@@ -263,6 +266,15 @@ export function useRoomPlayback(
     lastAction,
     error,
     playerErrorCode,
+    playerReady,
+    /** A página do player vai recarregar (tentar de novo): volta a "carregando" sem erro. */
+    resetPlayer: () => {
+      readyRef.current = false;
+      setPlayerReady(false);
+      setPlayerErrorCode(null);
+    },
+    /** "Pular vídeo" no aviso de erro: pede o próximo da fila (uma vez por item). */
+    skipBroken: () => requestAdvance('error'),
     handlePlayerEvent,
     /** Para o canal da sala: estado novo vindo do banco (linha crua). */
     handleRemoteRow: (row: unknown) => applyConfirmed(parsePlaybackRow(row)),
