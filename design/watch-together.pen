@@ -1,5 +1,5 @@
 {
-  "version": "2.22",
+  "version": "2.25",
   "children": [
     {
       "type": "frame",
@@ -33374,6 +33374,3626 @@
                       "icon": "minimize",
                       "library": "lucide",
                       "fill": "#FFFFFF"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "W7PSS",
+      "x": 110,
+      "y": 9298,
+      "name": "Ícone do app",
+      "fill": "#0B0B12",
+      "cornerRadius": 32,
+      "layout": "vertical",
+      "gap": 56,
+      "padding": 80,
+      "children": [
+        {
+          "type": "frame",
+          "id": "aZWfR",
+          "name": "Cabeçalho",
+          "layout": "vertical",
+          "gap": 10,
+          "children": [
+            {
+              "type": "text",
+              "id": "NlAHT",
+              "name": "Título",
+              "fill": "#F4F1FA",
+              "content": "Ícone do app — 6 conceitos",
+              "fontFamily": "Plus Jakarta Sans",
+              "fontSize": 40,
+              "fontWeight": "800"
+            },
+            {
+              "type": "text",
+              "id": "vwMpm",
+              "name": "Subtítulo",
+              "fill": "#A6A0BD",
+              "content": "Paleta Midnight Violet. Grande = 1024 px reduzido; embaixo, como aparece na tela inicial.",
+              "fontFamily": "Plus Jakarta Sans",
+              "fontSize": 18,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Cd5it",
+          "name": "Conceitos",
+          "gap": 48,
+          "children": [
+            {
+              "type": "frame",
+              "id": "c4pop",
+              "name": "Conceito A",
+              "width": 360,
+              "layout": "vertical",
+              "gap": 20,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "osHlJ",
+                  "name": "Ícone A",
+                  "clip": true,
+                  "width": 360,
+                  "height": 360,
+                  "fill": {
+                    "type": "gradient",
+                    "gradientType": "linear",
+                    "enabled": true,
+                    "rotation": 135,
+                    "size": {
+                      "height": 1
+                    },
+                    "colors": [
+                      {
+                        "color": "#A78BFA",
+                        "position": 0
+                      },
+                      {
+                        "color": "#6D28D9",
+                        "position": 1
+                      }
+                    ]
+                  },
+                  "cornerRadius": 81,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "path",
+                      "id": "jtT1O",
+                      "x": 125.005536,
+                      "y": 104.4,
+                      "name": "Play",
+                      "geometry": "M0 0l86.6 50-86.6 50z",
+                      "viewBox": [
+                        0,
+                        0,
+                        86.6,
+                        100
+                      ],
+                      "fill": "#FFFFFF",
+                      "width": 130.9392,
+                      "height": 151.2,
+                      "stroke": "#FFFFFF",
+                      "strokeWidth": 16.2,
+                      "strokeLinejoin": "round"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ROQYe",
+                  "name": "Texto",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "o33fRs",
+                      "name": "Nome",
+                      "fill": "#F4F1FA",
+                      "content": "A · Play",
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 22,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "agwxI",
+                      "name": "Descrição",
+                      "fill": "#A6A0BD",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "O símbolo atual, maior e mais limpo.",
+                      "lineHeight": 1.4,
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "I40ruV",
+                  "name": "Tela inicial",
+                  "width": "fill_container",
+                  "height": 150,
+                  "fill": {
+                    "type": "gradient",
+                    "gradientType": "linear",
+                    "enabled": true,
+                    "rotation": 160,
+                    "size": {
+                      "height": 1
+                    },
+                    "colors": [
+                      {
+                        "color": "#2B2442",
+                        "position": 0
+                      },
+                      {
+                        "color": "#141220",
+                        "position": 1
+                      }
+                    ]
+                  },
+                  "cornerRadius": 24,
+                  "gap": 36,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "TZ3ed",
+                      "name": "App 64",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "U1JwfB",
+                          "name": "Ícone A",
+                          "clip": true,
+                          "width": 64,
+                          "height": 64,
+                          "fill": {
+                            "type": "gradient",
+                            "gradientType": "linear",
+                            "enabled": true,
+                            "rotation": 135,
+                            "size": {
+                              "height": 1
+                            },
+                            "colors": [
+                              {
+                                "color": "#A78BFA",
+                                "position": 0
+                              },
+                              {
+                                "color": "#6D28D9",
+                                "position": 1
+                              }
+                            ]
+                          },
+                          "cornerRadius": 14.4,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "x6iXj",
+                              "x": 22.223206400000002,
+                              "y": 18.560000000000002,
+                              "name": "Play",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": "#FFFFFF",
+                              "width": 23.27808,
+                              "height": 26.88,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 2.88,
+                              "strokeLinejoin": "round"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "rzSqj",
+                          "name": "Rótulo",
+                          "fill": "#FFFFFF",
+                          "content": "Watch Together",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "rlDrI",
+                      "name": "App 44",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "blLzt",
+                          "name": "Ícone A",
+                          "clip": true,
+                          "width": 44,
+                          "height": 44,
+                          "fill": {
+                            "type": "gradient",
+                            "gradientType": "linear",
+                            "enabled": true,
+                            "rotation": 135,
+                            "size": {
+                              "height": 1
+                            },
+                            "colors": [
+                              {
+                                "color": "#A78BFA",
+                                "position": 0
+                              },
+                              {
+                                "color": "#6D28D9",
+                                "position": 1
+                              }
+                            ]
+                          },
+                          "cornerRadius": 9.9,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "gF2c9",
+                              "x": 15.278454400000001,
+                              "y": 12.76,
+                              "name": "Play",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": "#FFFFFF",
+                              "width": 16.00368,
+                              "height": 18.48,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 1.98,
+                              "strokeLinejoin": "round"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "Yiy9D",
+                          "name": "Rótulo",
+                          "fill": "#FFFFFF",
+                          "content": "Watch Together",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 9,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "emhNN",
+              "name": "Conceito B",
+              "width": 360,
+              "layout": "vertical",
+              "gap": 20,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "QbpdG",
+                  "name": "Ícone B",
+                  "clip": true,
+                  "width": 360,
+                  "height": 360,
+                  "fill": {
+                    "type": "gradient",
+                    "gradientType": "linear",
+                    "enabled": true,
+                    "rotation": 135,
+                    "size": {
+                      "height": 1
+                    },
+                    "colors": [
+                      {
+                        "color": "#A78BFA",
+                        "position": 0
+                      },
+                      {
+                        "color": "#6D28D9",
+                        "position": 1
+                      }
+                    ]
+                  },
+                  "cornerRadius": 81,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "path",
+                      "id": "f9q945",
+                      "x": 98.82432,
+                      "y": 108,
+                      "name": "Play de trás",
+                      "geometry": "M0 0l86.6 50-86.6 50z",
+                      "viewBox": [
+                        0,
+                        0,
+                        86.6,
+                        100
+                      ],
+                      "fill": "#FFFFFF59",
+                      "width": 124.704,
+                      "height": 144,
+                      "stroke": "#FFFFFF59",
+                      "strokeWidth": 16.2,
+                      "strokeLinejoin": "round"
+                    },
+                    {
+                      "type": "path",
+                      "id": "v1N6m",
+                      "x": 163.62432,
+                      "y": 108,
+                      "name": "Play da frente",
+                      "geometry": "M0 0l86.6 50-86.6 50z",
+                      "viewBox": [
+                        0,
+                        0,
+                        86.6,
+                        100
+                      ],
+                      "fill": "#FFFFFF",
+                      "width": 124.704,
+                      "height": 144,
+                      "stroke": "#FFFFFF",
+                      "strokeWidth": 16.2,
+                      "strokeLinejoin": "round"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "bHzaT",
+                  "name": "Texto",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Y6X7q0",
+                      "name": "Nome",
+                      "fill": "#F4F1FA",
+                      "content": "B · Dois plays",
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 22,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "Grlpo",
+                      "name": "Descrição",
+                      "fill": "#A6A0BD",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Dois plays sobrepostos: assistir junto, em sincronia.",
+                      "lineHeight": 1.4,
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Hd3GQ",
+                  "name": "Tela inicial",
+                  "width": "fill_container",
+                  "height": 150,
+                  "fill": {
+                    "type": "gradient",
+                    "gradientType": "linear",
+                    "enabled": true,
+                    "rotation": 160,
+                    "size": {
+                      "height": 1
+                    },
+                    "colors": [
+                      {
+                        "color": "#2B2442",
+                        "position": 0
+                      },
+                      {
+                        "color": "#141220",
+                        "position": 1
+                      }
+                    ]
+                  },
+                  "cornerRadius": 24,
+                  "gap": 36,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "mK4fu",
+                      "name": "App 64",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "upPPy",
+                          "name": "Ícone B",
+                          "clip": true,
+                          "width": 64,
+                          "height": 64,
+                          "fill": {
+                            "type": "gradient",
+                            "gradientType": "linear",
+                            "enabled": true,
+                            "rotation": 135,
+                            "size": {
+                              "height": 1
+                            },
+                            "colors": [
+                              {
+                                "color": "#A78BFA",
+                                "position": 0
+                              },
+                              {
+                                "color": "#6D28D9",
+                                "position": 1
+                              }
+                            ]
+                          },
+                          "cornerRadius": 14.4,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "KI2uz",
+                              "x": 17.568768,
+                              "y": 19.2,
+                              "name": "Play de trás",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": "#FFFFFF59",
+                              "width": 22.169600000000003,
+                              "height": 25.6,
+                              "stroke": "#FFFFFF59",
+                              "strokeWidth": 2.88,
+                              "strokeLinejoin": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "o0hdlE",
+                              "x": 29.088767999999998,
+                              "y": 19.2,
+                              "name": "Play da frente",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": "#FFFFFF",
+                              "width": 22.169600000000003,
+                              "height": 25.6,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 2.88,
+                              "strokeLinejoin": "round"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "CkWHR",
+                          "name": "Rótulo",
+                          "fill": "#FFFFFF",
+                          "content": "Watch Together",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "OmMwn",
+                      "name": "App 44",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "ewHVG",
+                          "name": "Ícone B",
+                          "clip": true,
+                          "width": 44,
+                          "height": 44,
+                          "fill": {
+                            "type": "gradient",
+                            "gradientType": "linear",
+                            "enabled": true,
+                            "rotation": 135,
+                            "size": {
+                              "height": 1
+                            },
+                            "colors": [
+                              {
+                                "color": "#A78BFA",
+                                "position": 0
+                              },
+                              {
+                                "color": "#6D28D9",
+                                "position": 1
+                              }
+                            ]
+                          },
+                          "cornerRadius": 9.9,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "GIGqJ",
+                              "x": 12.078527999999999,
+                              "y": 13.2,
+                              "name": "Play de trás",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": "#FFFFFF59",
+                              "width": 15.241600000000002,
+                              "height": 17.6,
+                              "stroke": "#FFFFFF59",
+                              "strokeWidth": 1.98,
+                              "strokeLinejoin": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "WwFJO",
+                              "x": 19.998527999999997,
+                              "y": 13.2,
+                              "name": "Play da frente",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": "#FFFFFF",
+                              "width": 15.241600000000002,
+                              "height": 17.6,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 1.98,
+                              "strokeLinejoin": "round"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "m3N8A",
+                          "name": "Rótulo",
+                          "fill": "#FFFFFF",
+                          "content": "Watch Together",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 9,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "eQH0D",
+              "name": "Conceito C",
+              "width": 360,
+              "layout": "vertical",
+              "gap": 20,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "mN7F7",
+                  "name": "Ícone C",
+                  "clip": true,
+                  "width": 360,
+                  "height": 360,
+                  "fill": {
+                    "type": "gradient",
+                    "gradientType": "linear",
+                    "enabled": true,
+                    "rotation": 135,
+                    "size": {
+                      "height": 1
+                    },
+                    "colors": [
+                      {
+                        "color": "#A78BFA",
+                        "position": 0
+                      },
+                      {
+                        "color": "#6D28D9",
+                        "position": 1
+                      }
+                    ]
+                  },
+                  "cornerRadius": 81,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "cornerRadius": 25.200000000000003,
+                      "id": "STp1C",
+                      "x": 64.8,
+                      "y": 86.39999999999999,
+                      "name": "Tela",
+                      "width": 208.79999999999998,
+                      "height": 151.2,
+                      "stroke": "#FFFFFF",
+                      "strokeWidth": 14.4
+                    },
+                    {
+                      "type": "path",
+                      "id": "QgHLt",
+                      "x": 148.249728,
+                      "y": 133.2,
+                      "name": "Play",
+                      "geometry": "M0 0l86.6 50-86.6 50z",
+                      "viewBox": [
+                        0,
+                        0,
+                        86.6,
+                        100
+                      ],
+                      "fill": "#FFFFFF",
+                      "width": 49.8816,
+                      "height": 57.6,
+                      "stroke": "#FFFFFF",
+                      "strokeWidth": 8.1,
+                      "strokeLinejoin": "round"
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "gQJn9",
+                      "x": 201.60000000000002,
+                      "y": 187.20000000000002,
+                      "name": "Balão",
+                      "fill": "#FFFFFF",
+                      "width": 93.60000000000001,
+                      "height": 93.60000000000001,
+                      "stroke": "#6D28D9",
+                      "strokeWidth": 12.600000000000001,
+                      "strokeAlignment": "outer"
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "kGM1A",
+                      "x": 216,
+                      "y": 228.6,
+                      "name": "Ponto 1",
+                      "fill": "#6D28D9",
+                      "width": 14.4,
+                      "height": 14.4
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "Pnc0a",
+                      "x": 239.4,
+                      "y": 228.6,
+                      "name": "Ponto 2",
+                      "fill": "#6D28D9",
+                      "width": 14.4,
+                      "height": 14.4
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "muwcg",
+                      "x": 262.8,
+                      "y": 228.6,
+                      "name": "Ponto 3",
+                      "fill": "#6D28D9",
+                      "width": 14.4,
+                      "height": 14.4
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "d5Mama",
+                  "name": "Texto",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ZyYy2",
+                      "name": "Nome",
+                      "fill": "#F4F1FA",
+                      "content": "C · Tela + conversa",
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 22,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "jDC49",
+                      "name": "Descrição",
+                      "fill": "#A6A0BD",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Vídeo com um balão de chat: assistir e conversar.",
+                      "lineHeight": 1.4,
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "rzWU3",
+                  "name": "Tela inicial",
+                  "width": "fill_container",
+                  "height": 150,
+                  "fill": {
+                    "type": "gradient",
+                    "gradientType": "linear",
+                    "enabled": true,
+                    "rotation": 160,
+                    "size": {
+                      "height": 1
+                    },
+                    "colors": [
+                      {
+                        "color": "#2B2442",
+                        "position": 0
+                      },
+                      {
+                        "color": "#141220",
+                        "position": 1
+                      }
+                    ]
+                  },
+                  "cornerRadius": 24,
+                  "gap": 36,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "oMFyC",
+                      "name": "App 64",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "jL35l",
+                          "name": "Ícone C",
+                          "clip": true,
+                          "width": 64,
+                          "height": 64,
+                          "fill": {
+                            "type": "gradient",
+                            "gradientType": "linear",
+                            "enabled": true,
+                            "rotation": 135,
+                            "size": {
+                              "height": 1
+                            },
+                            "colors": [
+                              {
+                                "color": "#A78BFA",
+                                "position": 0
+                              },
+                              {
+                                "color": "#6D28D9",
+                                "position": 1
+                              }
+                            ]
+                          },
+                          "cornerRadius": 14.4,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 4.48,
+                              "id": "Q75Yym",
+                              "x": 11.52,
+                              "y": 15.36,
+                              "name": "Tela",
+                              "width": 37.12,
+                              "height": 26.88,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 2.56
+                            },
+                            {
+                              "type": "path",
+                              "id": "t3pC8",
+                              "x": 26.355507199999998,
+                              "y": 23.68,
+                              "name": "Play",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": "#FFFFFF",
+                              "width": 8.86784,
+                              "height": 10.24,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 1.44,
+                              "strokeLinejoin": "round"
+                            },
+                            {
+                              "type": "ellipse",
+                              "id": "Xk9lc",
+                              "x": 35.84,
+                              "y": 33.28,
+                              "name": "Balão",
+                              "fill": "#FFFFFF",
+                              "width": 16.64,
+                              "height": 16.64,
+                              "stroke": "#6D28D9",
+                              "strokeWidth": 2.24,
+                              "strokeAlignment": "outer"
+                            },
+                            {
+                              "type": "ellipse",
+                              "id": "QTcPQ",
+                              "x": 38.4,
+                              "y": 40.64,
+                              "name": "Ponto 1",
+                              "fill": "#6D28D9",
+                              "width": 2.56,
+                              "height": 2.56
+                            },
+                            {
+                              "type": "ellipse",
+                              "id": "isN0c",
+                              "x": 42.56,
+                              "y": 40.64,
+                              "name": "Ponto 2",
+                              "fill": "#6D28D9",
+                              "width": 2.56,
+                              "height": 2.56
+                            },
+                            {
+                              "type": "ellipse",
+                              "id": "pLKUf",
+                              "x": 46.72,
+                              "y": 40.64,
+                              "name": "Ponto 3",
+                              "fill": "#6D28D9",
+                              "width": 2.56,
+                              "height": 2.56
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "wBnUi",
+                          "name": "Rótulo",
+                          "fill": "#FFFFFF",
+                          "content": "Watch Together",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Xlbp2",
+                      "name": "App 44",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "YaQ4R",
+                          "name": "Ícone C",
+                          "clip": true,
+                          "width": 44,
+                          "height": 44,
+                          "fill": {
+                            "type": "gradient",
+                            "gradientType": "linear",
+                            "enabled": true,
+                            "rotation": 135,
+                            "size": {
+                              "height": 1
+                            },
+                            "colors": [
+                              {
+                                "color": "#A78BFA",
+                                "position": 0
+                              },
+                              {
+                                "color": "#6D28D9",
+                                "position": 1
+                              }
+                            ]
+                          },
+                          "cornerRadius": 9.9,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 3.08,
+                              "id": "k2LJ3p",
+                              "x": 7.92,
+                              "y": 10.559999999999999,
+                              "name": "Tela",
+                              "width": 25.52,
+                              "height": 18.48,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 1.76
+                            },
+                            {
+                              "type": "path",
+                              "id": "zdUq8",
+                              "x": 18.119411200000002,
+                              "y": 16.28,
+                              "name": "Play",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": "#FFFFFF",
+                              "width": 6.09664,
+                              "height": 7.04,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 0.99,
+                              "strokeLinejoin": "round"
+                            },
+                            {
+                              "type": "ellipse",
+                              "id": "le4tB",
+                              "x": 24.64,
+                              "y": 22.880000000000003,
+                              "name": "Balão",
+                              "fill": "#FFFFFF",
+                              "width": 11.440000000000001,
+                              "height": 11.440000000000001,
+                              "stroke": "#6D28D9",
+                              "strokeWidth": 1.54,
+                              "strokeAlignment": "outer"
+                            },
+                            {
+                              "type": "ellipse",
+                              "id": "vEvzh",
+                              "x": 26.4,
+                              "y": 27.94,
+                              "name": "Ponto 1",
+                              "fill": "#6D28D9",
+                              "width": 1.76,
+                              "height": 1.76
+                            },
+                            {
+                              "type": "ellipse",
+                              "id": "UVfgQ",
+                              "x": 29.259999999999998,
+                              "y": 27.94,
+                              "name": "Ponto 2",
+                              "fill": "#6D28D9",
+                              "width": 1.76,
+                              "height": 1.76
+                            },
+                            {
+                              "type": "ellipse",
+                              "id": "baGmK",
+                              "x": 32.12,
+                              "y": 27.94,
+                              "name": "Ponto 3",
+                              "fill": "#6D28D9",
+                              "width": 1.76,
+                              "height": 1.76
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "GKaD3",
+                          "name": "Rótulo",
+                          "fill": "#FFFFFF",
+                          "content": "Watch Together",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 9,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "OiF9n",
+              "name": "Conceito D",
+              "width": 360,
+              "layout": "vertical",
+              "gap": 20,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "kUUsg",
+                  "name": "Ícone D",
+                  "clip": true,
+                  "width": 360,
+                  "height": 360,
+                  "fill": "#15131F",
+                  "cornerRadius": 81,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "Ty2rW",
+                      "x": 36,
+                      "y": 36,
+                      "name": "Brilho",
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "radial",
+                        "enabled": true,
+                        "rotation": 0,
+                        "size": {
+                          "width": 1,
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#8B5CF666",
+                            "position": 0
+                          },
+                          {
+                            "color": "#8B5CF600",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "width": 288,
+                      "height": 288
+                    },
+                    {
+                      "type": "path",
+                      "id": "N2A42O",
+                      "x": 122.386752,
+                      "y": 100.8,
+                      "name": "Play",
+                      "geometry": "M0 0l86.6 50-86.6 50z",
+                      "viewBox": [
+                        0,
+                        0,
+                        86.6,
+                        100
+                      ],
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "linear",
+                        "enabled": true,
+                        "rotation": 135,
+                        "size": {
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#DDD6FE",
+                            "position": 0
+                          },
+                          {
+                            "color": "#8B5CF6",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "width": 137.1744,
+                      "height": 158.4,
+                      "stroke": {
+                        "type": "gradient",
+                        "gradientType": "linear",
+                        "enabled": true,
+                        "rotation": 135,
+                        "size": {
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#DDD6FE",
+                            "position": 0
+                          },
+                          {
+                            "color": "#8B5CF6",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "strokeWidth": 16.2,
+                      "strokeLinejoin": "round"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "LLxzC",
+                  "name": "Texto",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "D8qkV",
+                      "name": "Nome",
+                      "fill": "#F4F1FA",
+                      "content": "D · Play no escuro",
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 22,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "l4rihr",
+                      "name": "Descrição",
+                      "fill": "#A6A0BD",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Fundo escuro do app com o play em gradiente.",
+                      "lineHeight": 1.4,
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "lkWtp",
+                  "name": "Tela inicial",
+                  "width": "fill_container",
+                  "height": 150,
+                  "fill": {
+                    "type": "gradient",
+                    "gradientType": "linear",
+                    "enabled": true,
+                    "rotation": 160,
+                    "size": {
+                      "height": 1
+                    },
+                    "colors": [
+                      {
+                        "color": "#2B2442",
+                        "position": 0
+                      },
+                      {
+                        "color": "#141220",
+                        "position": 1
+                      }
+                    ]
+                  },
+                  "cornerRadius": 24,
+                  "gap": 36,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "bJMtI",
+                      "name": "App 64",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Q9uucJ",
+                          "name": "Ícone D",
+                          "clip": true,
+                          "width": 64,
+                          "height": 64,
+                          "fill": "#15131F",
+                          "cornerRadius": 14.4,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "v9jpO9",
+                              "x": 6.4,
+                              "y": 6.4,
+                              "name": "Brilho",
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "radial",
+                                "enabled": true,
+                                "rotation": 0,
+                                "size": {
+                                  "width": 1,
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#8B5CF666",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF600",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 51.2,
+                              "height": 51.2
+                            },
+                            {
+                              "type": "path",
+                              "id": "P2OmDY",
+                              "x": 21.7576448,
+                              "y": 17.92,
+                              "name": "Play",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 24.38656,
+                              "height": 28.16,
+                              "stroke": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "strokeWidth": 2.88,
+                              "strokeLinejoin": "round"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "Y05B2",
+                          "name": "Rótulo",
+                          "fill": "#FFFFFF",
+                          "content": "Watch Together",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "tiBYa",
+                      "name": "App 44",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Yfo8h",
+                          "name": "Ícone D",
+                          "clip": true,
+                          "width": 44,
+                          "height": 44,
+                          "fill": "#15131F",
+                          "cornerRadius": 9.9,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "KGZ1e",
+                              "x": 4.4,
+                              "y": 4.4,
+                              "name": "Brilho",
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "radial",
+                                "enabled": true,
+                                "rotation": 0,
+                                "size": {
+                                  "width": 1,
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#8B5CF666",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF600",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 35.2,
+                              "height": 35.2
+                            },
+                            {
+                              "type": "path",
+                              "id": "cmdaD",
+                              "x": 14.9583808,
+                              "y": 12.32,
+                              "name": "Play",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 16.76576,
+                              "height": 19.36,
+                              "stroke": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "strokeWidth": 1.98,
+                              "strokeLinejoin": "round"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "CsirJ",
+                          "name": "Rótulo",
+                          "fill": "#FFFFFF",
+                          "content": "Watch Together",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 9,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Q9jiS",
+              "name": "Conceito E",
+              "width": 360,
+              "layout": "vertical",
+              "gap": 20,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "GIQM3",
+                  "name": "Ícone E",
+                  "clip": true,
+                  "width": 360,
+                  "height": 360,
+                  "fill": "#15131F",
+                  "cornerRadius": 81,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "pYZGx",
+                      "x": 36,
+                      "y": 36,
+                      "name": "Brilho",
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "radial",
+                        "enabled": true,
+                        "rotation": 0,
+                        "size": {
+                          "width": 1,
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#8B5CF666",
+                            "position": 0
+                          },
+                          {
+                            "color": "#8B5CF600",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "width": 288,
+                      "height": 288
+                    },
+                    {
+                      "type": "path",
+                      "id": "OPSd9",
+                      "x": 98.82432,
+                      "y": 108,
+                      "name": "Play de trás",
+                      "geometry": "M0 0l86.6 50-86.6 50z",
+                      "viewBox": [
+                        0,
+                        0,
+                        86.6,
+                        100
+                      ],
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "linear",
+                        "enabled": true,
+                        "rotation": 135,
+                        "size": {
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#8B5CF6A6",
+                            "position": 0
+                          },
+                          {
+                            "color": "#5B21B680",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "width": 124.704,
+                      "height": 144,
+                      "stroke": {
+                        "type": "gradient",
+                        "gradientType": "linear",
+                        "enabled": true,
+                        "rotation": 135,
+                        "size": {
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#8B5CF6A6",
+                            "position": 0
+                          },
+                          {
+                            "color": "#5B21B680",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "strokeWidth": 16.2,
+                      "strokeLinejoin": "round"
+                    },
+                    {
+                      "type": "path",
+                      "id": "uKW1V",
+                      "x": 163.62432,
+                      "y": 108,
+                      "name": "Play da frente",
+                      "geometry": "M0 0l86.6 50-86.6 50z",
+                      "viewBox": [
+                        0,
+                        0,
+                        86.6,
+                        100
+                      ],
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "linear",
+                        "enabled": true,
+                        "rotation": 135,
+                        "size": {
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#DDD6FE",
+                            "position": 0
+                          },
+                          {
+                            "color": "#8B5CF6",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "width": 124.704,
+                      "height": 144,
+                      "stroke": {
+                        "type": "gradient",
+                        "gradientType": "linear",
+                        "enabled": true,
+                        "rotation": 135,
+                        "size": {
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#DDD6FE",
+                            "position": 0
+                          },
+                          {
+                            "color": "#8B5CF6",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "strokeWidth": 16.2,
+                      "strokeLinejoin": "round"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "a2tIf",
+                  "name": "Texto",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "V90ZFH",
+                      "name": "Nome",
+                      "fill": "#F4F1FA",
+                      "content": "E · Dois plays no escuro",
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 22,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "tHlPG",
+                      "name": "Descrição",
+                      "fill": "#A6A0BD",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Os dois plays do B sobre o fundo escuro do D.",
+                      "lineHeight": 1.4,
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "k2McF",
+                  "name": "Tela inicial",
+                  "width": "fill_container",
+                  "height": 150,
+                  "fill": {
+                    "type": "gradient",
+                    "gradientType": "linear",
+                    "enabled": true,
+                    "rotation": 160,
+                    "size": {
+                      "height": 1
+                    },
+                    "colors": [
+                      {
+                        "color": "#2B2442",
+                        "position": 0
+                      },
+                      {
+                        "color": "#141220",
+                        "position": 1
+                      }
+                    ]
+                  },
+                  "cornerRadius": 24,
+                  "gap": 36,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "SbZPf",
+                      "name": "App 64",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "G9DKE",
+                          "name": "Ícone E",
+                          "clip": true,
+                          "width": 64,
+                          "height": 64,
+                          "fill": "#15131F",
+                          "cornerRadius": 14.4,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "DWXUG",
+                              "x": 6.4,
+                              "y": 6.4,
+                              "name": "Brilho",
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "radial",
+                                "enabled": true,
+                                "rotation": 0,
+                                "size": {
+                                  "width": 1,
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#8B5CF666",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF600",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 51.2,
+                              "height": 51.2
+                            },
+                            {
+                              "type": "path",
+                              "id": "wDpWV",
+                              "x": 17.568768,
+                              "y": 19.2,
+                              "name": "Play de trás",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#8B5CF6A6",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#5B21B680",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 22.169600000000003,
+                              "height": 25.6,
+                              "stroke": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#8B5CF6A6",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#5B21B680",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "strokeWidth": 2.88,
+                              "strokeLinejoin": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "BohXD",
+                              "x": 29.088767999999998,
+                              "y": 19.2,
+                              "name": "Play da frente",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 22.169600000000003,
+                              "height": 25.6,
+                              "stroke": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "strokeWidth": 2.88,
+                              "strokeLinejoin": "round"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "SpeA9",
+                          "name": "Rótulo",
+                          "fill": "#FFFFFF",
+                          "content": "Watch Together",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "yKkv0",
+                      "name": "App 44",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "K7Ay7",
+                          "name": "Ícone E",
+                          "clip": true,
+                          "width": 44,
+                          "height": 44,
+                          "fill": "#15131F",
+                          "cornerRadius": 9.9,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "GPkDC",
+                              "x": 4.4,
+                              "y": 4.4,
+                              "name": "Brilho",
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "radial",
+                                "enabled": true,
+                                "rotation": 0,
+                                "size": {
+                                  "width": 1,
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#8B5CF666",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF600",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 35.2,
+                              "height": 35.2
+                            },
+                            {
+                              "type": "path",
+                              "id": "oqlpq",
+                              "x": 12.078527999999999,
+                              "y": 13.2,
+                              "name": "Play de trás",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#8B5CF6A6",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#5B21B680",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 15.241600000000002,
+                              "height": 17.6,
+                              "stroke": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#8B5CF6A6",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#5B21B680",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "strokeWidth": 1.98,
+                              "strokeLinejoin": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "VMwP2",
+                              "x": 19.998527999999997,
+                              "y": 13.2,
+                              "name": "Play da frente",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 15.241600000000002,
+                              "height": 17.6,
+                              "stroke": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "strokeWidth": 1.98,
+                              "strokeLinejoin": "round"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "UB7Yl",
+                          "name": "Rótulo",
+                          "fill": "#FFFFFF",
+                          "content": "Watch Together",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 9,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "p1T5Hj",
+              "name": "Conceito F",
+              "width": 360,
+              "layout": "vertical",
+              "gap": 20,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "ENyEi",
+                  "name": "Ícone F",
+                  "clip": true,
+                  "width": 360,
+                  "height": 360,
+                  "fill": "#15131F",
+                  "cornerRadius": 81,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "xiPyr",
+                      "x": 36,
+                      "y": 36,
+                      "name": "Brilho",
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "radial",
+                        "enabled": true,
+                        "rotation": 0,
+                        "size": {
+                          "width": 1,
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#8B5CF666",
+                            "position": 0
+                          },
+                          {
+                            "color": "#8B5CF600",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "width": 288,
+                      "height": 288
+                    },
+                    {
+                      "type": "path",
+                      "id": "oZf0d",
+                      "x": 98.82432,
+                      "y": 108,
+                      "name": "Play de trás",
+                      "geometry": "M0 0l86.6 50-86.6 50z",
+                      "viewBox": [
+                        0,
+                        0,
+                        86.6,
+                        100
+                      ],
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "linear",
+                        "enabled": true,
+                        "rotation": 135,
+                        "size": {
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#DDD6FE",
+                            "position": 0
+                          },
+                          {
+                            "color": "#8B5CF6",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "width": 124.704,
+                      "height": 144,
+                      "stroke": {
+                        "type": "gradient",
+                        "gradientType": "linear",
+                        "enabled": true,
+                        "rotation": 135,
+                        "size": {
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#DDD6FE",
+                            "position": 0
+                          },
+                          {
+                            "color": "#8B5CF6",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "strokeWidth": 16.2,
+                      "strokeLinejoin": "round"
+                    },
+                    {
+                      "type": "path",
+                      "id": "a9Fdfb",
+                      "x": 163.62432,
+                      "y": 108,
+                      "name": "Play da frente",
+                      "geometry": "M0 0l86.6 50-86.6 50z",
+                      "viewBox": [
+                        0,
+                        0,
+                        86.6,
+                        100
+                      ],
+                      "fill": "#FFFFFF",
+                      "width": 124.704,
+                      "height": 144,
+                      "stroke": "#FFFFFF",
+                      "strokeWidth": 16.2,
+                      "strokeLinejoin": "round"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "YG77S",
+                  "name": "Texto",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "rVv4W",
+                      "name": "Nome",
+                      "fill": "#F4F1FA",
+                      "content": "F · Play branco na frente",
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 22,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "oUoRH",
+                      "name": "Descrição",
+                      "fill": "#A6A0BD",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Como o E, com o play da frente branco e o de trás no gradiente lilás.",
+                      "lineHeight": 1.4,
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Zkzn2",
+                  "name": "Tela inicial",
+                  "width": "fill_container",
+                  "height": 150,
+                  "fill": {
+                    "type": "gradient",
+                    "gradientType": "linear",
+                    "enabled": true,
+                    "rotation": 160,
+                    "size": {
+                      "height": 1
+                    },
+                    "colors": [
+                      {
+                        "color": "#2B2442",
+                        "position": 0
+                      },
+                      {
+                        "color": "#141220",
+                        "position": 1
+                      }
+                    ]
+                  },
+                  "cornerRadius": 24,
+                  "gap": 36,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "wUJME",
+                      "name": "App 64",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "JlFcW",
+                          "name": "Ícone F",
+                          "clip": true,
+                          "width": 64,
+                          "height": 64,
+                          "fill": "#15131F",
+                          "cornerRadius": 14.4,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "z9p8S",
+                              "x": 6.4,
+                              "y": 6.4,
+                              "name": "Brilho",
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "radial",
+                                "enabled": true,
+                                "rotation": 0,
+                                "size": {
+                                  "width": 1,
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#8B5CF666",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF600",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 51.2,
+                              "height": 51.2
+                            },
+                            {
+                              "type": "path",
+                              "id": "sYJsK",
+                              "x": 17.568768,
+                              "y": 19.2,
+                              "name": "Play de trás",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 22.169600000000003,
+                              "height": 25.6,
+                              "stroke": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "strokeWidth": 2.88,
+                              "strokeLinejoin": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "l88gMe",
+                              "x": 29.088767999999998,
+                              "y": 19.2,
+                              "name": "Play da frente",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": "#FFFFFF",
+                              "width": 22.169600000000003,
+                              "height": 25.6,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 2.88,
+                              "strokeLinejoin": "round"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "W2bQXt",
+                          "name": "Rótulo",
+                          "fill": "#FFFFFF",
+                          "content": "Watch Together",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "b6z7Ij",
+                      "name": "App 44",
+                      "layout": "vertical",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "uQXvr",
+                          "name": "Ícone F",
+                          "clip": true,
+                          "width": 44,
+                          "height": 44,
+                          "fill": "#15131F",
+                          "cornerRadius": 9.9,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "k4qK4",
+                              "x": 4.4,
+                              "y": 4.4,
+                              "name": "Brilho",
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "radial",
+                                "enabled": true,
+                                "rotation": 0,
+                                "size": {
+                                  "width": 1,
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#8B5CF666",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF600",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 35.2,
+                              "height": 35.2
+                            },
+                            {
+                              "type": "path",
+                              "id": "QnMvL",
+                              "x": 12.078527999999999,
+                              "y": 13.2,
+                              "name": "Play de trás",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 15.241600000000002,
+                              "height": 17.6,
+                              "stroke": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "strokeWidth": 1.98,
+                              "strokeLinejoin": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "jVb5l",
+                              "x": 19.998527999999997,
+                              "y": 13.2,
+                              "name": "Play da frente",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": "#FFFFFF",
+                              "width": 15.241600000000002,
+                              "height": 17.6,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 1.98,
+                              "strokeLinejoin": "round"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "w54wB",
+                          "name": "Rótulo",
+                          "fill": "#FFFFFF",
+                          "content": "Watch Together",
+                          "fontFamily": "Plus Jakarta Sans",
+                          "fontSize": 9,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "C5pls",
+          "name": "F · Arquivos do app",
+          "layout": "vertical",
+          "gap": 24,
+          "children": [
+            {
+              "type": "text",
+              "id": "KTYjZ",
+              "name": "Título",
+              "fill": "#F4F1FA",
+              "content": "F · Arquivos do app (exportados em 1024 px)",
+              "fontFamily": "Plus Jakarta Sans",
+              "fontSize": 26,
+              "fontWeight": "700"
+            },
+            {
+              "type": "frame",
+              "id": "gb0DG",
+              "name": "Arquivos",
+              "gap": 32,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "h89fI",
+                  "name": "Item icon.png",
+                  "layout": "vertical",
+                  "gap": 10,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "OyctI",
+                      "name": "Moldura",
+                      "fill": "#2B2442",
+                      "stroke": "#34304F",
+                      "strokeWidth": 1,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "BZkWe",
+                          "name": "Export icon",
+                          "clip": true,
+                          "width": 256,
+                          "height": 256,
+                          "fill": "#15131F",
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "a0ljXm",
+                              "x": 25.6,
+                              "y": 25.6,
+                              "name": "Brilho",
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "radial",
+                                "enabled": true,
+                                "rotation": 0,
+                                "size": {
+                                  "width": 1,
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#8B5CF666",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF600",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 204.8,
+                              "height": 204.8
+                            },
+                            {
+                              "type": "path",
+                              "id": "hWKaQ",
+                              "x": 70.275072,
+                              "y": 76.8,
+                              "name": "Play de trás",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 88.67840000000001,
+                              "height": 102.4,
+                              "stroke": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "strokeWidth": 11.52,
+                              "strokeLinejoin": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "GVc5X",
+                              "x": 116.35507199999999,
+                              "y": 76.8,
+                              "name": "Play da frente",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": "#FFFFFF",
+                              "width": 88.67840000000001,
+                              "height": 102.4,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 11.52,
+                              "strokeLinejoin": "round"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "s8OfQ",
+                      "name": "Arquivo",
+                      "fill": "#DDD6FE",
+                      "content": "icon.png",
+                      "fontFamily": "JetBrains Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "upEPh",
+                      "name": "Uso",
+                      "fill": "#A6A0BD",
+                      "content": "Ícone geral (quadrado cheio)",
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "hBsS2",
+                  "name": "Item android-icon-background.png",
+                  "layout": "vertical",
+                  "gap": 10,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "eGDju",
+                      "name": "Moldura",
+                      "fill": "#2B2442",
+                      "stroke": "#34304F",
+                      "strokeWidth": 1,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "fnMrJ",
+                          "name": "Export background",
+                          "clip": true,
+                          "width": 256,
+                          "height": 256,
+                          "fill": "#15131F",
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "H71n2J",
+                              "x": 25.6,
+                              "y": 25.6,
+                              "name": "Brilho",
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "radial",
+                                "enabled": true,
+                                "rotation": 0,
+                                "size": {
+                                  "width": 1,
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#8B5CF666",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF600",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 204.8,
+                              "height": 204.8
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "glAkb",
+                      "name": "Arquivo",
+                      "fill": "#DDD6FE",
+                      "content": "android-icon-background.png",
+                      "fontFamily": "JetBrains Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "hW2H1",
+                      "name": "Uso",
+                      "fill": "#A6A0BD",
+                      "content": "Adaptativo · fundo",
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Gx88w",
+                  "name": "Item android-icon-foreground.png",
+                  "layout": "vertical",
+                  "gap": 10,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "XrlRV",
+                      "name": "Moldura",
+                      "fill": "#2B2442",
+                      "stroke": "#34304F",
+                      "strokeWidth": 1,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "qOGgt",
+                          "name": "Export foreground",
+                          "clip": true,
+                          "width": 256,
+                          "height": 256,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "bFhpq",
+                              "x": 80.66555904,
+                              "y": 86.01599999999999,
+                              "name": "Play de trás",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 72.716288,
+                              "height": 83.968,
+                              "stroke": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "strokeWidth": 9.446399999999999,
+                              "strokeLinejoin": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "WImwe",
+                              "x": 118.45115904,
+                              "y": 86.01599999999999,
+                              "name": "Play da frente",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": "#FFFFFF",
+                              "width": 72.716288,
+                              "height": 83.968,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 9.446399999999999,
+                              "strokeLinejoin": "round"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "GoSvw",
+                          "layoutPosition": "absolute",
+                          "x": 49.792,
+                          "y": 49.792,
+                          "name": "Guia zona segura",
+                          "width": 156.416,
+                          "height": 156.416,
+                          "stroke": "#FF5C7A",
+                          "strokeWidth": 1,
+                          "strokeDash": [
+                            4,
+                            4
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "SRf7w",
+                      "name": "Arquivo",
+                      "fill": "#DDD6FE",
+                      "content": "android-icon-foreground.png",
+                      "fontFamily": "JetBrains Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "TRLwB",
+                      "name": "Uso",
+                      "fill": "#A6A0BD",
+                      "content": "Adaptativo · frente (zona segura)",
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "EUZkc",
+                  "name": "Item android-icon-monochrome.png",
+                  "layout": "vertical",
+                  "gap": 10,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "ZZj5L",
+                      "name": "Moldura",
+                      "fill": "#2B2442",
+                      "stroke": "#34304F",
+                      "strokeWidth": 1,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "p9w4B",
+                          "name": "Export monochrome",
+                          "clip": true,
+                          "width": 256,
+                          "height": 256,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "iH97U",
+                              "x": 80.66555904,
+                              "y": 86.01599999999999,
+                              "name": "Play de trás",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": "#FFFFFF80",
+                              "width": 72.716288,
+                              "height": 83.968,
+                              "stroke": "#FFFFFF80",
+                              "strokeWidth": 9.446399999999999,
+                              "strokeLinejoin": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "foNoQ",
+                              "x": 118.45115904,
+                              "y": 86.01599999999999,
+                              "name": "Play da frente",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": "#FFFFFF",
+                              "width": 72.716288,
+                              "height": 83.968,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 9.446399999999999,
+                              "strokeLinejoin": "round"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "pub2u",
+                      "name": "Arquivo",
+                      "fill": "#DDD6FE",
+                      "content": "android-icon-monochrome.png",
+                      "fontFamily": "JetBrains Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "a0Vk4n",
+                      "name": "Uso",
+                      "fill": "#A6A0BD",
+                      "content": "Android 13+ · ícone temático",
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "RI18H",
+                  "name": "Item splash-icon.png",
+                  "layout": "vertical",
+                  "gap": 10,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "C7UYrK",
+                      "name": "Moldura",
+                      "fill": "#2B2442",
+                      "stroke": "#34304F",
+                      "strokeWidth": 1,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "XefwF",
+                          "name": "Export splash",
+                          "clip": true,
+                          "width": 256,
+                          "height": 256,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "path",
+                              "id": "XWMQb",
+                              "x": 30.29885440000001,
+                              "y": 53.760000000000005,
+                              "name": "Play de trás",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 128.58368,
+                              "height": 148.48,
+                              "stroke": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "strokeWidth": 16.704,
+                              "strokeLinejoin": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "iamvO",
+                              "x": 97.11485440000001,
+                              "y": 53.760000000000005,
+                              "name": "Play da frente",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": "#FFFFFF",
+                              "width": 128.58368,
+                              "height": 148.48,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 16.704,
+                              "strokeLinejoin": "round"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "eYZar",
+                      "name": "Arquivo",
+                      "fill": "#DDD6FE",
+                      "content": "splash-icon.png",
+                      "fontFamily": "JetBrains Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "KhV33",
+                      "name": "Uso",
+                      "fill": "#A6A0BD",
+                      "content": "Tela de abertura (fundo transparente)",
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "T2bWL3",
+              "name": "Prévias dos cortes do Android",
+              "gap": 32,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "VwDAj",
+                  "name": "Corte Círculo",
+                  "layout": "vertical",
+                  "gap": 10,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "v0qcsb",
+                      "name": "Máscara",
+                      "clip": true,
+                      "width": 140,
+                      "height": 140,
+                      "fill": "#15131F",
+                      "cornerRadius": 70,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "ENL2k",
+                          "x": -35,
+                          "y": -35,
+                          "name": "Camadas",
+                          "width": 210,
+                          "height": 210,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "OtPH1",
+                              "x": 21,
+                              "y": 21,
+                              "name": "Brilho",
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "radial",
+                                "enabled": true,
+                                "rotation": 0,
+                                "size": {
+                                  "width": 1,
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#8B5CF666",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF600",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 168,
+                              "height": 168
+                            },
+                            {
+                              "type": "path",
+                              "id": "j4LBW",
+                              "x": 66.1709664,
+                              "y": 70.56,
+                              "name": "Play de trás",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 59.650079999999996,
+                              "height": 68.88,
+                              "stroke": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "strokeWidth": 7.748999999999999,
+                              "strokeLinejoin": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "GmMMZ",
+                              "x": 97.1669664,
+                              "y": 70.56,
+                              "name": "Play da frente",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": "#FFFFFF",
+                              "width": 59.650079999999996,
+                              "height": 68.88,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 7.748999999999999,
+                              "strokeLinejoin": "round"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "RZHhD",
+                      "name": "Nome",
+                      "fill": "#A6A0BD",
+                      "content": "Círculo",
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "TfTtY",
+                  "name": "Corte Quadrado arredondado",
+                  "layout": "vertical",
+                  "gap": 10,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "IVDPn",
+                      "name": "Máscara",
+                      "clip": true,
+                      "width": 140,
+                      "height": 140,
+                      "fill": "#15131F",
+                      "cornerRadius": 30.8,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "KDJwt",
+                          "x": -35,
+                          "y": -35,
+                          "name": "Camadas",
+                          "width": 210,
+                          "height": 210,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "HpDNp",
+                              "x": 21,
+                              "y": 21,
+                              "name": "Brilho",
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "radial",
+                                "enabled": true,
+                                "rotation": 0,
+                                "size": {
+                                  "width": 1,
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#8B5CF666",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF600",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 168,
+                              "height": 168
+                            },
+                            {
+                              "type": "path",
+                              "id": "N1E9cf",
+                              "x": 66.1709664,
+                              "y": 70.56,
+                              "name": "Play de trás",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 59.650079999999996,
+                              "height": 68.88,
+                              "stroke": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "strokeWidth": 7.748999999999999,
+                              "strokeLinejoin": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "JHA7l",
+                              "x": 97.1669664,
+                              "y": 70.56,
+                              "name": "Play da frente",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": "#FFFFFF",
+                              "width": 59.650079999999996,
+                              "height": 68.88,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 7.748999999999999,
+                              "strokeLinejoin": "round"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "R2Eyag",
+                      "name": "Nome",
+                      "fill": "#A6A0BD",
+                      "content": "Quadrado arredondado",
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "eF6xo",
+                  "name": "Corte Gota",
+                  "layout": "vertical",
+                  "gap": 10,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "kC0LZ",
+                      "name": "Máscara",
+                      "clip": true,
+                      "width": 140,
+                      "height": 140,
+                      "fill": "#15131F",
+                      "cornerRadius": [
+                        70,
+                        70,
+                        70,
+                        16.8
+                      ],
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "A30i3",
+                          "x": -35,
+                          "y": -35,
+                          "name": "Camadas",
+                          "width": 210,
+                          "height": 210,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "o6gN2",
+                              "x": 21,
+                              "y": 21,
+                              "name": "Brilho",
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "radial",
+                                "enabled": true,
+                                "rotation": 0,
+                                "size": {
+                                  "width": 1,
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#8B5CF666",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF600",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 168,
+                              "height": 168
+                            },
+                            {
+                              "type": "path",
+                              "id": "lA5VT",
+                              "x": 66.1709664,
+                              "y": 70.56,
+                              "name": "Play de trás",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "width": 59.650079999999996,
+                              "height": 68.88,
+                              "stroke": {
+                                "type": "gradient",
+                                "gradientType": "linear",
+                                "enabled": true,
+                                "rotation": 135,
+                                "size": {
+                                  "height": 1
+                                },
+                                "colors": [
+                                  {
+                                    "color": "#DDD6FE",
+                                    "position": 0
+                                  },
+                                  {
+                                    "color": "#8B5CF6",
+                                    "position": 1
+                                  }
+                                ]
+                              },
+                              "strokeWidth": 7.748999999999999,
+                              "strokeLinejoin": "round"
+                            },
+                            {
+                              "type": "path",
+                              "id": "lKpFm",
+                              "x": 97.1669664,
+                              "y": 70.56,
+                              "name": "Play da frente",
+                              "geometry": "M0 0l86.6 50-86.6 50z",
+                              "viewBox": [
+                                0,
+                                0,
+                                86.6,
+                                100
+                              ],
+                              "fill": "#FFFFFF",
+                              "width": 59.650079999999996,
+                              "height": 68.88,
+                              "stroke": "#FFFFFF",
+                              "strokeWidth": 7.748999999999999,
+                              "strokeLinejoin": "round"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "E19qC",
+                      "name": "Nome",
+                      "fill": "#A6A0BD",
+                      "content": "Gota",
+                      "fontFamily": "Plus Jakarta Sans",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
