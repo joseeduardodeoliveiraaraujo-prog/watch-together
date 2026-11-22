@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Pressable, View } from 'react-native';
 
 import { Icon, type IconName } from '@/components/ui/Icon';
@@ -5,10 +6,13 @@ import { Colors } from '@/constants/theme';
 
 import type { ProgressStore } from './progressStore';
 import { ProgressSeekBar, ProgressTime } from './ProgressViews';
+import type { VolumeControls } from './useVolume';
+import { VolumeControl } from './VolumeControl';
 
 type PlayerControlsProps = {
   isPlaying: boolean;
   progress: ProgressStore;
+  volume: VolumeControls;
   disabled: boolean;
   onPlay: () => void;
   onPause: () => void;
@@ -24,6 +28,7 @@ type PlayerControlsProps = {
 export function PlayerControls({
   isPlaying,
   progress,
+  volume,
   disabled,
   onPlay,
   onPause,
@@ -31,11 +36,48 @@ export function PlayerControls({
   onSeekTo,
   onToggleFullscreen,
 }: PlayerControlsProps) {
+  // Volume aberto: a linha vira alto-falante + barra larga (os botões voltam sozinhos em 3 s).
+  const [volumeOpen, setVolumeOpen] = useState(false);
+  const fullscreenButton = (
+    <Pressable
+      onPress={onToggleFullscreen}
+      accessibilityRole="button"
+      accessibilityLabel="Tela cheia"
+      hitSlop={8}
+      className="h-10 w-10 items-end justify-center active:opacity-70"
+    >
+      <Icon name="maximize" size={20} color={Colors.muted} />
+    </Pressable>
+  );
+
+  if (volumeOpen) {
+    return (
+      <View className="gap-2.5 bg-surface px-5 pb-1.5 pt-3.5">
+        <ProgressSeekBar
+          store={progress}
+          disabled={disabled}
+          variant="surface"
+          onSeekTo={onSeekTo}
+        />
+        <View className="h-[52px] flex-row items-center gap-3">
+          <VolumeControl
+            controls={volume}
+            variant="surface"
+            mode="expandable"
+            expanded
+            onExpandedChange={setVolumeOpen}
+          />
+          {fullscreenButton}
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View className="gap-2.5 bg-surface px-5 pb-1.5 pt-3.5">
       <ProgressSeekBar store={progress} disabled={disabled} variant="surface" onSeekTo={onSeekTo} />
 
-      <View className="flex-row items-center">
+      <View className="h-[52px] flex-row items-center">
         <View className="flex-1">
           <ProgressTime store={progress} className="font-mono text-xs text-muted" />
         </View>
@@ -65,16 +107,14 @@ export function PlayerControls({
           />
         </View>
 
-        <View className="flex-1 flex-row items-center justify-end">
-          <Pressable
-            onPress={onToggleFullscreen}
-            accessibilityRole="button"
-            accessibilityLabel="Tela cheia"
-            hitSlop={8}
-            className="h-10 w-10 items-end justify-center active:opacity-70"
-          >
-            <Icon name="maximize" size={20} color={Colors.muted} />
-          </Pressable>
+        <View className="flex-1 flex-row items-center justify-end gap-1">
+          <VolumeControl
+            controls={volume}
+            variant="surface"
+            mode="expandable"
+            onExpandedChange={setVolumeOpen}
+          />
+          {fullscreenButton}
         </View>
       </View>
     </View>

@@ -15,6 +15,8 @@ export type PlayerCommand =
   | { type: 'pause' }
   | { type: 'seek'; seconds: number }
   | { type: 'mute'; muted: boolean }
+  /** Volume do vídeo neste aparelho, 0 a 100 (dentro do volume de mídia do celular). */
+  | { type: 'volume'; volume: number }
   /** Pede a lista de legendas do vídeo atual (resposta: evento `captions`). */
   | { type: 'getCaptions' }
   /** Liga a legenda escolhida; `null` desliga. Vale só para este aparelho. */

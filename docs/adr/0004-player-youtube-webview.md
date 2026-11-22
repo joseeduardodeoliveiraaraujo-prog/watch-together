@@ -35,6 +35,9 @@ O YouTube exige que o embed identifique o site de origem via `Referer`. Sem ele,
   não documentados pelo YouTube. **Qualidade** não é controlável pela IFrame API
   (`setPlaybackQuality` não faz nada desde 2019): fica no automático do YouTube, independente em
   cada aparelho. Tocar o vídeo fora do player oficial para escolher a qualidade viola os termos.
+- **Volume** (2026-11-22): `setVolume` (0–100) e `mute` da IFrame API, escolha local salva no
+  celular (`localStorage`, chave `wt.player.volume`) e reaplicada quando o player fica pronto. O
+  volume do app multiplica o volume de mídia do celular, que continua nos botões físicos.
 
 ## Validação (critérios da Etapa 2)
 

@@ -147,6 +147,7 @@ export const PLAYER_HTML = `<!doctype html>
       case 'pause': player.pauseVideo(); break;
       case 'seek': player.seekTo(cmd.seconds, true); break;
       case 'mute': if (cmd.muted) { player.mute(); } else { player.unMute(); } break;
+      case 'volume': player.setVolume(Math.max(0, Math.min(100, Math.round(Number(cmd.volume) || 0)))); break;
       case 'getCaptions': sendCaptions(); break;
       case 'setCaption': setCaption(cmd.selection); break;
       default: send({ type: 'log', message: 'unknown command: ' + cmd.type });

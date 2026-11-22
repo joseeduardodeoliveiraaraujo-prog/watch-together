@@ -19,6 +19,7 @@ import { useRoomChat } from '@/features/chat/useRoomChat';
 import { FullscreenControls } from '@/features/player/FullscreenControls';
 import { PlayerControls } from '@/features/player/PlayerControls';
 import { useCaptions } from '@/features/player/useCaptions';
+import { useVolume } from '@/features/player/useVolume';
 import { useFullscreen } from '@/features/player/useFullscreen';
 import { useRoomPlayback } from '@/features/player/useRoomPlayback';
 import { listPlaylist } from '@/features/playlist/api';
@@ -47,6 +48,7 @@ export function RoomScreen({ roomId }: { roomId: string }) {
   const playerRef = useRef<YouTubePlayerHandle>(null);
   const playback = useRoomPlayback(roomId, userId, playerRef);
   const { fullscreen, toggle: toggleFullscreen } = useFullscreen();
+  const volume = useVolume(playerRef);
   const captions = useCaptions(playerRef, playback.snapshot?.videoId ?? null);
   const { profile } = useProfile();
   const myName = profile?.display_name ?? null;
@@ -131,6 +133,7 @@ export function RoomScreen({ roomId }: { roomId: string }) {
 
   const handlePlayerEvent: typeof playback.handlePlayerEvent = (event) => {
     captions.handleEvent(event);
+    volume.handleEvent(event);
     playback.handlePlayerEvent(event);
   };
 
@@ -198,6 +201,7 @@ export function RoomScreen({ roomId }: { roomId: string }) {
           <FullscreenControls
             isPlaying={!!playback.snapshot?.isPlaying}
             progress={playback.progress}
+            volume={volume}
             disabled={!hasVideo}
             title={currentTitle}
             captions={captions.captions}
@@ -234,6 +238,7 @@ export function RoomScreen({ roomId }: { roomId: string }) {
           <PlayerControls
             isPlaying={!!playback.snapshot?.isPlaying}
             progress={playback.progress}
+            volume={volume}
             disabled={!hasVideo}
             onPlay={playback.play}
             onPause={playback.pause}

@@ -13,6 +13,10 @@ type SeekBarProps = {
   onSeekTo: (seconds: number) => void;
   /** Durante o arraste: posição prevista em segundos; `null` ao soltar ou cancelar. */
   onScrub?: (seconds: number | null) => void;
+  /** Rótulo para leitores de tela (padrão: posição do vídeo). */
+  label?: string;
+  /** Passo dos gestos de acessibilidade (aumentar/diminuir), na mesma unidade de `currentTime`. */
+  a11yStep?: number;
 };
 
 /** Barra de progresso: toque pula para o ponto; arrastar mostra a prévia e busca ao soltar. */
@@ -23,6 +27,8 @@ export function SeekBar({
   variant,
   onSeekTo,
   onScrub,
+  label = 'Posição do vídeo',
+  a11yStep = A11Y_STEP_SECONDS,
 }: SeekBarProps) {
   const [width, setWidth] = useState(0);
   const [dragRatio, setDragRatio] = useState<number | null>(null);
@@ -69,15 +75,14 @@ export function SeekBar({
       hitSlop={{ top: 12, bottom: 12 }}
       accessible
       accessibilityRole="adjustable"
-      accessibilityLabel="Posição do vídeo"
+      accessibilityLabel={label}
       accessibilityState={{ disabled }}
       accessibilityValue={{ min: 0, max: Math.round(duration), now: Math.round(currentTime) }}
       accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
       onAccessibilityAction={(e) => {
         if (disabled) return;
-        const delta =
-          e.nativeEvent.actionName === 'increment' ? A11Y_STEP_SECONDS : -A11Y_STEP_SECONDS;
-        onSeekTo(Math.max(0, currentTime + delta));
+        const delta = e.nativeEvent.actionName === 'increment' ? a11yStep : -a11yStep;
+        onSeekTo(Math.min(duration, Math.max(0, currentTime + delta)));
       }}
       className="h-3.5 justify-center"
     >

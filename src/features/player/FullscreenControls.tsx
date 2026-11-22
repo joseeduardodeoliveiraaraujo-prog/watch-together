@@ -11,6 +11,8 @@ import { CaptionsSheet } from './CaptionsSheet';
 import type { ProgressStore } from './progressStore';
 import { ProgressSeekBar, ProgressTime } from './ProgressViews';
 import type { CaptionsState } from './useCaptions';
+import type { VolumeControls } from './useVolume';
+import { VolumeControl } from './VolumeControl';
 
 /** Tocando, os controles somem depois desse tempo sem interação. */
 const HIDE_AFTER_MS = 3000;
@@ -24,6 +26,7 @@ type Side = 'left' | 'center' | 'right';
 type FullscreenControlsProps = {
   isPlaying: boolean;
   progress: ProgressStore;
+  volume: VolumeControls;
   disabled: boolean;
   title: string | null;
   captions: CaptionsState;
@@ -46,6 +49,7 @@ type FullscreenControlsProps = {
 export function FullscreenControls({
   isPlaying,
   progress,
+  volume,
   disabled,
   title,
   captions,
@@ -244,7 +248,8 @@ export function FullscreenControls({
           pointerEvents="box-none"
           className="absolute bottom-0 left-0 right-0 gap-2 px-10 pb-5"
         >
-          <View pointerEvents="box-none" className="flex-row items-center">
+          <View pointerEvents="box-none" className="flex-row items-center gap-3">
+            <VolumeControl controls={volume} variant="overlay" mode="inline" onInteract={poke} />
             <View className="flex-1">
               <ProgressTime
                 store={progress}
