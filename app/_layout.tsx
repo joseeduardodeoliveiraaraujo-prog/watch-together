@@ -5,6 +5,7 @@ import { useFonts } from 'expo-font';
 import { SplashScreen, Stack, ThemeProvider } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 import { AppErrorScreen } from '@/components/layout/AppErrorScreen';
 import { DialogProvider } from '@/components/ui/Dialog';
@@ -62,12 +63,14 @@ export default function RootLayout() {
   const ready = fontsLoaded || !!fontError;
 
   return (
-    <ThemeProvider value={NavigationTheme}>
-      <StatusBar style="light" />
-      <SessionProvider>
-        <SplashScreenController ready={ready} />
-        <DialogProvider>{ready ? <RootNavigator /> : null}</DialogProvider>
-      </SessionProvider>
-    </ThemeProvider>
+    <KeyboardProvider>
+      <ThemeProvider value={NavigationTheme}>
+        <StatusBar style="light" />
+        <SessionProvider>
+          <SplashScreenController ready={ready} />
+          <DialogProvider>{ready ? <RootNavigator /> : null}</DialogProvider>
+        </SessionProvider>
+      </ThemeProvider>
+    </KeyboardProvider>
   );
 }

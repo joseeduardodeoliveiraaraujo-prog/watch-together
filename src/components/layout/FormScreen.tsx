@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
-import { KeyboardAvoidingView, ScrollView } from 'react-native';
+import { cssInterop } from 'nativewind';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 import { Screen } from './Screen';
 
@@ -15,7 +16,16 @@ type FormScreenProps = {
   header?: ReactNode;
 };
 
-/** Tela com rolagem que sobe junto com o teclado. */
+// Para aceitar `contentContainerClassName` como o ScrollView do react-native.
+cssInterop(KeyboardAwareScrollView, { contentContainerClassName: 'contentContainerStyle' });
+
+/** Distância entre o campo focado e o topo do teclado. */
+const KEYBOARD_GAP = 24;
+
+/**
+ * Tela com rolagem que acompanha o teclado: rola até o campo focado para ele não ficar coberto.
+ * (O KeyboardAvoidingView do react-native calcula errado a posição do teclado no Android.)
+ */
 export function FormScreen({
   children,
   contentClassName = 'gap-4 px-5 py-6',
@@ -27,14 +37,13 @@ export function FormScreen({
     <Screen padded={false} topInset={topInset} className="overflow-hidden">
       {background}
       {header}
-      <KeyboardAvoidingView behavior="padding" className="flex-1">
-        <ScrollView
-          contentContainerClassName={`flex-grow ${contentClassName}`}
-          keyboardShouldPersistTaps="handled"
-        >
-          {children}
-        </ScrollView>
-      </KeyboardAvoidingView>
+      <KeyboardAwareScrollView
+        bottomOffset={KEYBOARD_GAP}
+        contentContainerClassName={`flex-grow ${contentClassName}`}
+        keyboardShouldPersistTaps="handled"
+      >
+        {children}
+      </KeyboardAwareScrollView>
     </Screen>
   );
 }

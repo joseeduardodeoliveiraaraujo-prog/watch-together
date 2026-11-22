@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { FlatList, KeyboardAvoidingView, Pressable, Text, TextInput, View } from 'react-native';
+import { FlatList, Pressable, Text, TextInput, View } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 
 import { Avatar } from '@/components/ui/Avatar';
 import { Icon } from '@/components/ui/Icon';
@@ -41,7 +42,9 @@ export function ChatPanel({
   };
 
   return (
-    <KeyboardAvoidingView behavior="padding" className="flex-1">
+    // O do react-native calcula errado a posição do teclado no Android (edge-to-edge) e o campo
+    // ficava coberto. Este mede de verdade onde o chat está na tela (automaticOffset).
+    <KeyboardAvoidingView behavior="padding" automaticOffset style={{ flex: 1 }}>
       {entries.length === 0 ? (
         // Fora da FlatList: a lista é invertida e o comportamento do componente vazio nesse modo
         // muda entre versões do React Native (já apareceu de cabeça para baixo).
