@@ -12,7 +12,7 @@ import type { ProgressStore } from './progressStore';
 import { ProgressSeekBar, ProgressTime } from './ProgressViews';
 import type { CaptionsState } from './useCaptions';
 import type { VolumeControls } from './useVolume';
-import { VolumeControl } from './VolumeControl';
+import { SideVolume } from './VolumeControl';
 
 /** Tocando, os controles somem depois desse tempo sem interação. */
 const HIDE_AFTER_MS = 3000;
@@ -244,12 +244,16 @@ export function FullscreenControls({
           />
         </View>
 
+        {/* F2: volume na borda direita, entre o topo e a linha de baixo. */}
+        <View pointerEvents="box-none" className="absolute bottom-0 right-6 top-0 justify-center">
+          <SideVolume controls={volume} onInteract={poke} />
+        </View>
+
         <View
           pointerEvents="box-none"
           className="absolute bottom-0 left-0 right-0 gap-2 px-10 pb-5"
         >
-          <View pointerEvents="box-none" className="flex-row items-center gap-3">
-            <VolumeControl controls={volume} variant="overlay" mode="inline" onInteract={poke} />
+          <View pointerEvents="box-none" className="flex-row items-center">
             <View className="flex-1">
               <ProgressTime
                 store={progress}

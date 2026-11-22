@@ -2,7 +2,14 @@ import { NavigationBar } from 'expo-navigation-bar';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useRef, useState, type ReactNode } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+  type HostInstance,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AppHeader } from '@/components/layout/AppHeader';
@@ -18,6 +25,7 @@ import { ChatOverlay, ChatPanel } from '@/features/chat/ChatPanel';
 import { useRoomChat } from '@/features/chat/useRoomChat';
 import { FullscreenControls } from '@/features/player/FullscreenControls';
 import { PlayerControls } from '@/features/player/PlayerControls';
+import { VOLUME_POPOVER_WIDTH, VolumePopover } from '@/features/player/VolumeControl';
 import { useCaptions } from '@/features/player/useCaptions';
 import { useVolume } from '@/features/player/useVolume';
 import { useFullscreen } from '@/features/player/useFullscreen';
@@ -49,6 +57,12 @@ export function RoomScreen({ roomId }: { roomId: string }) {
   const playback = useRoomPlayback(roomId, userId, playerRef);
   const { fullscreen, toggle: toggleFullscreen } = useFullscreen();
   const volume = useVolume(playerRef);
+  /** Barra de volume (em pé) aberta sobre o vídeo; `volumeTouch` reinicia o tempo para fechar. */
+  const [volumeOpen, setVolumeOpen] = useState(false);
+  const [volumeTouch, setVolumeTouch] = useState(0);
+  /** Posição horizontal da barra dentro da área do vídeo (medida ao abrir). */
+  const [volumeLeft, setVolumeLeft] = useState(0);
+  const playerAreaRef = useRef<HostInstance>(null);
   const captions = useCaptions(playerRef, playback.snapshot?.videoId ?? null);
   const { profile } = useProfile();
   const myName = profile?.display_name ?? null;
@@ -131,6 +145,26 @@ export function RoomScreen({ roomId }: { roomId: string }) {
     playlist.data?.find((item) => item.id === playback.snapshot?.currentItemId)?.title ?? null;
   const online = channel.onlineIds.size;
 
+  const pressVolume = (centerX: number) => {
+    if (!volumeOpen) {
+      // Centraliza a barra sobre o alto-falante, medindo a área do vídeo na tela.
+      const area = playerAreaRef.current;
+      if (!area) return;
+      area.measureInWindow((x) => {
+        setVolumeLeft(centerX - x - VOLUME_POPOVER_WIDTH / 2);
+        setVolumeOpen(true);
+      });
+      return;
+    }
+    volume.toggleMute();
+    setVolumeTouch((n) => n + 1);
+  };
+
+  const switchFullscreen = () => {
+    setVolumeOpen(false);
+    toggleFullscreen();
+  };
+
   const handlePlayerEvent: typeof playback.handlePlayerEvent = (event) => {
     captions.handleEvent(event);
     volume.handleEvent(event);
@@ -182,7 +216,7 @@ export function RoomScreen({ roomId }: { roomId: string }) {
       )}
 
       {/* O player fica sempre no mesmo lugar da árvore: alternar a tela cheia não recarrega o vídeo. */}
-      <View className={fullscreen ? 'flex-1 bg-black' : ''}>
+      <View ref={playerAreaRef} className={fullscreen ? 'flex-1 bg-black' : ''}>
         {PLAYER_URL ? (
           <YouTubePlayer
             ref={playerRef}
@@ -209,7 +243,7 @@ export function RoomScreen({ roomId }: { roomId: string }) {
             onPause={playback.pause}
             onSeekBy={playback.seekBy}
             onSeekTo={playback.seekTo}
-            onExit={toggleFullscreen}
+            onExit={switchFullscreen}
             onRequestCaptions={captions.refresh}
             onSelectCaption={captions.select}
             overlay={<ChatOverlay entries={chat.entries} userId={userId} colorOf={colorOf} />}
@@ -217,7 +251,11 @@ export function RoomScreen({ roomId }: { roomId: string }) {
         ) : (
           <>
             {/* Bloqueia toques no vídeo: o play do YouTube tocaria só aqui e a sincronia pausaria. */}
-            <View className="absolute inset-0" onStartShouldSetResponder={() => true} />
+            <View
+              className="absolute inset-0"
+              onStartShouldSetResponder={() => true}
+              onResponderRelease={() => setVolumeOpen(false)}
+            />
             {currentTitle ? (
               <GradientView
                 gradient="linear-gradient(to bottom, #00000000, #000000AA)"
@@ -229,6 +267,17 @@ export function RoomScreen({ roomId }: { roomId: string }) {
                 </Text>
               </GradientView>
             ) : null}
+            {volumeOpen ? (
+              // Dentro da área do vídeo (toques fora do pai não chegam no Android), centralizada
+              // sobre o alto-falante.
+              <View className="absolute bottom-2" style={{ left: volumeLeft }}>
+                <VolumePopover
+                  controls={volume}
+                  activityKey={volumeTouch}
+                  onClose={() => setVolumeOpen(false)}
+                />
+              </View>
+            ) : null}
           </>
         )}
       </View>
@@ -239,12 +288,14 @@ export function RoomScreen({ roomId }: { roomId: string }) {
             isPlaying={!!playback.snapshot?.isPlaying}
             progress={playback.progress}
             volume={volume}
+            volumeOpen={volumeOpen}
+            onVolumePress={pressVolume}
             disabled={!hasVideo}
             onPlay={playback.play}
             onPause={playback.pause}
             onSeekBy={playback.seekBy}
             onSeekTo={playback.seekTo}
-            onToggleFullscreen={toggleFullscreen}
+            onToggleFullscreen={switchFullscreen}
           />
           <PlaybackStatus
             lastAction={playback.lastAction}
