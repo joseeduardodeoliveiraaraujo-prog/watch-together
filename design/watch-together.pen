@@ -39836,6 +39836,1795 @@
           ]
         }
       ]
+    },
+    {
+      "type": "frame",
+      "id": "o7Vvj",
+      "x": 1226,
+      "y": 12689,
+      "name": "Erros e carregamento",
+      "theme": {
+        "paleta": "midnight-violet"
+      },
+      "fill": "#0B0B12",
+      "cornerRadius": 32,
+      "layout": "vertical",
+      "gap": 48,
+      "padding": 80,
+      "children": [
+        {
+          "type": "frame",
+          "id": "m2vwf",
+          "name": "Cabeçalho",
+          "layout": "vertical",
+          "gap": 10,
+          "children": [
+            {
+              "type": "text",
+              "id": "LJ2Qx",
+              "name": "Título",
+              "fill": "#F4F1FA",
+              "content": "Erros e carregamento",
+              "fontFamily": "$font-body",
+              "fontSize": 40,
+              "fontWeight": "800"
+            },
+            {
+              "type": "text",
+              "id": "sQvIe",
+              "name": "Subtítulo",
+              "fill": "#A6A0BD",
+              "content": "Estados sobre o próprio vídeo (em pé e tela cheia) e a tela de erro geral. Mensagem humana, ação e o código pequeno embaixo.",
+              "fontFamily": "$font-body",
+              "fontSize": 18,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "cJgYe",
+          "name": "Seção vídeo",
+          "fill": "#F4F1FA",
+          "content": "No vídeo (em pé)",
+          "fontFamily": "$font-body",
+          "fontSize": 26,
+          "fontWeight": "700"
+        },
+        {
+          "type": "frame",
+          "id": "fRQzr",
+          "name": "Estados em pé",
+          "gap": 40,
+          "children": [
+            {
+              "type": "frame",
+              "id": "R0Hre",
+              "name": "1 · Carregando",
+              "width": 390,
+              "layout": "vertical",
+              "gap": 14,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Ek2Kz",
+                  "name": "Nome",
+                  "fill": "#F4F1FA",
+                  "content": "1 · Carregando",
+                  "fontFamily": "$font-body",
+                  "fontSize": 20,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "ibELh",
+                  "name": "Descrição",
+                  "fill": "#A6A0BD",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Círculo girando enquanto o vídeo busca dados (buffering) ou o player está abrindo.",
+                  "lineHeight": 1.45,
+                  "fontFamily": "$font-body",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "i0vOr",
+                  "name": "Player",
+                  "metadata": {
+                    "type": "unsplash",
+                    "username": "alamanga",
+                    "link": "https://unsplash.com/@alamanga",
+                    "author": "Yanhao Fang"
+                  },
+                  "clip": true,
+                  "width": "fill_container",
+                  "height": 219,
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "https://images.unsplash.com/photo-1770246263031-75f9420ca13b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3OTQ4ODYzMTl8&ixlib=rb-4.1.0&q=80&w=1080",
+                    "mode": "cover"
+                  },
+                  "cornerRadius": 16,
+                  "layout": "vertical",
+                  "justifyContent": "end",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "D7NoX",
+                      "name": "Shade",
+                      "width": "fill_container",
+                      "height": 70,
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "linear",
+                        "enabled": true,
+                        "rotation": 180,
+                        "size": {
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#00000000",
+                            "position": 0
+                          },
+                          {
+                            "color": "#000000AA",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "padding": [
+                        0,
+                        16,
+                        12,
+                        16
+                      ],
+                      "alignItems": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Dw2HC",
+                          "name": "Video Title",
+                          "fill": "#FFFFFF",
+                          "content": "Lo-fi beats para estudar — 24/7",
+                          "fontFamily": "$font-body",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "OjcGK",
+                      "layoutPosition": "absolute",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Camada de estado",
+                      "width": 390,
+                      "height": 219,
+                      "fill": "#00000066",
+                      "layout": "vertical",
+                      "gap": 10,
+                      "padding": [
+                        0,
+                        28
+                      ],
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "njRQb",
+                          "name": "Carregando",
+                          "width": 40,
+                          "height": 40,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "Zhafu",
+                              "x": 0,
+                              "y": 0,
+                              "name": "Trilho",
+                              "innerRadius": 0.84,
+                              "fill": "#FFFFFF33",
+                              "width": 40,
+                              "height": 40
+                            },
+                            {
+                              "type": "ellipse",
+                              "id": "K2vEF7",
+                              "x": 0,
+                              "y": 0,
+                              "name": "Arco",
+                              "innerRadius": 0.84,
+                              "startAngle": 90,
+                              "sweepAngle": -110,
+                              "fill": "$primary",
+                              "width": 40,
+                              "height": 40
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "u0SkC",
+              "name": "2 · Conexão lenta",
+              "width": 390,
+              "layout": "vertical",
+              "gap": 14,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "F709lj",
+                  "name": "Nome",
+                  "fill": "#F4F1FA",
+                  "content": "2 · Conexão lenta",
+                  "fontFamily": "$font-body",
+                  "fontSize": 20,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "YjMMi",
+                  "name": "Descrição",
+                  "fill": "#A6A0BD",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Depois de ~8 s carregando: aviso discreto embaixo do círculo. Some sozinho quando volta a tocar.",
+                  "lineHeight": 1.45,
+                  "fontFamily": "$font-body",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "jgeeW",
+                  "name": "Player",
+                  "metadata": {
+                    "type": "unsplash",
+                    "username": "alamanga",
+                    "link": "https://unsplash.com/@alamanga",
+                    "author": "Yanhao Fang"
+                  },
+                  "clip": true,
+                  "width": "fill_container",
+                  "height": 219,
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "https://images.unsplash.com/photo-1770246263031-75f9420ca13b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3OTQ4ODYzMTl8&ixlib=rb-4.1.0&q=80&w=1080",
+                    "mode": "cover"
+                  },
+                  "cornerRadius": 16,
+                  "layout": "vertical",
+                  "justifyContent": "end",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "YiuvK",
+                      "name": "Shade",
+                      "width": "fill_container",
+                      "height": 70,
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "linear",
+                        "enabled": true,
+                        "rotation": 180,
+                        "size": {
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#00000000",
+                            "position": 0
+                          },
+                          {
+                            "color": "#000000AA",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "padding": [
+                        0,
+                        16,
+                        12,
+                        16
+                      ],
+                      "alignItems": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "b8HORK",
+                          "name": "Video Title",
+                          "fill": "#FFFFFF",
+                          "content": "Lo-fi beats para estudar — 24/7",
+                          "fontFamily": "$font-body",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "R0TfW",
+                      "layoutPosition": "absolute",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Camada de estado",
+                      "width": 390,
+                      "height": 219,
+                      "fill": "#00000080",
+                      "layout": "vertical",
+                      "gap": 10,
+                      "padding": [
+                        0,
+                        28
+                      ],
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "HanrB",
+                          "name": "Carregando",
+                          "width": 40,
+                          "height": 40,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "ellipse",
+                              "id": "Gs4ck",
+                              "x": 0,
+                              "y": 0,
+                              "name": "Trilho",
+                              "innerRadius": 0.84,
+                              "fill": "#FFFFFF33",
+                              "width": 40,
+                              "height": 40
+                            },
+                            {
+                              "type": "ellipse",
+                              "id": "jx9x0",
+                              "x": 0,
+                              "y": 0,
+                              "name": "Arco",
+                              "innerRadius": 0.84,
+                              "startAngle": 90,
+                              "sweepAngle": -110,
+                              "fill": "$primary",
+                              "width": 40,
+                              "height": 40
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "u314V8",
+                          "name": "Aviso",
+                          "fill": "#00000099",
+                          "cornerRadius": 14,
+                          "gap": 6,
+                          "padding": [
+                            6,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "b40h3l",
+                              "name": "wifi",
+                              "width": 13,
+                              "height": 13,
+                              "icon": "wifi-low",
+                              "library": "lucide",
+                              "fill": "#FFFFFFCC"
+                            },
+                            {
+                              "type": "text",
+                              "id": "Z8EI90",
+                              "name": "Texto",
+                              "fill": "#FFFFFFCC",
+                              "content": "Conexão lenta… ainda tentando",
+                              "fontFamily": "$font-body",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "RBYYM",
+          "name": "Estados em pé 2",
+          "gap": 40,
+          "children": [
+            {
+              "type": "frame",
+              "id": "r1yf4H",
+              "name": "3 · Vídeo não pode tocar",
+              "width": 390,
+              "layout": "vertical",
+              "gap": 14,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "L7ouq",
+                  "name": "Nome",
+                  "fill": "#F4F1FA",
+                  "content": "3 · Vídeo não pode tocar",
+                  "fontFamily": "$font-body",
+                  "fontSize": 20,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "RlaNZ",
+                  "name": "Descrição",
+                  "fill": "#A6A0BD",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Erro do YouTube. Se nunca vai tocar (removido, proibido), a sala pula sozinha; o aviso fica alguns segundos.",
+                  "lineHeight": 1.45,
+                  "fontFamily": "$font-body",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "gVWih",
+                  "name": "Player",
+                  "metadata": {
+                    "type": "unsplash",
+                    "username": "alamanga",
+                    "link": "https://unsplash.com/@alamanga",
+                    "author": "Yanhao Fang"
+                  },
+                  "clip": true,
+                  "width": "fill_container",
+                  "height": 219,
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "https://images.unsplash.com/photo-1770246263031-75f9420ca13b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3OTQ4ODYzMTl8&ixlib=rb-4.1.0&q=80&w=1080",
+                    "mode": "cover"
+                  },
+                  "cornerRadius": 16,
+                  "layout": "vertical",
+                  "justifyContent": "end",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "TJNSN",
+                      "x": 0,
+                      "y": 149,
+                      "name": "Shade",
+                      "enabled": false,
+                      "width": "fill_container(390)",
+                      "height": 70,
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "linear",
+                        "enabled": true,
+                        "rotation": 180,
+                        "size": {
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#00000000",
+                            "position": 0
+                          },
+                          {
+                            "color": "#000000AA",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "padding": [
+                        0,
+                        16,
+                        12,
+                        16
+                      ],
+                      "alignItems": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "q5kNZ",
+                          "name": "Video Title",
+                          "fill": "#FFFFFF",
+                          "content": "Lo-fi beats para estudar — 24/7",
+                          "fontFamily": "$font-body",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "DvKZa",
+                      "layoutPosition": "absolute",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Camada de estado",
+                      "width": 390,
+                      "height": 219,
+                      "fill": "#000000CC",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "padding": [
+                        0,
+                        28
+                      ],
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "KLy1k",
+                          "name": "Ícone",
+                          "width": 40,
+                          "height": 40,
+                          "fill": "$danger-soft",
+                          "cornerRadius": 20,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "T3cQOo",
+                              "name": "ban",
+                              "width": 20,
+                              "height": 20,
+                              "icon": "ban",
+                              "library": "lucide",
+                              "fill": "$danger"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "SWdX4",
+                          "name": "Textos",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 3,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "V9f8YV",
+                              "name": "Título",
+                              "fill": "#FFFFFF",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Este vídeo não pode tocar aqui",
+                              "textAlign": "center",
+                              "fontFamily": "$font-body",
+                              "fontSize": 15,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "nbBwV",
+                              "name": "Mensagem",
+                              "fill": "#FFFFFFB3",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "O dono do vídeo não permite que ele toque fora do YouTube.",
+                              "lineHeight": 1.4,
+                              "textAlign": "center",
+                              "fontFamily": "$font-body",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "kvNyj",
+                          "name": "Ações",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "EmOUF",
+                              "name": "Pular vídeo",
+                              "height": 34,
+                              "fill": "$primary",
+                              "cornerRadius": 17,
+                              "gap": 6,
+                              "padding": [
+                                0,
+                                14
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "CjnkL",
+                                  "name": "skip-forward",
+                                  "width": 14,
+                                  "height": 14,
+                                  "icon": "skip-forward",
+                                  "library": "lucide",
+                                  "fill": "#FFFFFF"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "d2D8gF",
+                                  "name": "Rótulo",
+                                  "fill": "#FFFFFF",
+                                  "content": "Pular vídeo",
+                                  "fontFamily": "$font-body",
+                                  "fontSize": 12,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "x8zSc",
+                              "name": "Abrir no YouTube",
+                              "height": 34,
+                              "fill": "#FFFFFF26",
+                              "cornerRadius": 17,
+                              "gap": 6,
+                              "padding": [
+                                0,
+                                14
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "rZelY",
+                                  "name": "external-link",
+                                  "width": 14,
+                                  "height": 14,
+                                  "icon": "external-link",
+                                  "library": "lucide",
+                                  "fill": "#FFFFFF"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "KTfFY",
+                                  "name": "Rótulo",
+                                  "fill": "#FFFFFF",
+                                  "content": "Abrir no YouTube",
+                                  "fontFamily": "$font-body",
+                                  "fontSize": 12,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "hm6z1",
+                          "name": "Código",
+                          "fill": "#FFFFFF66",
+                          "content": "código 150",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 10,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "WoqSq",
+              "name": "4 · Player sem conexão",
+              "width": 390,
+              "layout": "vertical",
+              "gap": 14,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "lrGYO",
+                  "name": "Nome",
+                  "fill": "#F4F1FA",
+                  "content": "4 · Player sem conexão",
+                  "fontFamily": "$font-body",
+                  "fontSize": 20,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "Ye6oy",
+                  "name": "Descrição",
+                  "fill": "#A6A0BD",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "A página do player não carregou (sem internet ou servidor fora do ar).",
+                  "lineHeight": 1.45,
+                  "fontFamily": "$font-body",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "bbl42",
+                  "name": "Player",
+                  "metadata": {
+                    "type": "unsplash",
+                    "username": "alamanga",
+                    "link": "https://unsplash.com/@alamanga",
+                    "author": "Yanhao Fang"
+                  },
+                  "clip": true,
+                  "width": "fill_container",
+                  "height": 219,
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "https://images.unsplash.com/photo-1770246263031-75f9420ca13b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3OTQ4ODYzMTl8&ixlib=rb-4.1.0&q=80&w=1080",
+                    "mode": "cover"
+                  },
+                  "cornerRadius": 16,
+                  "layout": "vertical",
+                  "justifyContent": "end",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "CdpNF",
+                      "x": 0,
+                      "y": 149,
+                      "name": "Shade",
+                      "enabled": false,
+                      "width": "fill_container(390)",
+                      "height": 70,
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "linear",
+                        "enabled": true,
+                        "rotation": 180,
+                        "size": {
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#00000000",
+                            "position": 0
+                          },
+                          {
+                            "color": "#000000AA",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "padding": [
+                        0,
+                        16,
+                        12,
+                        16
+                      ],
+                      "alignItems": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "vs6yo",
+                          "name": "Video Title",
+                          "fill": "#FFFFFF",
+                          "content": "Lo-fi beats para estudar — 24/7",
+                          "fontFamily": "$font-body",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "K9taR",
+                      "layoutPosition": "absolute",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Camada de estado",
+                      "width": 390,
+                      "height": 219,
+                      "fill": "#000000CC",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "padding": [
+                        0,
+                        28
+                      ],
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "ccj10",
+                          "name": "Ícone",
+                          "width": 40,
+                          "height": 40,
+                          "fill": "$primary-soft",
+                          "cornerRadius": 20,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "L7KEQ",
+                              "name": "wifi-off",
+                              "width": 20,
+                              "height": 20,
+                              "icon": "wifi-off",
+                              "library": "lucide",
+                              "fill": "$accent"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "gMuJk",
+                          "name": "Textos",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 3,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Y47Jp",
+                              "name": "Título",
+                              "fill": "#FFFFFF",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Não foi possível carregar o player",
+                              "textAlign": "center",
+                              "fontFamily": "$font-body",
+                              "fontSize": 15,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "K6OIVK",
+                              "name": "Mensagem",
+                              "fill": "#FFFFFFB3",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Verifique sua internet e tente de novo.",
+                              "lineHeight": 1.4,
+                              "textAlign": "center",
+                              "fontFamily": "$font-body",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "f8BkwX",
+                          "name": "Ações",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "Ubvv2",
+                              "name": "Tentar de novo",
+                              "height": 34,
+                              "fill": "$primary",
+                              "cornerRadius": 17,
+                              "gap": 6,
+                              "padding": [
+                                0,
+                                14
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "upV6T",
+                                  "name": "refresh-cw",
+                                  "width": 14,
+                                  "height": 14,
+                                  "icon": "refresh-cw",
+                                  "library": "lucide",
+                                  "fill": "#FFFFFF"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "TAcFl",
+                                  "name": "Rótulo",
+                                  "fill": "#FFFFFF",
+                                  "content": "Tentar de novo",
+                                  "fontFamily": "$font-body",
+                                  "fontSize": 12,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "v4v6yO",
+                          "name": "Código",
+                          "fill": "#FFFFFF66",
+                          "content": "código player_load_failed",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 10,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "v0gjF",
+          "name": "Seção tela cheia",
+          "fill": "#F4F1FA",
+          "content": "Tela cheia e erro geral",
+          "fontFamily": "$font-body",
+          "fontSize": 26,
+          "fontWeight": "700"
+        },
+        {
+          "type": "frame",
+          "id": "EkkAK",
+          "name": "Tela cheia e geral",
+          "gap": 48,
+          "children": [
+            {
+              "type": "frame",
+              "id": "Ib45d",
+              "name": "5 · Erro na tela cheia",
+              "width": 844,
+              "layout": "vertical",
+              "gap": 14,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "jKcNu",
+                  "name": "Nome",
+                  "fill": "#F4F1FA",
+                  "content": "5 · Erro na tela cheia",
+                  "fontFamily": "$font-body",
+                  "fontSize": 20,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "N4yV0g",
+                  "name": "Descrição",
+                  "fill": "#A6A0BD",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "O mesmo aviso, centralizado sobre o vídeo. O botão de sair da tela cheia continua disponível.",
+                  "lineHeight": 1.45,
+                  "fontFamily": "$font-body",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "fvEu0",
+                  "name": "Tela cheia",
+                  "theme": {
+                    "paleta": "midnight-violet"
+                  },
+                  "clip": true,
+                  "width": 844,
+                  "height": 390,
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "https://images.unsplash.com/photo-1770246263031-75f9420ca13b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NDM0ODN8MHwxfHJhbmRvbXx8fHx8fHx8fDE3OTQ4ODYzMTl8&ixlib=rb-4.1.0&q=80&w=1080",
+                    "mode": "cover"
+                  },
+                  "cornerRadius": 16,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "rectangle",
+                      "id": "mQt3W",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Shade",
+                      "enabled": false,
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "linear",
+                        "enabled": true,
+                        "rotation": 180,
+                        "size": {
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#00000066",
+                            "position": 0
+                          },
+                          {
+                            "color": "#00000000",
+                            "position": 0.35
+                          },
+                          {
+                            "color": "#00000000",
+                            "position": 0.6
+                          },
+                          {
+                            "color": "#000000CC",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "width": 844,
+                      "height": 390
+                    },
+                    {
+                      "type": "frame",
+                      "id": "uaUzu",
+                      "x": 24,
+                      "y": 20,
+                      "name": "Chat Overlay",
+                      "enabled": false,
+                      "width": 300,
+                      "layout": "vertical",
+                      "gap": 6,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "V76jU9",
+                          "name": "Line Ana",
+                          "fill": "#00000080",
+                          "cornerRadius": 10,
+                          "gap": 4,
+                          "padding": [
+                            5,
+                            10
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "FEHOK",
+                              "name": "n",
+                              "fill": "#3DD68C",
+                              "content": "Ana:",
+                              "fontFamily": "$font-body",
+                              "fontSize": 13,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "CBMCH",
+                              "name": "t",
+                              "fill": "#FFFFFF",
+                              "content": "esse beat é bom demais",
+                              "fontFamily": "$font-body",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "j1Pxmq",
+                          "name": "Line João",
+                          "fill": "#00000080",
+                          "cornerRadius": 10,
+                          "gap": 4,
+                          "padding": [
+                            5,
+                            10
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ksPEa",
+                              "name": "n",
+                              "fill": "#FF9F5C",
+                              "content": "João:",
+                              "fontFamily": "$font-body",
+                              "fontSize": 13,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "jar1P",
+                              "name": "t",
+                              "fill": "#FFFFFF",
+                              "content": "aumenta aí 🔊",
+                              "fontFamily": "$font-body",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "beyzg",
+                          "name": "Line Você",
+                          "fill": "#00000080",
+                          "cornerRadius": 10,
+                          "gap": 4,
+                          "padding": [
+                            5,
+                            10
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "F4bhY9",
+                              "name": "n",
+                              "fill": "$accent",
+                              "content": "Você:",
+                              "fontFamily": "$font-body",
+                              "fontSize": 13,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ZqWSx",
+                              "name": "t",
+                              "fill": "#FFFFFF",
+                              "content": "já aumentei kkk",
+                              "fontFamily": "$font-body",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "iwtDC",
+                      "x": 0,
+                      "y": 300,
+                      "name": "Controls",
+                      "enabled": false,
+                      "width": 844,
+                      "layout": "vertical",
+                      "gap": 12,
+                      "padding": [
+                        0,
+                        40,
+                        20,
+                        40
+                      ],
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "d835H",
+                          "name": "Progress",
+                          "width": "fill_container",
+                          "height": 14,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "q3rzzj",
+                              "x": 0,
+                              "y": 5,
+                              "name": "Track",
+                              "fill": "#FFFFFF40",
+                              "width": 764,
+                              "height": 4
+                            },
+                            {
+                              "type": "rectangle",
+                              "cornerRadius": 2,
+                              "id": "hhAlX",
+                              "x": 0,
+                              "y": 5,
+                              "name": "Played",
+                              "fill": "$primary",
+                              "width": 286,
+                              "height": 4
+                            },
+                            {
+                              "type": "ellipse",
+                              "id": "x4izcm",
+                              "x": 279,
+                              "y": 0,
+                              "name": "Thumb",
+                              "fill": "#FFFFFF",
+                              "width": 14,
+                              "height": 14
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "aHCPn",
+                          "name": "Buttons",
+                          "width": "fill_container",
+                          "justifyContent": "space_between",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "xysoe",
+                              "name": "Left",
+                              "width": 220,
+                              "gap": 16,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "RC4Rq",
+                                  "name": "Time",
+                                  "fill": "#FFFFFFCC",
+                                  "content": "12:47 / 34:10",
+                                  "fontFamily": "$font-mono",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "fcjGP",
+                              "name": "Center",
+                              "gap": 18,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "Goagu",
+                                  "name": "Back 10",
+                                  "width": 40,
+                                  "height": 40,
+                                  "justifyContent": "center",
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "icon",
+                                      "id": "kxnXN",
+                                      "name": "rotate-ccw",
+                                      "width": 22,
+                                      "height": 22,
+                                      "icon": "rotate-ccw",
+                                      "library": "lucide",
+                                      "fill": "#FFFFFF"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "IqodF",
+                                  "name": "Play/Pause",
+                                  "width": 48,
+                                  "height": 48,
+                                  "fill": "#FFFFFF",
+                                  "cornerRadius": 24,
+                                  "justifyContent": "center",
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "icon",
+                                      "id": "nraCo",
+                                      "name": "pause",
+                                      "width": 20,
+                                      "height": 20,
+                                      "icon": "pause",
+                                      "library": "lucide",
+                                      "fill": "$background"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "khEcF",
+                                  "name": "Fwd 10",
+                                  "width": 40,
+                                  "height": 40,
+                                  "justifyContent": "center",
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "icon",
+                                      "id": "b4BiMO",
+                                      "name": "rotate-cw",
+                                      "width": 22,
+                                      "height": 22,
+                                      "icon": "rotate-cw",
+                                      "library": "lucide",
+                                      "fill": "#FFFFFF"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "KZve8",
+                              "name": "Right",
+                              "width": 220,
+                              "gap": 16,
+                              "justifyContent": "end",
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "oepI1",
+                                  "name": "Title",
+                                  "fill": "#FFFFFFCC",
+                                  "content": "Lo-fi beats para estudar",
+                                  "fontFamily": "$font-body",
+                                  "fontSize": 13,
+                                  "fontWeight": "600"
+                                },
+                                {
+                                  "type": "icon",
+                                  "id": "d5tg0",
+                                  "name": "Exit",
+                                  "width": 20,
+                                  "height": 20,
+                                  "icon": "minimize",
+                                  "library": "lucide",
+                                  "fill": "#FFFFFF"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "nkKyV",
+                      "layoutPosition": "absolute",
+                      "x": 0,
+                      "y": 0,
+                      "name": "Camada de estado",
+                      "width": 844,
+                      "height": 390,
+                      "fill": "#000000CC",
+                      "layout": "vertical",
+                      "gap": 10,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "cEYDd",
+                          "name": "Ícone",
+                          "width": 48,
+                          "height": 48,
+                          "fill": "$danger-soft",
+                          "cornerRadius": 24,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "N8YzA8",
+                              "name": "ban",
+                              "width": 24,
+                              "height": 24,
+                              "icon": "ban",
+                              "library": "lucide",
+                              "fill": "$danger"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "mf9gV",
+                          "name": "Textos",
+                          "width": 420,
+                          "layout": "vertical",
+                          "gap": 4,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "EF3a6",
+                              "name": "Título",
+                              "fill": "#FFFFFF",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Este vídeo não pode tocar aqui",
+                              "textAlign": "center",
+                              "fontFamily": "$font-body",
+                              "fontSize": 18,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "Rbfvi",
+                              "name": "Mensagem",
+                              "fill": "#FFFFFFB3",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "O dono do vídeo não permite que ele toque fora do YouTube.",
+                              "lineHeight": 1.4,
+                              "textAlign": "center",
+                              "fontFamily": "$font-body",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "DHaaY",
+                          "name": "Ações",
+                          "gap": 10,
+                          "padding": [
+                            6,
+                            0,
+                            0,
+                            0
+                          ],
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "fC9gX",
+                              "name": "Pular vídeo",
+                              "height": 40,
+                              "fill": "$primary",
+                              "cornerRadius": 20,
+                              "gap": 8,
+                              "padding": [
+                                0,
+                                18
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "adq3b",
+                                  "name": "skip-forward",
+                                  "width": 16,
+                                  "height": 16,
+                                  "icon": "skip-forward",
+                                  "library": "lucide",
+                                  "fill": "#FFFFFF"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "v3sDP",
+                                  "name": "Rótulo",
+                                  "fill": "#FFFFFF",
+                                  "content": "Pular vídeo",
+                                  "fontFamily": "$font-body",
+                                  "fontSize": 14,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "R0KXvJ",
+                              "name": "Abrir no YouTube",
+                              "height": 40,
+                              "fill": "#FFFFFF26",
+                              "cornerRadius": 20,
+                              "gap": 8,
+                              "padding": [
+                                0,
+                                18
+                              ],
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon",
+                                  "id": "s3gK03",
+                                  "name": "external-link",
+                                  "width": 16,
+                                  "height": 16,
+                                  "icon": "external-link",
+                                  "library": "lucide",
+                                  "fill": "#FFFFFF"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "aByYe",
+                                  "name": "Rótulo",
+                                  "fill": "#FFFFFF",
+                                  "content": "Abrir no YouTube",
+                                  "fontFamily": "$font-body",
+                                  "fontSize": 14,
+                                  "fontWeight": "700"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "D5BiJb",
+                          "name": "Código",
+                          "fill": "#FFFFFF66",
+                          "content": "código 150",
+                          "fontFamily": "$font-mono",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "icon",
+                      "id": "RaID0",
+                      "layoutPosition": "absolute",
+                      "x": 784,
+                      "y": 340,
+                      "name": "Sair da tela cheia",
+                      "width": 20,
+                      "height": 20,
+                      "icon": "minimize",
+                      "library": "lucide",
+                      "fill": "#FFFFFF"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ee7zy",
+              "name": "6 · Algo deu errado",
+              "width": 390,
+              "layout": "vertical",
+              "gap": 14,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "g1LJ2",
+                  "name": "Nome",
+                  "fill": "#F4F1FA",
+                  "content": "6 · Algo deu errado",
+                  "fontFamily": "$font-body",
+                  "fontSize": 20,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "n3OzCh",
+                  "name": "Descrição",
+                  "fill": "#A6A0BD",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Erro inesperado no app (bug). Substitui a tela branca.",
+                  "lineHeight": 1.45,
+                  "fontFamily": "$font-body",
+                  "fontSize": 14,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "PdR6x",
+                  "name": "Tela",
+                  "clip": true,
+                  "width": 390,
+                  "height": 844,
+                  "fill": "$background",
+                  "cornerRadius": 24,
+                  "layout": "vertical",
+                  "gap": 24,
+                  "padding": [
+                    0,
+                    32
+                  ],
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "f2HTSG",
+                      "layoutPosition": "absolute",
+                      "x": -60,
+                      "y": 120,
+                      "name": "Brilho",
+                      "fill": {
+                        "type": "gradient",
+                        "gradientType": "radial",
+                        "enabled": true,
+                        "rotation": 0,
+                        "size": {
+                          "width": 1,
+                          "height": 1
+                        },
+                        "colors": [
+                          {
+                            "color": "#8B5CF633",
+                            "position": 0
+                          },
+                          {
+                            "color": "#8B5CF600",
+                            "position": 1
+                          }
+                        ]
+                      },
+                      "width": 510,
+                      "height": 420
+                    },
+                    {
+                      "type": "frame",
+                      "id": "xrNRK",
+                      "name": "Ícone",
+                      "width": 72,
+                      "height": 72,
+                      "fill": "$danger-soft",
+                      "cornerRadius": 24,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon",
+                          "id": "kjRnM",
+                          "name": "alert-triangle",
+                          "width": 32,
+                          "height": 32,
+                          "icon": "triangle-alert",
+                          "library": "lucide",
+                          "fill": "$danger"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "BZ2ca",
+                      "name": "Textos",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ywFUV",
+                          "name": "Título",
+                          "fill": "$text",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Algo deu errado",
+                          "textAlign": "center",
+                          "fontFamily": "$font-body",
+                          "fontSize": 26,
+                          "fontWeight": "800"
+                        },
+                        {
+                          "type": "text",
+                          "id": "L15xl",
+                          "name": "Mensagem",
+                          "fill": "$muted",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "O app encontrou um problema inesperado. Tente de novo; se continuar, volte ao início.",
+                          "lineHeight": 1.45,
+                          "textAlign": "center",
+                          "fontFamily": "$font-body",
+                          "fontSize": 15,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "SRnYE",
+                      "name": "Botões",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 12,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "vxGP4",
+                          "name": "Tentar de novo",
+                          "width": "fill_container",
+                          "height": 52,
+                          "fill": "$primary",
+                          "cornerRadius": 14,
+                          "gap": 8,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "IO40L",
+                              "name": "refresh-cw",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "refresh-cw",
+                              "library": "lucide",
+                              "fill": "#FFFFFF"
+                            },
+                            {
+                              "type": "text",
+                              "id": "Xg0Bx",
+                              "name": "Rótulo",
+                              "fill": "#FFFFFF",
+                              "content": "Tentar de novo",
+                              "fontFamily": "$font-body",
+                              "fontSize": 16,
+                              "fontWeight": "700"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "SFnUQ",
+                          "name": "Voltar ao início",
+                          "width": "fill_container",
+                          "height": 52,
+                          "fill": "$surface-raised",
+                          "cornerRadius": 14,
+                          "stroke": "$border",
+                          "strokeWidth": 1,
+                          "gap": 8,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon",
+                              "id": "f3KuDj",
+                              "name": "home",
+                              "width": 18,
+                              "height": 18,
+                              "icon": "house",
+                              "library": "lucide",
+                              "fill": "$text"
+                            },
+                            {
+                              "type": "text",
+                              "id": "xgCC3",
+                              "name": "Rótulo",
+                              "fill": "$text",
+                              "content": "Voltar ao início",
+                              "fontFamily": "$font-body",
+                              "fontSize": 16,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "MZ9Jp",
+                      "name": "Código",
+                      "fill": "#000000",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "código TypeError: undefined is not a function",
+                      "textAlign": "center",
+                      "fontFamily": "$font-mono",
+                      "fontSize": 11,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ],
   "themes": {
