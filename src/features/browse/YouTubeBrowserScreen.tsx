@@ -1,5 +1,4 @@
-import { useRouter } from 'expo-router';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useEffectEvent, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   BackHandler,
@@ -37,6 +36,9 @@ import {
 
 type Busy = 'video' | 'adding' | null;
 
+/** Altura da barra de busca + linha de progresso (o miniplayer da sala não passa disto). */
+export const BROWSER_HEADER_HEIGHT = 62;
+
 const BUSY_TEXT: Record<Exclude<Busy, null>, string> = {
   video: 'Abrindo vídeo…',
   adding: 'Adicionando à fila…',
@@ -44,10 +46,10 @@ const BUSY_TEXT: Record<Exclude<Busy, null>, string> = {
 
 /**
  * Navegador do YouTube dentro da sala: a pessoa navega pelo site e, ao tocar num vídeo, escolhe
- * "Adicionar à fila" ou "Tocar agora". O player da sala continua tocando por baixo. ADR 0011.
+ * "Adicionar à fila" ou "Tocar agora". É uma camada da própria sala (não uma rota), para o vídeo
+ * continuar visível num miniplayer por cima. ADR 0011.
  */
-export function YouTubeBrowserScreen({ roomId }: { roomId: string }) {
-  const router = useRouter();
+export function YouTubeBrowserScreen({ roomId, onClose }: { roomId: string; onClose: () => void }) {
   const insets = useSafeAreaInsets();
   const dialog = useDialog();
   // Fila própria desta tela (contador, fila cheia, "já está na fila"); recarrega a cada adição.
@@ -67,11 +69,14 @@ export function YouTubeBrowserScreen({ roomId }: { roomId: string }) {
   const count = playlist.data?.length ?? null;
   const full = count !== null && count >= PLAYLIST_CAPACITY;
 
-  // Botão "voltar" do Android: volta no site; na primeira página, sai da tela.
+  // Botão "voltar" do Android: volta no site; na primeira página, volta para a sala.
+  const handleBack = useEffectEvent(() => {
+    if (canGoBackRef.current) webViewRef.current?.goBack();
+    else onClose();
+  });
   useEffect(() => {
     const sub = BackHandler.addEventListener('hardwareBackPress', () => {
-      if (!canGoBackRef.current) return false;
-      webViewRef.current?.goBack();
+      handleBack();
       return true;
     });
     return () => sub.remove();
@@ -97,7 +102,7 @@ export function YouTubeBrowserScreen({ roomId }: { roomId: string }) {
         if (playNow) {
           await playPlaylistItem(roomId, itemId);
           dialog.toast({ message: 'Tocando para a sala', icon: 'play' });
-          router.back();
+          onClose();
         } else {
           dialog.toast({ message: 'Adicionado à fila', icon: 'check-circle' });
         }
@@ -213,7 +218,7 @@ export function YouTubeBrowserScreen({ roomId }: { roomId: string }) {
     <View className="flex-1 bg-background" style={{ paddingTop: insets.top }}>
       <View className="h-[60px] flex-row items-center gap-2 border-b border-border bg-surface px-3">
         <Pressable
-          onPress={() => router.back()}
+          onPress={onClose}
           accessibilityRole="button"
           accessibilityLabel="Voltar para a sala"
           hitSlop={8}
@@ -254,7 +259,7 @@ export function YouTubeBrowserScreen({ roomId }: { roomId: string }) {
         </View>
 
         <Pressable
-          onPress={() => router.back()}
+          onPress={onClose}
           accessibilityRole="button"
           accessibilityLabel={
             count === null ? 'Fila' : `Fila com ${count} vídeos. Voltar para a sala`

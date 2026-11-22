@@ -1,0 +1,24 @@
+plugins {
+  id 'com.android.library'
+  id 'expo-module-gradle-plugin'
+}
+
+group = 'expo.modules.pictureinpicture'
+version = '0.1.0'
+
+android {
+  namespace "expo.modules.pictureinpicture"
+  defaultConfig {
+    versionCode 1
+    versionName "0.1.0"
+  }
+  lintOptions {
+    abortOnError false
+  }
+}
+
+dependencies {
+  // ComponentActivity 1.9+ avisa quando o usuário sai do app (OnUserLeaveHintProvider),
+  // usado para entrar na janelinha no Android 8 a 11.
+  implementation 'androidx.activity:activity:1.10.1'
+}

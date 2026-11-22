@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useRef, useState, type ReactNode } from 'react';
 import {
   ActivityIndicator,
+  Animated,
   Pressable,
   ScrollView,
   Text,
@@ -21,16 +22,23 @@ import { Icon } from '@/components/ui/Icon';
 import { PLAYER_URL } from '@/constants/config';
 import { Colors } from '@/constants/theme';
 import { useSession } from '@/features/auth/SessionProvider';
+import {
+  BROWSER_HEADER_HEIGHT,
+  YouTubeBrowserScreen,
+} from '@/features/browse/YouTubeBrowserScreen';
 import { useProfile } from '@/features/auth/useProfile';
 import { ChatOverlay, ChatPanel } from '@/features/chat/ChatPanel';
 import { useRoomChat } from '@/features/chat/useRoomChat';
 import { FullscreenControls } from '@/features/player/FullscreenControls';
 import { PlayerControls } from '@/features/player/PlayerControls';
+import { PipIcon } from '@/features/player/PipIcon';
 import { PlayerStatusOverlay } from '@/features/player/PlayerStatusOverlay';
 import { VOLUME_POPOVER_WIDTH, VolumePopover } from '@/features/player/VolumeControl';
 import { useCaptions } from '@/features/player/useCaptions';
 import { useVolume } from '@/features/player/useVolume';
 import { useFullscreen } from '@/features/player/useFullscreen';
+import { useMiniPlayer } from '@/features/player/useMiniPlayer';
+import { usePictureInPicture } from '@/features/player/usePictureInPicture';
 import { useRoomPlayback } from '@/features/player/useRoomPlayback';
 import { listPlaylist } from '@/features/playlist/api';
 import { PlaylistPanel } from '@/features/playlist/PlaylistPanel';
@@ -63,6 +71,21 @@ export function RoomScreen({ roomId }: { roomId: string }) {
   const playerRef = useRef<YouTubePlayerHandle>(null);
   const playback = useRoomPlayback(roomId, userId, playerRef);
   const { fullscreen, toggle: toggleFullscreen } = useFullscreen();
+  const pip = usePictureInPicture({
+    autoEnter: !!PLAYER_URL && !!playback.snapshot?.videoId && !!playback.snapshot?.isPlaying,
+    // Fora da tela (sem janelinha): o vídeo para só aqui; a sala continua para os outros.
+    onHiddenChange: playback.setSuspended,
+  });
+  /** Só o vídeo na tela: tela cheia ou janelinha (picture in picture). */
+  const videoOnly = fullscreen || pip.active;
+  /** Navegador do YouTube aberto por cima da sala, com o vídeo num miniplayer. */
+  const [browsing, setBrowsing] = useState(false);
+  const mini = browsing && !videoOnly;
+  const miniPlayer = useMiniPlayer({
+    enabled: mini,
+    topInset: insets.top + BROWSER_HEADER_HEIGHT,
+    onTap: () => setBrowsing(false),
+  });
   const volume = useVolume(playerRef);
   /** A página do player (Vercel) não carregou. */
   const [pageIssue, setPageIssue] = useState<PlayerIssue | null>(null);
@@ -174,6 +197,13 @@ export function RoomScreen({ roomId }: { roomId: string }) {
     toggleFullscreen();
   };
 
+  const enterPictureInPicture = pip.supported
+    ? () => {
+        setVolumeOpen(false);
+        pip.enter();
+      }
+    : undefined;
+
   const videoId = playback.snapshot?.videoId ?? null;
   const playerIssue: PlayerIssue | null =
     pageIssue ??
@@ -201,11 +231,11 @@ export function RoomScreen({ roomId }: { roomId: string }) {
   };
 
   return (
-    <View className="flex-1 bg-background" style={{ paddingTop: fullscreen ? 0 : insets.top }}>
-      <StatusBar hidden={fullscreen} style="light" />
-      <NavigationBar hidden={fullscreen} />
+    <View className="flex-1 bg-background" style={{ paddingTop: videoOnly ? 0 : insets.top }}>
+      <StatusBar hidden={videoOnly} style="light" />
+      <NavigationBar hidden={videoOnly} />
 
-      {fullscreen ? null : (
+      {videoOnly ? null : (
         <AppHeader
           title={
             <View className="gap-0.5">
@@ -244,13 +274,36 @@ export function RoomScreen({ roomId }: { roomId: string }) {
         />
       )}
 
-      {/* O player fica sempre no mesmo lugar da árvore: alternar a tela cheia não recarrega o vídeo. */}
-      <View ref={playerAreaRef} className={fullscreen ? 'flex-1 bg-black' : ''}>
+      {/* O player fica sempre no mesmo lugar da árvore: alternar tela cheia, janelinha ou
+          miniplayer só muda o estilo e não recarrega o vídeo. */}
+      <Animated.View
+        ref={playerAreaRef}
+        style={
+          videoOnly
+            ? { flex: 1, backgroundColor: Colors.black }
+            : mini
+              ? {
+                  position: 'absolute',
+                  left: 0,
+                  top: 0,
+                  zIndex: 20,
+                  elevation: 12,
+                  width: miniPlayer.size.width,
+                  height: miniPlayer.size.height,
+                  borderRadius: 12,
+                  overflow: 'hidden',
+                  backgroundColor: Colors.black,
+                  boxShadow: '0px 8px 24px #00000099',
+                  transform: miniPlayer.transform,
+                }
+              : undefined
+        }
+      >
         {PLAYER_URL ? (
           <YouTubePlayer
             ref={playerRef}
             playerUrl={PLAYER_URL}
-            fill={fullscreen}
+            fill={videoOnly}
             onEvent={handlePlayerEvent}
             onLoadError={(httpStatus) => setPageIssue(pageLoadIssue(httpStatus))}
           />
@@ -261,7 +314,21 @@ export function RoomScreen({ roomId }: { roomId: string }) {
             </Text>
           </View>
         )}
-        {fullscreen ? (
+        {pip.active ? null : mini ? (
+          // Miniplayer: arrasta para outro canto; um toque volta para a sala.
+          <View
+            className="absolute inset-0 items-end p-1.5"
+            accessible
+            accessibilityRole="button"
+            accessibilityLabel="Vídeo da sala"
+            accessibilityHint="Toque para voltar para a sala. Arraste para mudar de canto."
+            {...miniPlayer.panHandlers}
+          >
+            <View className="h-6 w-6 items-center justify-center rounded-full bg-black/50">
+              <Icon name="maximize-2" size={12} color={Colors.white} />
+            </View>
+          </View>
+        ) : fullscreen ? (
           <FullscreenControls
             isPlaying={!!playback.snapshot?.isPlaying}
             progress={playback.progress}
@@ -274,6 +341,7 @@ export function RoomScreen({ roomId }: { roomId: string }) {
             onSeekBy={playback.seekBy}
             onSeekTo={playback.seekTo}
             onExit={switchFullscreen}
+            onPictureInPicture={enterPictureInPicture}
             onRequestCaptions={captions.refresh}
             onSelectCaption={captions.select}
             overlay={<ChatOverlay entries={chat.entries} userId={userId} colorOf={colorOf} />}
@@ -297,6 +365,18 @@ export function RoomScreen({ roomId }: { roomId: string }) {
                 </Text>
               </GradientView>
             ) : null}
+            {enterPictureInPicture && hasVideo && !playerIssue ? (
+              // No canto do vídeo: na linha de controles em pé não cabe mais um botão.
+              <Pressable
+                onPress={enterPictureInPicture}
+                accessibilityRole="button"
+                accessibilityLabel="Janelinha (picture in picture)"
+                hitSlop={6}
+                className="absolute right-2.5 top-2.5 h-9 w-9 items-center justify-center rounded-full bg-black/50 active:opacity-70"
+              >
+                <PipIcon size={17} color={Colors.white} />
+              </Pressable>
+            ) : null}
             {volumeOpen ? (
               // Dentro da área do vídeo (toques fora do pai não chegam no Android), centralizada
               // sobre o alto-falante.
@@ -310,7 +390,7 @@ export function RoomScreen({ roomId }: { roomId: string }) {
             ) : null}
           </>
         )}
-        {PLAYER_URL ? (
+        {PLAYER_URL && !pip.active && !mini ? (
           <PlayerStatusOverlay
             progress={playback.progress}
             issue={playerIssue}
@@ -322,9 +402,9 @@ export function RoomScreen({ roomId }: { roomId: string }) {
             onExitFullscreen={fullscreen ? switchFullscreen : undefined}
           />
         ) : null}
-      </View>
+      </Animated.View>
 
-      {fullscreen ? null : (
+      {videoOnly ? null : (
         <Screen padded={false} topInset={false}>
           <PlayerControls
             isPlaying={!!playback.snapshot?.isPlaying}
@@ -377,6 +457,10 @@ export function RoomScreen({ roomId }: { roomId: string }) {
                 currentItemId={playback.snapshot?.currentItemId ?? null}
                 names={names}
                 onChanged={playlist.reload}
+                onBrowse={() => {
+                  setVolumeOpen(false);
+                  setBrowsing(true);
+                }}
               />
             </ScrollView>
           ) : (
@@ -389,6 +473,16 @@ export function RoomScreen({ roomId }: { roomId: string }) {
           )}
         </Screen>
       )}
+
+      {browsing ? (
+        // Por cima da sala (que segue montada); some na janelinha, que mostra só o vídeo.
+        <View
+          className="absolute inset-0"
+          style={{ zIndex: 10, display: pip.active ? 'none' : 'flex' }}
+        >
+          <YouTubeBrowserScreen roomId={details.id} onClose={() => setBrowsing(false)} />
+        </View>
+      ) : null}
     </View>
   );
 }

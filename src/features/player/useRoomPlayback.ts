@@ -60,6 +60,8 @@ export function useRoomPlayback(
   const lastCorrectionRef = useRef(0);
   /** Item para o qual já pedimos "próximo" (evita pedir de novo a cada status). */
   const advancedItemRef = useRef<string | null>(null);
+  /** App fora da tela e sem janelinha: o vídeo fica parado só aqui, sem mexer na sala. */
+  const suspendedRef = useRef(false);
 
   const [snapshot, setSnapshot] = useState<PlaybackSnapshot | null>(null);
   /** Posição do player fora do estado da sala (ver progressStore.ts). */
@@ -83,7 +85,7 @@ export function useRoomPlayback(
   const runSync = () => {
     const snap = snapshotRef.current;
     const player = playerRef.current;
-    if (!snap || !player || !readyRef.current) return;
+    if (!snap || !player || !readyRef.current || suspendedRef.current) return;
 
     const now = Date.now();
     const commands = decideSync(
@@ -272,6 +274,20 @@ export function useRoomPlayback(
       readyRef.current = false;
       setPlayerReady(false);
       setPlayerErrorCode(null);
+    },
+    /**
+     * Para o vídeo só neste aparelho (app fora da tela) ou volta a seguir a sala. Não muda o
+     * estado da sala para os outros.
+     */
+    setSuspended: (suspended: boolean) => {
+      if (suspendedRef.current === suspended) return;
+      suspendedRef.current = suspended;
+      if (suspended) {
+        playerRef.current?.send({ type: 'pause' });
+      } else {
+        lastCorrectionRef.current = 0;
+        runSync();
+      }
     },
     /** "Pular vídeo" no aviso de erro: pede o próximo da fila (uma vez por item). */
     skipBroken: () => requestAdvance('error'),

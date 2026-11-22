@@ -8,6 +8,7 @@ import { Colors } from '@/constants/theme';
 import type { CaptionSelection } from '@/lib/youtube/bridge';
 
 import { CaptionsSheet } from './CaptionsSheet';
+import { PipIcon } from './PipIcon';
 import type { ProgressStore } from './progressStore';
 import { ProgressSeekBar, ProgressTime } from './ProgressViews';
 import type { CaptionsState } from './useCaptions';
@@ -35,6 +36,8 @@ type FullscreenControlsProps = {
   onSeekBy: (delta: number) => void;
   onSeekTo: (seconds: number) => void;
   onExit: () => void;
+  /** Janelinha (picture in picture); sem ela no aparelho, o botão não aparece. */
+  onPictureInPicture?: () => void;
   onRequestCaptions: () => void;
   onSelectCaption: (selection: CaptionSelection | null) => void;
   /** Camada sem toque sobre o vídeo (chat), empurrada para baixo do título quando os controles aparecem. */
@@ -58,6 +61,7 @@ export function FullscreenControls({
   onSeekBy,
   onSeekTo,
   onExit,
+  onPictureInPicture,
   onRequestCaptions,
   onSelectCaption,
   overlay,
@@ -261,6 +265,19 @@ export function FullscreenControls({
                 className="font-mono text-[13px] text-white/80"
               />
             </View>
+            {onPictureInPicture ? (
+              <Pressable
+                onPress={onPictureInPicture}
+                disabled={disabled}
+                accessibilityRole="button"
+                accessibilityLabel="Janelinha (picture in picture)"
+                accessibilityState={{ disabled }}
+                hitSlop={8}
+                className={`mr-3 h-10 w-10 items-end justify-center active:opacity-70 ${disabled ? 'opacity-40' : ''}`}
+              >
+                <PipIcon size={19} color={Colors.white} />
+              </Pressable>
+            ) : null}
             <Pressable
               onPress={onExit}
               accessibilityRole="button"

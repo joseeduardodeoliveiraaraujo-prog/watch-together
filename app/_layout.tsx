@@ -40,7 +40,6 @@ function RootNavigator() {
       <Stack.Protected guard={signedIn} redirectTo="/sign-in">
         <Stack.Screen name="(app)" />
         <Stack.Screen name="room/[id]/index" />
-        <Stack.Screen name="room/[id]/youtube" />
         <Stack.Screen name="join/[code]" />
       </Stack.Protected>
 

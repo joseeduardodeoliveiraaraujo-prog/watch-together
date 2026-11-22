@@ -4,6 +4,8 @@ import 'expo-sqlite/localStorage/install';
 import { createClient } from '@supabase/supabase-js';
 import { AppState } from 'react-native';
 
+import { addPictureInPictureListener, isInPictureInPicture } from '@/modules/pip';
+
 import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from '@/constants/config';
 
 import type { Database } from './database.types';
@@ -25,11 +27,15 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
   },
 });
 
-// Renova o token só com o app em primeiro plano (recomendação do Supabase para mobile).
-AppState.addEventListener('change', (state) => {
-  if (state === 'active') {
+// Renova o token só com o app na tela (recomendação do Supabase para mobile). A janelinha
+// (picture in picture) conta como na tela: o Android a trata como segundo plano, mas a sala
+// continua aberta e sincronizando.
+const updateAutoRefresh = () => {
+  if (AppState.currentState === 'active' || isInPictureInPicture()) {
     supabase.auth.startAutoRefresh();
   } else {
     supabase.auth.stopAutoRefresh();
   }
-});
+};
+AppState.addEventListener('change', updateAutoRefresh);
+addPictureInPictureListener(updateAutoRefresh);

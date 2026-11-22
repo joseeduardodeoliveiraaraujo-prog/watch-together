@@ -1,5 +1,4 @@
 import { Image } from 'expo-image';
-import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { ActivityIndicator, Pressable, Text, View } from 'react-native';
 
@@ -29,6 +28,8 @@ type PlaylistPanelProps = {
   names: ReadonlyMap<string, string>;
   /** Recarrega a fila (a mudança também chega pelo canal; isto deixa a resposta imediata). */
   onChanged: () => void;
+  /** Abre o navegador do YouTube (camada da sala, com o vídeo num miniplayer). */
+  onBrowse: () => void;
 };
 
 /** Fila compartilhada: todos adicionam, removem, reordenam e escolhem o que tocar. */
@@ -40,9 +41,9 @@ export function PlaylistPanel({
   currentItemId,
   names,
   onChanged,
+  onBrowse,
 }: PlaylistPanelProps) {
   const dialog = useDialog();
-  const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [busyItem, setBusyItem] = useState<string | null>(null);
 
@@ -108,7 +109,7 @@ export function PlaylistPanel({
         icon="youtube"
         variant="secondary"
         disabled={(items?.length ?? 0) >= PLAYLIST_CAPACITY}
-        onPress={() => router.push({ pathname: '/room/[id]/youtube', params: { id: roomId } })}
+        onPress={onBrowse}
       />
 
       {error ? <Text className="font-sans text-danger">{error}</Text> : null}

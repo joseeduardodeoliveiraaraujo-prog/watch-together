@@ -11,9 +11,15 @@ ali mesmo.
 
 ## Decisão
 
-- **O site mobile do YouTube (`m.youtube.com`) numa WebView**, em uma tela própria
-  (`app/room/[id]/youtube.tsx`), aberta pelo botão "Buscar no YouTube" da aba Fila. A sala fica
-  montada por baixo: o player continua tocando e voltar não recarrega nada.
+- **O site mobile do YouTube (`m.youtube.com`) numa WebView**, aberto pelo botão "Buscar no
+  YouTube" da aba Fila. Voltar não recarrega nada.
+- **Camada da sala com miniplayer** (2026-11-22; antes era a rota `app/room/[id]/youtube.tsx`):
+  o navegador abre por cima da `RoomScreen`, e o mesmo player da sala vira um miniplayer
+  flutuante 16:9 num canto (`useMiniPlayer`, `miniPlayerLayout.ts`). Dá para arrastar, ele gruda
+  no canto mais próximo, e um toque volta para a sala. Como rota separada, a sala ficava escondida
+  por baixo e o vídeo só se ouvia. O player não muda de lugar na árvore (só de estilo), então não
+  recarrega. A janelinha do Android (ADR 0013) não serviria aqui: ela encolhe o app inteiro,
+  navegador junto.
 - **Toque num vídeo abre direto o menu do app** ("Adicionar à fila" / "Tocar agora"), com
   miniatura, título e canal (oEmbed). "Tocar agora" adiciona, toca para a sala e volta para a sala.
   Não há prévia do vídeo dentro do navegador.

@@ -18,3 +18,4 @@ próprio arquivo, com data.
 | [0010](0010-identidade-visual.md)         | Identidade visual (Midnight Violet, fontes, ícones)               |
 | [0011](0011-navegador-do-youtube.md)      | Navegador do YouTube dentro da sala                               |
 | [0012](0012-recuperacao-de-senha.md)      | Recuperação e troca de senha                                      |
+| [0013](0013-picture-in-picture.md)        | Picture in picture (janelinha) no Android                         |
