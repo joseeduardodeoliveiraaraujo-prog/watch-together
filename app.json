@@ -8,7 +8,9 @@
     "scheme": "watchtogether",
     "userInterfaceStyle": "dark",
     "backgroundColor": "#0F0F17",
-    "platforms": ["android"],
+    "platforms": [
+      "android"
+    ],
     "android": {
       "versionCode": 1,
       "package": "com.watchtogether.app",
@@ -45,11 +47,31 @@
           ]
         }
       ],
-      "expo-asset"
+      "expo-asset",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "enableMinifyInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true
+          }
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {
+        "asyncRoutes": {
+          "web": true
+        }
+      },
+      "eas": {
+        "projectId": "fdd8a7a0-2fc6-486f-ada1-a322142e0640"
+      }
+    },
+    "owner": "eduardo_dev_faculdade"
   }
 }
