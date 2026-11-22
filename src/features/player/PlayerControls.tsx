@@ -1,15 +1,14 @@
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import { Icon, type IconName } from '@/components/ui/Icon';
 import { Colors } from '@/constants/theme';
 
-import { formatTime } from './format';
-import { SeekBar } from './SeekBar';
+import type { ProgressStore } from './progressStore';
+import { ProgressSeekBar, ProgressTime } from './ProgressViews';
 
 type PlayerControlsProps = {
   isPlaying: boolean;
-  currentTime: number;
-  duration: number;
+  progress: ProgressStore;
   disabled: boolean;
   onPlay: () => void;
   onPause: () => void;
@@ -24,8 +23,7 @@ type PlayerControlsProps = {
  */
 export function PlayerControls({
   isPlaying,
-  currentTime,
-  duration,
+  progress,
   disabled,
   onPlay,
   onPause,
@@ -35,19 +33,11 @@ export function PlayerControls({
 }: PlayerControlsProps) {
   return (
     <View className="gap-2.5 bg-surface px-5 pb-1.5 pt-3.5">
-      <SeekBar
-        currentTime={currentTime}
-        duration={duration}
-        disabled={disabled}
-        variant="surface"
-        onSeekTo={onSeekTo}
-      />
+      <ProgressSeekBar store={progress} disabled={disabled} variant="surface" onSeekTo={onSeekTo} />
 
       <View className="flex-row items-center">
         <View className="flex-1">
-          <Text className="font-mono text-xs text-muted">
-            {formatTime(currentTime)} / {formatTime(duration)}
-          </Text>
+          <ProgressTime store={progress} className="font-mono text-xs text-muted" />
         </View>
 
         <View className="flex-row items-center gap-3.5">

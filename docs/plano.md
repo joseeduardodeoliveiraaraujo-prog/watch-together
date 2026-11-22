@@ -1,6 +1,9 @@
 # Plano de desenvolvimento — Etapas 3 a 8
 
-Atualizado em 2026-11-15. Etapas 1 (Fundação), 2 (POC do player), 3 (Supabase), 4 (Salas), 5 (Sincronização) e 6 (Playlist) concluídas.
+Atualizado em 2026-11-22. Etapas 1 a 7 concluídas. Etapa 8 em andamento: falta o build do APK
+e o teste completo com 2 a 4 pessoas. Fora do plano original, entraram: identidade visual
+(ADR 0010), tela cheia no estilo do YouTube com legendas (ADR 0004), navegador do YouTube na sala
+(ADR 0011) e recuperação de senha (ADR 0012).
 
 Cada etapa termina com: `npm run check` passando, critérios de validação testados no celular,
 README/ADR atualizados e um commit.
@@ -133,11 +136,16 @@ chat vazio.
 
 **Entregas:**
 
-- Ícone, splash screen, nome e cores finais.
+- ✅ Ícone, splash screen, nome e cores finais (ícone "F", ADR 0010).
+- ✅ "Esqueci minha senha" e trocar senha (ADR 0012). Confirmação de e-mail no cadastro: continua
+  desligada.
+- ✅ Limpeza e otimização: barra de progresso sem redesenhar a sala, fontes embutidas no build,
+  imagens comprimidas, `RoomScreen` dividida.
 - Revisão de erros e estados vazios em todas as telas; teste com internet ruim.
-- Confirmação de e-mail e "esqueci minha senha".
-- Build Android com EAS (APK para instalar direto; AAB se for para a Play Store).
-- Política de privacidade simples (exigida pela Play Store).
+- Build Android com EAS: **APK para os amigos** (decisão de 2026-11-22), com R8/encolhimento de
+  recursos (`expo-build-properties`). AAB só se for para a Play Store.
+- Player em segundo plano: parar o envio de posição com o app minimizado (exige publicar a página).
+- Política de privacidade simples (só se for para a Play Store).
 - Se o app virar comercial: mover o player da Vercel para Cloudflare Pages (ADR 0004).
 
 **Validação:** APK instalado em um celular sem Expo Go; fluxo completo com 2 a 4 pessoas.

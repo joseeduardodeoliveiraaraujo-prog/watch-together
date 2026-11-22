@@ -8,8 +8,8 @@ import { Colors } from '@/constants/theme';
 import type { CaptionSelection } from '@/lib/youtube/bridge';
 
 import { CaptionsSheet } from './CaptionsSheet';
-import { formatTime } from './format';
-import { SeekBar } from './SeekBar';
+import type { ProgressStore } from './progressStore';
+import { ProgressSeekBar, ProgressTime } from './ProgressViews';
 import type { CaptionsState } from './useCaptions';
 
 /** Tocando, os controles somem depois desse tempo sem interação. */
@@ -23,8 +23,7 @@ type Side = 'left' | 'center' | 'right';
 
 type FullscreenControlsProps = {
   isPlaying: boolean;
-  currentTime: number;
-  duration: number;
+  progress: ProgressStore;
   disabled: boolean;
   title: string | null;
   captions: CaptionsState;
@@ -46,8 +45,7 @@ type FullscreenControlsProps = {
  */
 export function FullscreenControls({
   isPlaying,
-  currentTime,
-  duration,
+  progress,
   disabled,
   title,
   captions,
@@ -156,8 +154,6 @@ export function FullscreenControls({
     poke();
   };
 
-  const shownTime = scrubTime ?? currentTime;
-
   return (
     <View className="absolute inset-0" onLayout={(e) => setWidth(e.nativeEvent.layout.width)}>
       {/* Recebe todos os toques no vídeo: o player do YouTube não reage a nada. */}
@@ -249,9 +245,13 @@ export function FullscreenControls({
           className="absolute bottom-0 left-0 right-0 gap-2 px-10 pb-5"
         >
           <View pointerEvents="box-none" className="flex-row items-center">
-            <Text className="flex-1 font-mono text-[13px] text-white/80">
-              {formatTime(shownTime)} / {formatTime(duration)}
-            </Text>
+            <View className="flex-1">
+              <ProgressTime
+                store={progress}
+                override={scrubTime}
+                className="font-mono text-[13px] text-white/80"
+              />
+            </View>
             <Pressable
               onPress={onExit}
               accessibilityRole="button"
@@ -262,9 +262,8 @@ export function FullscreenControls({
               <Icon name="minimize" size={20} color={Colors.white} />
             </Pressable>
           </View>
-          <SeekBar
-            currentTime={currentTime}
-            duration={duration}
+          <ProgressSeekBar
+            store={progress}
             disabled={disabled}
             variant="overlay"
             onSeekTo={(seconds) => {

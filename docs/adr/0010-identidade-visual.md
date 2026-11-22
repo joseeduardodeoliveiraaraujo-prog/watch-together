@@ -18,7 +18,8 @@ comparadas lado a lado (tema `paleta` nas variáveis do design). A escolhida foi
 - **Cor de cada pessoa:** a vaga na ordem de entrada define a cor (roxo, verde, laranja, azul) —
   `src/features/rooms/memberColors.ts`. Vale para avatares e nomes no chat.
 - **Fontes:** Plus Jakarta Sans (texto) e JetBrains Mono (códigos de sala, tempo do vídeo), via
-  `@expo-google-fonts/*`, carregadas em `app/_layout.tsx` com a splash na tela.
+  `@expo-google-fonts/*`. Nos builds vêm embutidas pelo plugin do `expo-font` (`app.json`); só o
+  Expo Go as carrega ao abrir, em `app/_layout.tsx`, com a splash na tela (2026-11-22).
   O Android não sintetiza pesos de fontes carregadas, então cada peso é uma família:
   `font-sans`, `font-medium`, `font-semibold`, `font-bold`, `font-extrabold`, `font-mono`,
   `font-mono-bold` (`src/constants/fonts.json`). O plugin `fontWeight` do Tailwind fica

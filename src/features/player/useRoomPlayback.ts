@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type RefObject } from 'react';
 import { AppState } from 'react-native';
 
 import { describeRpcError } from '@/lib/supabase/rpcErrors';
-import type { PlayerEvent, PlayerState } from '@/lib/youtube/bridge';
+import type { PlayerEvent } from '@/lib/youtube/bridge';
 import { isUnplayableError } from '@/lib/youtube/errors';
 import type { YouTubePlayerHandle } from '@/lib/youtube/YouTubePlayer';
 
@@ -13,6 +13,7 @@ import {
   sendPlaybackCommand,
   type PlaybackCommand,
 } from './api';
+import { createProgressStore } from './progressStore';
 import { decideSync, type LocalPlayer } from './sync/decideSync';
 import {
   expectedPosition,
@@ -23,8 +24,6 @@ import {
 } from './sync/playbackState';
 
 export type LastAction = { userId: string | null; action: PlaybackAction };
-
-export type PlayerProgress = { state: PlayerState; currentTime: number; duration: number };
 
 type LocalStatus = LocalPlayer & {
   /** Date.now() em que currentTime foi lido (para extrapolar enquanto toca). */
@@ -63,11 +62,8 @@ export function useRoomPlayback(
   const advancedItemRef = useRef<string | null>(null);
 
   const [snapshot, setSnapshot] = useState<PlaybackSnapshot | null>(null);
-  const [progress, setProgress] = useState<PlayerProgress>({
-    state: 'unstarted',
-    currentTime: 0,
-    duration: 0,
-  });
+  /** Posição do player fora do estado da sala (ver progressStore.ts). */
+  const [progress] = useState(createProgressStore);
   const [lastAction, setLastAction] = useState<LastAction | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [playerErrorCode, setPlayerErrorCode] = useState<number | null>(null);
@@ -181,7 +177,7 @@ export function useRoomPlayback(
           duration: event.duration,
           at: event.at,
         });
-        setProgress({
+        progress.set({
           state: event.state,
           currentTime: event.currentTime,
           duration: event.duration,
@@ -262,6 +258,7 @@ export function useRoomPlayback(
 
   return {
     snapshot,
+    /** Posição do player: use com `usePlayerProgress` / `ProgressSeekBar` / `ProgressTime`. */
     progress,
     lastAction,
     error,
