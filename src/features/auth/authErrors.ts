@@ -16,6 +16,8 @@ const MESSAGES: Record<string, string> = {
   session_expired: 'Sua sessão expirou. Entre novamente.',
   session_not_found: 'Sua sessão expirou. Entre novamente.',
   same_password: 'A nova senha precisa ser diferente da atual.',
+  otp_expired: 'Código inválido ou expirado. Confira o e-mail ou peça um novo.',
+  reauthentication_needed: 'Entre de novo na conta antes de trocar a senha.',
 };
 
 export const NETWORK_ERROR_MESSAGE = 'Sem conexão com o servidor. Verifique sua internet.';

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <title>Redefinir senha — Watch Together</title>
+  </head>
+  <!--
+    Modelo do e-mail "Reset Password" (recuperação com código numérico, ADR 0012).
+    No projeto hospedado: copiar para Authentication → Email Templates → Reset Password.
+    Estilos inline e tabelas: muitos apps de e-mail ignoram <style> e flexbox.
+  -->
+  <body style="margin: 0; padding: 0; background-color: #0f0f17">
+    <table
+      role="presentation"
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      style="background-color: #0f0f17; padding: 32px 16px"
+    >
+      <tr>
+        <td align="center">
+          <table
+            role="presentation"
+            width="100%"
+            cellpadding="0"
+            cellspacing="0"
+            style="
+              max-width: 440px;
+              background-color: #1d1b2f;
+              border: 1px solid #34304f;
+              border-radius: 20px;
+              font-family: 'Plus Jakarta Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            "
+          >
+            <tr>
+              <td style="padding: 32px 28px 8px 28px">
+                <table role="presentation" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td
+                      width="44"
+                      height="44"
+                      align="center"
+                      valign="middle"
+                      style="
+                        width: 44px;
+                        height: 44px;
+                        border-radius: 14px;
+                        background-color: #8b5cf6;
+                        background-image: linear-gradient(135deg, #a78bfa, #6d28d9);
+                        color: #ffffff;
+                        font-size: 18px;
+                      "
+                    >
+                      &#9654;
+                    </td>
+                    <td
+                      style="padding-left: 12px; color: #f4f1fa; font-size: 16px; font-weight: 800"
+                    >
+                      Watch Together
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 20px 28px 0 28px">
+                <h1
+                  style="
+                    margin: 0;
+                    color: #f4f1fa;
+                    font-size: 22px;
+                    line-height: 28px;
+                    font-weight: 800;
+                  "
+                >
+                  Seu código para redefinir a senha
+                </h1>
+                <p style="margin: 12px 0 0 0; color: #a6a0bd; font-size: 15px; line-height: 22px">
+                  Digite este código no app, junto com a sua senha nova:
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td align="center" style="padding: 24px 28px">
+                <div
+                  style="
+                    display: inline-block;
+                    padding: 16px 24px;
+                    background-color: #2e1d5a;
+                    border: 1px solid #8b5cf6;
+                    border-radius: 16px;
+                    color: #ddd6fe;
+                    font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+                    font-size: 34px;
+                    font-weight: 700;
+                    letter-spacing: 10px;
+                  "
+                >
+                  {{ .Token }}
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 0 28px 32px 28px">
+                <p style="margin: 0; color: #a6a0bd; font-size: 13px; line-height: 20px">
+                  O código vale por 1 hora. Se você não pediu para trocar a senha, ignore este
+                  e-mail — sua senha continua a mesma.
+                </p>
+              </td>
+            </tr>
+          </table>
+          <p
+            style="
+              margin: 16px 0 0 0;
+              color: #5c5873;
+              font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+              font-size: 12px;
+            "
+          >
+            Watch Together · e-mail automático, não responda.
+          </p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

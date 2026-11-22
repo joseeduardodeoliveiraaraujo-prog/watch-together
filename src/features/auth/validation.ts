@@ -28,6 +28,31 @@ export function validatePassword(password: string): string | null {
   return null;
 }
 
+/** Nova senha + confirmação (troca de senha e recuperação). */
+export function validateNewPassword(
+  password: string,
+  confirmation: string,
+): { password: string | null; confirmation: string | null } {
+  const passwordError = validatePassword(password);
+  return {
+    password: passwordError,
+    confirmation:
+      passwordError === null && password !== confirmation ? 'As senhas não conferem.' : null,
+  };
+}
+
+/** Código de recuperação enviado por e-mail: só dígitos (6 a 8, conforme o projeto Supabase). */
+export function normalizeRecoveryCode(code: string): string {
+  return code.replace(/\D/g, '');
+}
+
+export function validateRecoveryCode(code: string): string | null {
+  const value = normalizeRecoveryCode(code);
+  if (!value) return 'Informe o código que enviamos por e-mail.';
+  if (value.length < 6 || value.length > 8) return 'Código incompleto. Confira o e-mail.';
+  return null;
+}
+
 export function validateDisplayName(name: string): string | null {
   const value = normalizeDisplayName(name);
   if (!value) return 'Informe um apelido.';

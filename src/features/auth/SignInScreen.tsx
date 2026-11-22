@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Text } from 'react-native';
+import { Pressable, Text } from 'react-native';
 
 import { Button } from '@/components/ui/Button';
 import { TextField } from '@/components/ui/TextField';
@@ -70,6 +70,14 @@ export function SignInScreen() {
         returnKeyType="go"
         onSubmitEditing={submit}
       />
+      <Pressable
+        onPress={() => router.push('/forgot-password')}
+        accessibilityRole="link"
+        hitSlop={8}
+        className="-mt-1 self-end active:opacity-70"
+      >
+        <Text className="font-semibold text-sm text-accent">Esqueci a senha</Text>
+      </Pressable>
       {formError ? <Text className="font-sans text-danger">{formError}</Text> : null}
       <Button title="Entrar" onPress={submit} loading={loading} />
     </AuthScaffold>

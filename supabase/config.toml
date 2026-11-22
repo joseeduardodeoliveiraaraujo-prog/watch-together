@@ -254,6 +254,12 @@ otp_expiry = 3600
 # subject = "You have been invited"
 # content_path = "./supabase/templates/invite.html"
 
+# Recuperação de senha com código de 6 dígitos (ADR 0012). No projeto hospedado, o mesmo
+# conteúdo vai em Authentication → Email Templates → Reset Password (o envio é pelo SMTP da Brevo).
+[auth.email.template.recovery]
+subject = "Seu código para redefinir a senha — Watch Together"
+content_path = "./supabase/templates/recovery.html"
+
 # Uncomment to customize notification email template
 # [auth.email.notification.password_changed]
 # enabled = true

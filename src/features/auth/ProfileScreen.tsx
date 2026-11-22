@@ -11,6 +11,7 @@ import { Colors } from '@/constants/theme';
 import { supabase } from '@/lib/supabase/client';
 
 import { describeAuthError } from './authErrors';
+import { ChangePasswordForm } from './ChangePasswordForm';
 import { useSession } from './SessionProvider';
 import { useProfile } from './useProfile';
 import { DISPLAY_NAME_MAX, normalizeDisplayName, validateDisplayName } from './validation';
@@ -111,6 +112,8 @@ export function ProfileScreen() {
           <Button title="Salvar apelido" onPress={save} loading={saving} disabled={unchanged} />
         </View>
       )}
+
+      {session?.user.email ? <ChangePasswordForm email={session.user.email} /> : null}
 
       <View className="flex-1" />
 
