@@ -1,12 +1,19 @@
 import { fetchVideoInfo, oembedUrl, parseOembedResponse } from './oembed';
 
 describe('parseOembedResponse', () => {
-  it('lê o título', () => {
-    expect(parseOembedResponse(200, { title: '  Big Buck Bunny  ' })).toEqual({
+  it('lê o título e o canal', () => {
+    expect(
+      parseOembedResponse(200, { title: '  Big Buck Bunny  ', author_name: ' Blender ' }),
+    ).toEqual({
       status: 'ok',
       title: 'Big Buck Bunny',
+      author: 'Blender',
     });
-    expect(parseOembedResponse(200, { title: 42 })).toEqual({ status: 'ok', title: null });
+    expect(parseOembedResponse(200, { title: 42 })).toEqual({
+      status: 'ok',
+      title: null,
+      author: null,
+    });
   });
 
   it('identifica vídeo bloqueado e inexistente', () => {
@@ -47,6 +54,10 @@ describe('fetchVideoInfo', () => {
     globalThis.fetch = jest
       .fn()
       .mockResolvedValue({ ok: true, status: 200, json: () => Promise.resolve({ title: 'Oi' }) });
-    await expect(fetchVideoInfo('aqz-KE-bpKQ')).resolves.toEqual({ status: 'ok', title: 'Oi' });
+    await expect(fetchVideoInfo('aqz-KE-bpKQ')).resolves.toEqual({
+      status: 'ok',
+      title: 'Oi',
+      author: null,
+    });
   });
 });

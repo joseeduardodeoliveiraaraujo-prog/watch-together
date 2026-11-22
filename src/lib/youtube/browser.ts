@@ -17,6 +17,18 @@ export function browserSearchUrl(query: string): string {
   return `https://m.youtube.com/results?search_query=${encodeURIComponent(query.trim())}`;
 }
 
+/** Termo da página de resultados (`/results?search_query=`), para mostrar no campo de busca. */
+export function searchQueryFromUrl(url: string): string | null {
+  if (!/^https:\/\/(?:www\.|m\.)?youtube\.com\/results\?/i.test(url)) return null;
+  const match = /[?&]search_query=([^&#]*)/.exec(url);
+  if (!match) return null;
+  try {
+    return decodeURIComponent(match[1].replace(/\+/g, ' '));
+  } catch {
+    return null;
+  }
+}
+
 /** Domínios que abrem dentro do navegador. O resto vai para o navegador do celular. */
 const BROWSER_HOSTS = new Set([
   'youtube.com',

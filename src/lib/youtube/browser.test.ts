@@ -1,5 +1,6 @@
 import {
   BROWSER_SCRIPT,
+  searchQueryFromUrl,
   browserSearchUrl,
   isBrowserUrl,
   parseBrowserMessage,
@@ -76,6 +77,23 @@ describe('browserSearchUrl', () => {
     expect(browserSearchUrl('  lo-fi & chill ')).toBe(
       'https://m.youtube.com/results?search_query=lo-fi%20%26%20chill',
     );
+  });
+});
+
+describe('searchQueryFromUrl', () => {
+  it('lê o termo da página de resultados', () => {
+    expect(searchQueryFromUrl('https://m.youtube.com/results?search_query=lo-fi+%26+chill')).toBe(
+      'lo-fi & chill',
+    );
+    expect(searchQueryFromUrl('https://m.youtube.com/results?sp=x&search_query=abc#top')).toBe(
+      'abc',
+    );
+  });
+
+  it('ignora outras páginas e termos malformados', () => {
+    expect(searchQueryFromUrl('https://m.youtube.com/watch?v=dQw4w9WgXcQ')).toBeNull();
+    expect(searchQueryFromUrl('https://evil.com/results?search_query=x')).toBeNull();
+    expect(searchQueryFromUrl('https://m.youtube.com/results?search_query=%E0%A4%A')).toBeNull();
   });
 });
 

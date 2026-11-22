@@ -1,3 +1,4 @@
+import { Image } from 'expo-image';
 import { createContext, use, useEffect, useState, type ReactNode } from 'react';
 import { Modal, Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -21,7 +22,15 @@ export type SheetAction = {
   onPress: () => void;
 };
 
-type SheetOptions = { title: string; subtitle?: string; actions: SheetAction[] };
+type SheetOptions = {
+  title: string;
+  subtitle?: string;
+  /** Miniatura 16:9 ao lado do título (ex.: vídeo do YouTube). */
+  thumbnail?: string;
+  /** Aviso em destaque abaixo do título (ex.: "Este vídeo já está na fila"). */
+  note?: string;
+  actions: SheetAction[];
+};
 
 type ConfirmOptions = {
   title: string;
@@ -142,20 +151,41 @@ function Sheet({ options, onClose, closeThen }: PartProps<SheetOptions>) {
         accessibilityViewIsModal
       >
         <View className="mb-2 h-1 w-10 self-center rounded-full bg-border" />
-        <View className="gap-1 px-2 pb-3">
-          <Text
-            accessibilityRole="header"
-            className="font-bold text-base text-text"
-            numberOfLines={2}
-          >
-            {options.title}
-          </Text>
-          {options.subtitle ? (
-            <Text className="font-sans text-[13px] text-muted" numberOfLines={2}>
-              {options.subtitle}
-            </Text>
+        <View className="flex-row items-center gap-3 px-2 pb-3">
+          {options.thumbnail ? (
+            <Image
+              source={{ uri: options.thumbnail }}
+              style={{
+                width: 112,
+                height: 63,
+                borderRadius: 10,
+                backgroundColor: Colors['surface-raised'],
+              }}
+              contentFit="cover"
+              accessibilityIgnoresInvertColors
+            />
           ) : null}
+          <View className="flex-1 gap-1">
+            <Text
+              accessibilityRole="header"
+              className="font-bold text-base leading-5 text-text"
+              numberOfLines={options.thumbnail ? 3 : 2}
+            >
+              {options.title}
+            </Text>
+            {options.subtitle ? (
+              <Text className="font-sans text-[13px] text-muted" numberOfLines={1}>
+                {options.subtitle}
+              </Text>
+            ) : null}
+          </View>
         </View>
+        {options.note ? (
+          <View className="mx-2 mb-2 flex-row items-center gap-2 rounded-xl bg-primary/15 px-3 py-2">
+            <Icon name="info" size={14} color={Colors.accent} />
+            <Text className="flex-1 font-semibold text-xs text-accent-text">{options.note}</Text>
+          </View>
+        ) : null}
 
         {options.actions.map((action) => {
           const color = action.destructive ? Colors.danger : Colors.text;
