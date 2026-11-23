@@ -21,4 +21,6 @@ dependencies {
   // ComponentActivity 1.9+ avisa quando o usuário sai do app (OnUserLeaveHintProvider),
   // usado para entrar na janelinha no Android 8 a 11.
   implementation 'androidx.activity:activity:1.10.1'
+  // Manter a tela do React Native atualizando na janelinha (FabricUIManager).
+  implementation 'com.facebook.react:react-android'
 }

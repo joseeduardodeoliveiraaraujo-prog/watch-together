@@ -4,16 +4,22 @@ import android.app.Activity
 import android.app.PictureInPictureParams
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.util.Rational
 import androidx.annotation.RequiresApi
 import androidx.core.app.OnPictureInPictureModeChangedProvider
 import androidx.core.app.OnUserLeaveHintProvider
 import androidx.core.app.PictureInPictureModeChangedInfo
-import androidx.core.graphics.Insets
 import androidx.core.os.bundleOf
 import androidx.core.util.Consumer
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
+import com.facebook.react.bridge.LifecycleEventListener
+import com.facebook.react.bridge.ReactContext
+import com.facebook.react.uimanager.UIManagerHelper
+import com.facebook.react.uimanager.common.UIManagerType
 import expo.modules.kotlin.functions.Queues
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
@@ -29,33 +35,40 @@ class PictureInPictureModule : Module() {
   private var attachedTo: Activity? = null
 
   private val modeListener = Consumer<PictureInPictureModeChangedInfo> { info ->
-    attachedTo?.let { ignoreSystemBars(it, info.isInPictureInPictureMode) }
     sendEvent("onChange", bundleOf("active" to info.isInPictureInPictureMode))
+    updateRendering()
   }
 
   /**
-   * A janelinha não fica sob a barra de status, mas alguns aparelhos continuam informando o espaço
-   * dela: o conteúdo descia essa altura e o vídeo saía cortado embaixo. Na janelinha, as barras
-   * do sistema e o recorte da câmera são zerados para tudo dentro da janela (inclusive a WebView);
-   * fora dela, volta o normal.
+   * Na janelinha a Activity fica pausada, e com ela o React Native para de aplicar as mudanças
+   * na tela (o FabricUIManager pausa no onHostPause): a janelinha ficava congelada na sala
+   * inteira em vez de mostrar só o vídeo. Enquanto a janelinha estiver aberta, a tela continua
+   * sendo atualizada; fora dela, segue o ciclo normal da Activity.
    */
-  private fun ignoreSystemBars(activity: Activity, enabled: Boolean) {
-    val decor = activity.window?.decorView ?: return
-    if (enabled) {
-      ViewCompat.setOnApplyWindowInsetsListener(decor) { view, insets ->
-        val zeroed = WindowInsetsCompat.Builder(insets)
-          .setInsets(
-            WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout(),
-            Insets.NONE,
-          )
-          .build()
-        ViewCompat.onApplyWindowInsets(view, zeroed)
-      }
-    } else {
-      ViewCompat.setOnApplyWindowInsetsListener(decor, null)
-    }
-    ViewCompat.requestApplyInsets(decor)
+  private val lifecycleObserver = LifecycleEventObserver { _, event ->
+    if (event == Lifecycle.Event.ON_PAUSE) updateRendering()
   }
+
+  private fun updateRendering() {
+    val activity = attachedTo ?: return
+    // Depois do onPause da Activity (que pausa o React Native) terminar.
+    mainHandler.post {
+      val context = appContext.reactContext as? ReactContext ?: return@post
+      val uiManager = UIManagerHelper.getUIManager(context, UIManagerType.FABRIC)
+        as? LifecycleEventListener ?: return@post
+      val inPip =
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && activity.isInPictureInPictureMode
+      val resumed = (activity as? LifecycleOwner)
+        ?.lifecycle?.currentState?.isAtLeast(Lifecycle.State.RESUMED) == true
+      if (inPip) {
+        uiManager.onHostResume()
+      } else if (!resumed) {
+        uiManager.onHostPause()
+      }
+    }
+  }
+
+  private val mainHandler = Handler(Looper.getMainLooper())
 
   // Android 12+ entra sozinho (setAutoEnterEnabled). Antes disso, entra quando o usuário sai.
   private val leaveHintListener = Runnable {
@@ -97,6 +110,7 @@ class PictureInPictureModule : Module() {
     (activity as? OnPictureInPictureModeChangedProvider)
       ?.addOnPictureInPictureModeChangedListener(modeListener)
     (activity as? OnUserLeaveHintProvider)?.addOnUserLeaveHintListener(leaveHintListener)
+    (activity as? LifecycleOwner)?.lifecycle?.addObserver(lifecycleObserver)
     attachedTo = activity
   }
 
@@ -105,6 +119,7 @@ class PictureInPictureModule : Module() {
     (activity as? OnPictureInPictureModeChangedProvider)
       ?.removeOnPictureInPictureModeChangedListener(modeListener)
     (activity as? OnUserLeaveHintProvider)?.removeOnUserLeaveHintListener(leaveHintListener)
+    (activity as? LifecycleOwner)?.lifecycle?.removeObserver(lifecycleObserver)
     attachedTo = null
   }
 

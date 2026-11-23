@@ -26,6 +26,11 @@ Activity inteira: o sistema encolhe o app todo numa janela.
 - **Na janelinha a sala mostra só o vídeo**, sem controles nem avisos. Sem botões dentro da
   janelinha por enquanto (`RemoteAction` exigiria bem mais código nativo, e o play/pause valeria
   para a sala toda).
+- **A tela continua atualizando na janelinha:** a Activity fica pausada e o React Native pausa a
+  aplicação das mudanças na tela (`FabricUIManager.onHostPause`); sem isso a janelinha ficava
+  congelada na sala inteira. O módulo chama `onHostResume` só desse gerenciador enquanto a
+  janelinha está aberta. Não mexer nos insets da janela: a raiz (`decorView`) já tem o ouvinte
+  do `react-native-keyboard-controller`, e trocá-lo quebra o teclado no chat.
 - **Vídeo fora da tela para só neste aparelho:** app em segundo plano sem janelinha, ou janelinha
   fechada no X, chama `setSuspended(true)` em `useRoomPlayback`: pausa o player local e a
   sincronização deixa de corrigi-lo, sem mudar o estado da sala. Ao voltar, segue a sala de novo.
