@@ -9,8 +9,11 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.OnPictureInPictureModeChangedProvider
 import androidx.core.app.OnUserLeaveHintProvider
 import androidx.core.app.PictureInPictureModeChangedInfo
+import androidx.core.graphics.Insets
 import androidx.core.os.bundleOf
 import androidx.core.util.Consumer
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import expo.modules.kotlin.functions.Queues
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
@@ -26,7 +29,32 @@ class PictureInPictureModule : Module() {
   private var attachedTo: Activity? = null
 
   private val modeListener = Consumer<PictureInPictureModeChangedInfo> { info ->
+    attachedTo?.let { ignoreSystemBars(it, info.isInPictureInPictureMode) }
     sendEvent("onChange", bundleOf("active" to info.isInPictureInPictureMode))
+  }
+
+  /**
+   * A janelinha não fica sob a barra de status, mas alguns aparelhos continuam informando o espaço
+   * dela: o conteúdo descia essa altura e o vídeo saía cortado embaixo. Na janelinha, as barras
+   * do sistema e o recorte da câmera são zerados para tudo dentro da janela (inclusive a WebView);
+   * fora dela, volta o normal.
+   */
+  private fun ignoreSystemBars(activity: Activity, enabled: Boolean) {
+    val decor = activity.window?.decorView ?: return
+    if (enabled) {
+      ViewCompat.setOnApplyWindowInsetsListener(decor) { view, insets ->
+        val zeroed = WindowInsetsCompat.Builder(insets)
+          .setInsets(
+            WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout(),
+            Insets.NONE,
+          )
+          .build()
+        ViewCompat.onApplyWindowInsets(view, zeroed)
+      }
+    } else {
+      ViewCompat.setOnApplyWindowInsetsListener(decor, null)
+    }
+    ViewCompat.requestApplyInsets(decor)
   }
 
   // Android 12+ entra sozinho (setAutoEnterEnabled). Antes disso, entra quando o usuário sai.
