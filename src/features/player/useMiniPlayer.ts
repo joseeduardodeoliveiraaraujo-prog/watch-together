@@ -53,9 +53,13 @@ export function useMiniPlayer({ enabled, topInset, onTap }: Options) {
     onTapRef.current = onTap;
   });
 
-  // Ao abrir e se a tela mudar de tamanho: vai direto para o canto atual.
+  // Ao abrir e se a tela mudar de tamanho: vai direto para o canto atual. Fechado: sem
+  // deslocamento (o transform continua ligado no player, então precisa voltar a zero).
   useEffect(() => {
-    if (enabled) position.setValue(cornerPosition(cornerRef.current, areaRef.current));
+    position.stopAnimation();
+    position.setValue(
+      enabled ? cornerPosition(cornerRef.current, areaRef.current) : { x: 0, y: 0 },
+    );
   }, [enabled, position, screen.width, screen.height, topInset, insets.bottom]);
 
   // Os refs só são lidos dentro dos gestos (depois da renderização), não ao criar o responder.

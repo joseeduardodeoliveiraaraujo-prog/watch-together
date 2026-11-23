@@ -278,7 +278,9 @@ export function RoomScreen({ roomId }: { roomId: string }) {
           miniplayer só muda o estilo e não recarrega o vídeo. */}
       <Animated.View
         ref={playerAreaRef}
-        style={
+        // O deslocamento do miniplayer fica sempre ligado (zerado fora dele): tirar um transform
+        // animado no nativo deixa o último deslocamento aplicado e o vídeo sai cortado.
+        style={[
           videoOnly
             ? { flex: 1, backgroundColor: Colors.black }
             : mini
@@ -294,10 +296,10 @@ export function RoomScreen({ roomId }: { roomId: string }) {
                   overflow: 'hidden',
                   backgroundColor: Colors.black,
                   boxShadow: '0px 8px 24px #00000099',
-                  transform: miniPlayer.transform,
                 }
-              : undefined
-        }
+              : null,
+          { transform: miniPlayer.transform },
+        ]}
       >
         {PLAYER_URL ? (
           <YouTubePlayer
