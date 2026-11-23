@@ -103,10 +103,18 @@ class PictureInPictureModule : Module() {
     }
   }
 
-  private fun attach() {
-    val activity = activity ?: return
-    if (attachedTo === activity) return
-    detach()
+  /**
+   * O ciclo de vida da Activity só aceita observadores na thread principal, mas o Expo chama
+   * `OnStartObserving` na thread do JS: tudo o que liga e desliga os ouvintes roda na principal.
+   */
+  private fun onMain(block: () -> Unit) {
+    if (Looper.myLooper() == Looper.getMainLooper()) block() else mainHandler.post(block)
+  }
+
+  private fun attach() = onMain {
+    val activity = activity ?: return@onMain
+    if (attachedTo === activity) return@onMain
+    detachNow()
     (activity as? OnPictureInPictureModeChangedProvider)
       ?.addOnPictureInPictureModeChangedListener(modeListener)
     (activity as? OnUserLeaveHintProvider)?.addOnUserLeaveHintListener(leaveHintListener)
@@ -114,7 +122,9 @@ class PictureInPictureModule : Module() {
     attachedTo = activity
   }
 
-  private fun detach() {
+  private fun detach() = onMain { detachNow() }
+
+  private fun detachNow() {
     val activity = attachedTo ?: return
     (activity as? OnPictureInPictureModeChangedProvider)
       ?.removeOnPictureInPictureModeChangedListener(modeListener)
