@@ -12,7 +12,7 @@
       "android"
     ],
     "android": {
-      "versionCode": 6,
+      "versionCode": 7,
       "package": "com.watchtogether.app",
       "adaptiveIcon": {
         "backgroundColor": "#0F0F17",
