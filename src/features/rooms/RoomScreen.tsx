@@ -9,6 +9,7 @@ import {
   Pressable,
   ScrollView,
   Text,
+  useWindowDimensions,
   View,
   type HostInstance,
 } from 'react-native';
@@ -31,6 +32,7 @@ import { ChatOverlay, ChatPanel } from '@/features/chat/ChatPanel';
 import { useRoomChat } from '@/features/chat/useRoomChat';
 import { FullscreenControls } from '@/features/player/FullscreenControls';
 import { PlayerControls } from '@/features/player/PlayerControls';
+import { PIP_DEBUG, PipDebugOverlay, type AreaLayout } from '@/features/player/PipDebugOverlay';
 import { PipIcon } from '@/features/player/PipIcon';
 import { PlayerStatusOverlay } from '@/features/player/PlayerStatusOverlay';
 import { VOLUME_POPOVER_WIDTH, VolumePopover } from '@/features/player/VolumeControl';
@@ -50,7 +52,11 @@ import {
   type PlayerAction,
   type PlayerIssue,
 } from '@/lib/youtube/errors';
-import { YouTubePlayer, type YouTubePlayerHandle } from '@/lib/youtube/YouTubePlayer';
+import {
+  YouTubePlayer,
+  type WebLayout,
+  type YouTubePlayerHandle,
+} from '@/lib/youtube/YouTubePlayer';
 
 import { fetchRoom } from './api';
 import { shareRoomInvite } from './invite';
@@ -64,6 +70,7 @@ import { useRoomChannel, type PresencePerson } from './useRoomChannel';
 export function RoomScreen({ roomId }: { roomId: string }) {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const window = useWindowDimensions();
   const { session } = useSession();
   const userId = session?.user.id ?? null;
   const room = useAsyncData(`room:${roomId}`, () => fetchRoom(roomId));
@@ -102,6 +109,9 @@ export function RoomScreen({ roomId }: { roomId: string }) {
   const [tab, setTab] = useState<Tab>('chat');
   /** Mensagem mais nova já vista na aba de chat (para contar as não lidas). */
   const [seenEntryId, setSeenEntryId] = useState<string | null>(null);
+  /** Diagnóstico da janelinha (só com PIP_DEBUG). */
+  const [debugArea, setDebugArea] = useState<AreaLayout | null>(null);
+  const [debugWeb, setDebugWeb] = useState<WebLayout | null>(null);
 
   const memberName = (id: unknown) => room.data?.members.find((m) => m.userId === id)?.displayName;
   const nameOf = (person: PresencePerson) => memberName(person.id) ?? person.name ?? 'Alguém';
@@ -278,26 +288,31 @@ export function RoomScreen({ roomId }: { roomId: string }) {
           miniplayer só muda o estilo e não recarrega o vídeo. */}
       <Animated.View
         ref={playerAreaRef}
+        onLayout={PIP_DEBUG ? (e) => setDebugArea(e.nativeEvent.layout) : undefined}
         // O deslocamento do miniplayer fica sempre ligado (zerado fora dele): tirar um transform
         // animado no nativo deixa o último deslocamento aplicado e o vídeo sai cortado.
         style={[
-          videoOnly
-            ? { flex: 1, backgroundColor: Colors.black }
-            : mini
-              ? {
-                  position: 'absolute',
-                  left: 0,
-                  top: 0,
-                  zIndex: 20,
-                  elevation: 12,
-                  width: miniPlayer.size.width,
-                  height: miniPlayer.size.height,
-                  borderRadius: 12,
-                  overflow: 'hidden',
-                  backgroundColor: Colors.black,
-                  boxShadow: '0px 8px 24px #00000099',
-                }
-              : null,
+          pip.active
+            ? // Na janelinha, o tamanho exato dela: o contêiner da tela fica com a altura antiga
+              // (sobra a barra de status) e "ocupar o resto" deixava o vídeo cortado embaixo.
+              { width: window.width, height: window.height, backgroundColor: Colors.black }
+            : videoOnly
+              ? { flex: 1, backgroundColor: Colors.black }
+              : mini
+                ? {
+                    position: 'absolute',
+                    left: 0,
+                    top: 0,
+                    zIndex: 20,
+                    elevation: 12,
+                    width: miniPlayer.size.width,
+                    height: miniPlayer.size.height,
+                    borderRadius: 12,
+                    overflow: 'hidden',
+                    backgroundColor: Colors.black,
+                    boxShadow: '0px 8px 24px #00000099',
+                  }
+                : null,
           { transform: miniPlayer.transform },
         ]}
       >
@@ -308,6 +323,7 @@ export function RoomScreen({ roomId }: { roomId: string }) {
             fill={videoOnly}
             onEvent={handlePlayerEvent}
             onLoadError={(httpStatus) => setPageIssue(pageLoadIssue(httpStatus))}
+            onWebLayout={PIP_DEBUG ? setDebugWeb : undefined}
           />
         ) : (
           <View className="aspect-video w-full items-center justify-center bg-surface p-4">
@@ -316,7 +332,11 @@ export function RoomScreen({ roomId }: { roomId: string }) {
             </Text>
           </View>
         )}
-        {pip.active ? null : mini ? (
+        {pip.active ? (
+          PIP_DEBUG ? (
+            <PipDebugOverlay area={debugArea} web={debugWeb} />
+          ) : null
+        ) : mini ? (
           // Miniplayer: arrasta para outro canto; um toque volta para a sala.
           <View
             className="absolute inset-0 items-end p-1.5"

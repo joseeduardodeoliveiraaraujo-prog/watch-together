@@ -25,8 +25,59 @@ type YouTubePlayerProps = {
    * o servidor respondeu com erro.
    */
   onLoadError?: (httpStatus?: number) => void;
+  /** Diagnóstico: medidas que a página enxerga, enviadas a cada mudança de tamanho. */
+  onWebLayout?: (layout: WebLayout) => void;
   ref?: Ref<YouTubePlayerHandle>;
 };
+
+/** Tamanho visto de dentro da página (px CSS), para diagnosticar a janelinha. */
+export type WebLayout = {
+  innerWidth: number;
+  innerHeight: number;
+  vvWidth: number;
+  vvHeight: number;
+  vvTop: number;
+  /** Retângulo do player do YouTube na página: "x,y LxA". */
+  frame: string;
+};
+
+const WEB_LAYOUT_MARKER = '__wtLayout';
+
+/** Injetado só com `onWebLayout`: não depende de publicar a página de novo. */
+const WEB_LAYOUT_SCRIPT = `(function () {
+  var last = '';
+  function report() {
+    var vv = window.visualViewport || { width: 0, height: 0, offsetTop: 0 };
+    var el = document.getElementById('player');
+    var b = el ? el.getBoundingClientRect() : null;
+    var data = {
+      ${WEB_LAYOUT_MARKER}: true,
+      innerWidth: window.innerWidth,
+      innerHeight: window.innerHeight,
+      vvWidth: Math.round(vv.width),
+      vvHeight: Math.round(vv.height),
+      vvTop: Math.round(vv.offsetTop),
+      frame: b ? Math.round(b.left) + ',' + Math.round(b.top) + ' ' + Math.round(b.width) + 'x' + Math.round(b.height) : '?'
+    };
+    var json = JSON.stringify(data);
+    if (json !== last && window.ReactNativeWebView) {
+      last = json;
+      window.ReactNativeWebView.postMessage(json);
+    }
+  }
+  window.addEventListener('resize', report);
+  setInterval(report, 1000);
+  report();
+})(); true;`;
+
+function parseWebLayout(data: string): WebLayout | null {
+  if (!data.includes(WEB_LAYOUT_MARKER)) return null;
+  try {
+    return JSON.parse(data) as WebLayout;
+  } catch {
+    return null;
+  }
+}
 
 function getOrigin(url: string): string {
   const match = /^(https?:\/\/[^/?#]+)/i.exec(url);
@@ -38,6 +89,7 @@ export function YouTubePlayer({
   fill = false,
   onEvent,
   onLoadError,
+  onWebLayout,
   ref,
 }: YouTubePlayerProps) {
   // `WebView<object>`: os tipos da lib declaram `WebView<P = undefined>` com props
@@ -53,6 +105,10 @@ export function YouTubePlayer({
   const handleMessage = (event: WebViewMessageEvent) => {
     // Só aceitamos mensagens da nossa página (nunca de páginas para onde o usuário navegou).
     if (getOrigin(event.nativeEvent.url) !== playerOrigin) return;
+    if (onWebLayout) {
+      const layout = parseWebLayout(event.nativeEvent.data);
+      if (layout) return onWebLayout(layout);
+    }
     const parsed = parsePlayerEvent(event.nativeEvent.data);
     if (parsed) onEvent(parsed);
   };
@@ -73,6 +129,7 @@ export function YouTubePlayer({
         source={{ uri: playerUrl }}
         originWhitelist={['https://*']}
         onMessage={handleMessage}
+        injectedJavaScript={onWebLayout ? WEB_LAYOUT_SCRIPT : undefined}
         onShouldStartLoadWithRequest={handleShouldStartLoad}
         javaScriptEnabled
         domStorageEnabled

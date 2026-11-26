@@ -51,3 +51,9 @@ example
 /android
 
 .vercel
+
+# Pastas nativas geradas (CNG) pelo expo run:android / prebuild
+/android
+/ios
+# Saída da compilação dos módulos nativos locais
+modules/*/android/build/

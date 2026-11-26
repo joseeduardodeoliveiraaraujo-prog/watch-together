@@ -34,10 +34,26 @@ npm start                    # escaneie o QR code com o Expo Go
 No Expo Go o ícone e a splash são os do Expo e as fontes são carregadas ao abrir; num build
 (`eas build`) tudo vem embutido.
 
+### Build de desenvolvimento (recursos nativos, como a janelinha)
+
+O Expo Go não tem o módulo nativo `modules/pip`. Para testar recursos nativos sem gerar um APK a
+cada mudança:
+
+```bash
+npx eas-cli@latest build --profile development --platform android  # uma vez (e ao mexer em Kotlin/plugins)
+npm run dev                                                         # depois, sempre
+```
+
+O build instala como **Watch Together (Dev)** (pacote `com.watchtogether.app.dev`, ao lado do APK
+normal) e carrega o JS do `npm run dev` pela rede: mudanças em JS aparecem na hora. Só mudanças em
+código nativo, plugins ou bibliotecas nativas pedem um build novo. Na janelinha, esse build mostra
+as medidas da tela (`PipDebugOverlay`).
+
 ## Scripts
 
 | Script                  | O que faz                                                       |
 | ----------------------- | --------------------------------------------------------------- |
+| `npm run dev`           | Servidor para o build de desenvolvimento (variante Dev)         |
 | `npm run check`         | Tipos, lint, testes e página do player — rode antes de commitar |
 | `npm run typecheck`     | `tsc --noEmit`                                                  |
 | `npm run lint`          | ESLint (config Expo + Prettier)                                 |

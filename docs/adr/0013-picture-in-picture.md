@@ -41,4 +41,11 @@ Activity inteira: o sistema encolhe o app todo numa janela.
 ## Consequências
 
 - Precisa de build nativo (APK); não funciona no Expo Go.
-- O código Kotlin só é compilado no EAS Build (não há Android SDK na máquina de desenvolvimento).
+- O código Kotlin só é compilado no EAS Build (a compilação local falha no Windows: caminhos longos
+  no C++ do Reanimated e o ninja 1.10.2 do Android SDK).
+- **Tamanho na janelinha:** a área do vídeo recebe o tamanho exato da janela
+  (`useWindowDimensions`) em vez de `flex: 1`. O contêiner da tela ficava com a altura antiga
+  (sobrava a barra de status) e o vídeo saía cortado embaixo, mais quanto menor a janelinha.
+- **Para investigar:** o build de desenvolvimento (`eas build --profile development` +
+  `npm run dev`, ver README) mostra as medidas da janela, da área do vídeo e da página na
+  janelinha (`PipDebugOverlay`); mudanças em JS não exigem build novo.
